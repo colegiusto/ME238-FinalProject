@@ -5,15 +5,15 @@ function u = linearControl(t,x,c)
     if ~isfield(c, 't_k')
         
         K = c.K;
-        if (x(1) <= bounds(1,1)) || (x(1) >= bounds(2,1))
-            u = 0;
-            return
-        end
-        if (x(2) <= bounds(1,2)) || (x(2) >= bounds(2,2))
-            u = 0;
-            return
-        end
-        u = -K * (x-c.x_star);
+        % if (x(1)-c.x_star(1) <= bounds(1,1)) || (x(1)-c.x_star(1) >= bounds(2,1))
+        %     u(1) = 0;
+        %     return
+        % end
+        % if (x(2)-c.x_star(2) <= bounds(1,2)) || (x(2)-c.x_star(1) >= bounds(2,2))
+        %     u(1) = 0;
+        %     return
+        % end
+        u(1) = -K * (x-c.x_star) + c.u_star;
         return
     end
     

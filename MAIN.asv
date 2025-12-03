@@ -8,7 +8,7 @@ x0 = [-pi/2; 0; 0; 0];
 t_control = linspace(0,10,100);
 ut = (t_control>=1)*0.2;
 
-model = 'OpenLoop';
+model = 'OpenLoop_hw';
 
 set_param(model, 'SimulationMode', 'normal')
 set_param(model, 'SimulationCommand', 'connect')
@@ -34,6 +34,7 @@ end
 
 
 %% Stabilize Downward
+clear c
 c.bounds = [-4*pi/3 -2*pi/3; -pi/3 pi/3];
 c.x_star = [-pi/2; 0; 0; 0];
 
@@ -95,7 +96,6 @@ problem.bounds.control.low = -inf; %-inf;
 problem.bounds.control.upp = inf;
 
 % Guess at the initial trajectory
-
 
 
 problem.guess = guess;
@@ -179,7 +179,7 @@ ut = u;
 
 model = 'OpenLoop';
 
-set_param(model, "StopTime", )
+set_param(model, "StopTime", string(t(end)))
 set_param(model, 'SimulationMode', 'normal')
 set_param(model, 'SimulationCommand', 'connect')
 pause(1)
@@ -195,8 +195,41 @@ ap.l2 = 1.5;
 for i = 1:50:length(output.time)
     clf; hold on;
     animate(output.time(i), output.signals.values(:,:,i), ap)
+    animate(output.time(i), soln.grid.state(:,find(t>=output.time(i))), ap)
 
     drawnow; pause(0.05); 
 end
 
-% 
+
+%% Use closed loop to stabilize the traject
+x0 = [-pi/2;0;0;0];
+c.t_k = t;
+c.u_star = u;
+c.x_star = soln.grid.state;
+c.bounds = [-pi/3 pi/3; -pi/3 pi/3]*inf;
+
+c.K = zeros(1,4,length(t));
+
+Q = diag([0.01, 7, 0.1, 0.9]);
+R = 6;
+
+for i = 1:length(t)
+    A = J(c.x_star(:,i), 1e-5*ones(4,1), @(x)dynamics(x, u(i), p));
+
+    B = J(u(i), 1e-5, @(u)dynamics(c.x_star(:,i), u, p));
+
+    c.K(:,:, i) = lqr(A, B, Q, R);
+end
+
+%%
+
+model = 'ClosedLoop';
+set_param(model, "StopTime", string(t(end)+5))
+
+set_param(model, 'Dirty', 'on')
+
+set_param(model, 'SimulationMode', 'normal')
+set_param(model, 'SimulationCommand', 'connect')
+pause(1)
+set_param(model, 'SimulationCommand', 'start')
+pause(11)
