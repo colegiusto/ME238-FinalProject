@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.42
+ * Model version              : 1.48
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Fri Dec  5 13:30:04 2025
+ * C source code generated on : Fri Dec  5 15:31:47 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -76,16 +76,16 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&ClosedLoopHW_B.Delay[0]), 0, 0, 47 },
+  { (char_T *)(&ClosedLoopHW_B.Constant1[0]), 0, 0, 45 },
 
   { (char_T *)(&ClosedLoopHW_B.LogicalOperator), 8, 0, 1 }
   ,
 
-  { (char_T *)(&ClosedLoopHW_DW.Delay_DSTATE[0]), 0, 0, 40 },
+  { (char_T *)(&ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0]), 0, 0, 40 },
 
   { (char_T *)(&ClosedLoopHW_DW.HILInitialize_Card), 18, 0, 1 },
 
-  { (char_T *)(&ClosedLoopHW_DW.HILWriteAnalog_PWORK), 11, 0, 11 },
+  { (char_T *)(&ClosedLoopHW_DW.HILReadEncoder_PWORK), 11, 0, 11 },
 
   { (char_T *)(&ClosedLoopHW_DW.HILInitialize_QuadratureModes[0]), 6, 0, 13 },
 
@@ -112,9 +112,9 @@ static DataTypeTransition rtPTransitions[] = {
 
   { (char_T *)(&ClosedLoopHW_P.dC[0]), 0, 0, 18 },
 
-  { (char_T *)(&ClosedLoopHW_P.HILWriteAnalog_channels), 7, 0, 3 },
+  { (char_T *)(&ClosedLoopHW_P.HILReadEncoder_channels[0]), 7, 0, 3 },
 
-  { (char_T *)(&ClosedLoopHW_P.Constant_Value), 0, 0, 32 },
+  { (char_T *)(&ClosedLoopHW_P.Gain_Gain), 0, 0, 34 },
 
   { (char_T *)(&ClosedLoopHW_P.HILInitialize_CKChannels[0]), 6, 0, 7 },
 

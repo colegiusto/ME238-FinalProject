@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.42
+ * Model version              : 1.48
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Fri Dec  5 13:30:04 2025
+ * C source code generated on : Fri Dec  5 15:31:47 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -866,21 +866,19 @@
 
 /* Block signals (default storage) */
 typedef struct {
+  real_T Constant1[4];                 /* '<S1>/Constant1' */
+  real_T x[4];                         /* '<S1>/Discrete-Time Integrator' */
+  real_T Switch[2];                    /* '<Root>/Switch' */
   real_T Delay[4];                     /* '<Root>/Delay' */
-  real_T Saturation;                   /* '<Root>/Saturation' */
-  real_T Add;                          /* '<Root>/Add' */
-  real_T Gain1;                        /* '<Root>/Gain1' */
-  real_T y[2];
   real_T Probe[2];                     /* '<S8>/Probe' */
   real_T Constant[2];                  /* '<S13>/Constant' */
-  real_T Saturation_c[2];              /* '<S15>/Saturation' */
+  real_T Saturation[2];                /* '<S15>/Saturation' */
   real_T Multiply[2];                  /* '<Root>/Multiply' */
   real_T Sum[4];                       /* '<Root>/Sum' */
   real_T Reshape1[4];                  /* '<Root>/Reshape1' */
-  real_T Constant1[4];                 /* '<S1>/Constant1' */
-  real_T x[4];                         /* '<S1>/Discrete-Time Integrator' */
   real_T TSamp[2];                     /* '<S2>/TSamp' */
   real_T uT[2];                        /* '<S4>/1//T' */
+  real_T Saturation_p;                 /* '<Root>/Saturation' */
   real_T Step;                         /* '<Root>/Step' */
   real_T u;                            /* '<S5>/MATLAB Function' */
   real_T x_hat[4];                     /* '<S3>/MATLAB Function' */
@@ -890,10 +888,10 @@ typedef struct {
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
+  real_T DiscreteTimeIntegrator_DSTATE[4];/* '<S1>/Discrete-Time Integrator' */
   real_T Delay_DSTATE[4];              /* '<Root>/Delay' */
   real_T Integrator_DSTATE[2];         /* '<S15>/Integrator' */
   real_T Delay_DSTATE_m[4];            /* '<S3>/Delay' */
-  real_T DiscreteTimeIntegrator_DSTATE[4];/* '<S1>/Discrete-Time Integrator' */
   real_T UD_DSTATE[2];                 /* '<S2>/UD' */
   real_T HILInitialize_AIMinimums[4];  /* '<Root>/HIL Initialize' */
   real_T HILInitialize_AIMaximums[4];  /* '<Root>/HIL Initialize' */
@@ -902,15 +900,10 @@ typedef struct {
   real_T HILInitialize_AOVoltages[4];  /* '<Root>/HIL Initialize' */
   real_T HILInitialize_FilterFrequency[4];/* '<Root>/HIL Initialize' */
   t_card HILInitialize_Card;           /* '<Root>/HIL Initialize' */
-  void *HILWriteAnalog_PWORK;          /* '<Root>/HIL Write Analog' */
   void *HILReadEncoder_PWORK;          /* '<Root>/HIL Read Encoder' */
   struct {
     void *LoggedData;
   } Scope_PWORK;                       /* '<Root>/Scope' */
-
-  struct {
-    void *LoggedData;
-  } Scope1_PWORK;                      /* '<Root>/Scope1' */
 
   struct {
     void *LoggedData;
@@ -935,6 +928,11 @@ typedef struct {
   struct {
     void *LoggedData;
   } ToWorkspace1_PWORK;                /* '<Root>/To Workspace1' */
+
+  void *HILWriteAnalog_PWORK;          /* '<Root>/HIL Write Analog' */
+  struct {
+    void *LoggedData;
+  } Scope1_PWORK;                      /* '<Root>/Scope1' */
 
   struct {
     void *LoggedData;
@@ -1008,13 +1006,22 @@ struct P_ClosedLoopHW_T_ {
                               /* Mask Parameter: LowPassFilterDiscreteorContin_g
                                * Referenced by: '<S13>/Constant'
                                */
-  uint32_T HILWriteAnalog_channels;   /* Mask Parameter: HILWriteAnalog_channels
-                                       * Referenced by: '<Root>/HIL Write Analog'
-                                       */
   uint32_T HILReadEncoder_channels[2];/* Mask Parameter: HILReadEncoder_channels
                                        * Referenced by: '<Root>/HIL Read Encoder'
                                        */
-  real_T Constant_Value;               /* Expression: 0
+  uint32_T HILWriteAnalog_channels;   /* Mask Parameter: HILWriteAnalog_channels
+                                       * Referenced by: '<Root>/HIL Write Analog'
+                                       */
+  real_T Gain_Gain;                    /* Expression: 2*pi/5000
+                                        * Referenced by: '<Root>/Gain'
+                                        */
+  real_T Constant_Value;               /* Expression: -pi/2
+                                        * Referenced by: '<Root>/Constant'
+                                        */
+  real_T Gain1_Gain;                   /* Expression: -2*pi/10000
+                                        * Referenced by: '<Root>/Gain1'
+                                        */
+  real_T Constant_Value_o;             /* Expression: 0
                                         * Referenced by: '<S12>/Constant'
                                         */
   real_T HILInitialize_OOTerminate;/* Expression: set_other_outputs_at_terminate
@@ -1062,23 +1069,15 @@ struct P_ClosedLoopHW_T_ {
   real_T HILInitialize_POInitial;      /* Expression: initial_pwm_outputs
                                         * Referenced by: '<Root>/HIL Initialize'
                                         */
-  real_T Gain2_Gain;                   /* Expression: 2/(1.2*0.4006*3.5)
-                                        * Referenced by: '<Root>/Gain2'
+  real_T Constant1_Value;              /* Expression: -1
+                                        * Referenced by: '<Root>/Constant1'
                                         */
-  real_T Saturation_UpperSat;          /* Expression: 1
-                                        * Referenced by: '<Root>/Saturation'
-                                        */
-  real_T Saturation_LowerSat;          /* Expression: -1
-                                        * Referenced by: '<Root>/Saturation'
-                                        */
-  real_T Constant_Value_o;             /* Expression: -pi/2
-                                        * Referenced by: '<Root>/Constant'
-                                        */
-  real_T Gain_Gain;                    /* Expression: 2*pi/5000
-                                        * Referenced by: '<Root>/Gain'
-                                        */
-  real_T Gain1_Gain;                   /* Expression: -2*pi/10000
-                                        * Referenced by: '<Root>/Gain1'
+  real_T DiscreteTimeIntegrator_gainval;
+                           /* Computed Parameter: DiscreteTimeIntegrator_gainval
+                            * Referenced by: '<S1>/Discrete-Time Integrator'
+                            */
+  real_T Switch_Threshold;             /* Expression: 0
+                                        * Referenced by: '<Root>/Switch'
                                         */
   real_T Integrator_gainval;           /* Computed Parameter: Integrator_gainval
                                         * Referenced by: '<S15>/Integrator'
@@ -1089,18 +1088,23 @@ struct P_ClosedLoopHW_T_ {
   real_T Integrator_LowerSat;          /* Expression: antiwindupLowerLimit
                                         * Referenced by: '<S15>/Integrator'
                                         */
-  real_T Saturation_UpperSat_e;        /* Expression: windupUpperLimit
+  real_T Saturation_UpperSat;          /* Expression: windupUpperLimit
                                         * Referenced by: '<S15>/Saturation'
                                         */
-  real_T Saturation_LowerSat_b;        /* Expression: windupLowerLimit
+  real_T Saturation_LowerSat;          /* Expression: windupLowerLimit
                                         * Referenced by: '<S15>/Saturation'
                                         */
-  real_T DiscreteTimeIntegrator_gainval;
-                           /* Computed Parameter: DiscreteTimeIntegrator_gainval
-                            * Referenced by: '<S1>/Discrete-Time Integrator'
-                            */
   real_T TSamp_WtEt;                   /* Computed Parameter: TSamp_WtEt
                                         * Referenced by: '<S2>/TSamp'
+                                        */
+  real_T Gain2_Gain;                   /* Expression: 2/(1.2*0.4006*3.5)
+                                        * Referenced by: '<Root>/Gain2'
+                                        */
+  real_T Saturation_UpperSat_g;        /* Expression: 1
+                                        * Referenced by: '<Root>/Saturation'
+                                        */
+  real_T Saturation_LowerSat_o;        /* Expression: -1
+                                        * Referenced by: '<Root>/Saturation'
                                         */
   real_T Step_Time;                    /* Expression: 0.001
                                         * Referenced by: '<Root>/Step'
@@ -1253,11 +1257,11 @@ struct P_ClosedLoopHW_T_ {
                                   /* Computed Parameter: HILInitialize_DOInitial
                                    * Referenced by: '<Root>/HIL Initialize'
                                    */
-  boolean_T HILWriteAnalog_Active;  /* Computed Parameter: HILWriteAnalog_Active
-                                     * Referenced by: '<Root>/HIL Write Analog'
-                                     */
   boolean_T HILReadEncoder_Active;  /* Computed Parameter: HILReadEncoder_Active
                                      * Referenced by: '<Root>/HIL Read Encoder'
+                                     */
+  boolean_T HILWriteAnalog_Active;  /* Computed Parameter: HILWriteAnalog_Active
+                                     * Referenced by: '<Root>/HIL Write Analog'
                                      */
 };
 

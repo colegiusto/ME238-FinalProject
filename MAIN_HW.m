@@ -3,7 +3,7 @@ J = @(x,h,F)(F(repmat(x,size(x'))+diag(h))-F(repmat(x,size(x'))))./h';
 load guess.mat 
 
 %% Test Open Loop
-x0 = [-pi/2; 0; 0; 0];
+x0 = [-pi/2+0.3; 0; 0; 0];
 
 t_control = linspace(0,10,100);
 ut = (t_control>=1)*0.2;
@@ -41,17 +41,19 @@ end
 clear c
 c.bounds = [-pi/3 pi/3; -pi/3 pi/3];
 
-offset = 1;
+offset = 0.6;
 
 c.x_star = [-pi/2+offset; -offset; 0; 0];
 
 
-A = J(c.x_star, 1e-7*ones(1,4), @(x)dynamics(x,0,p));
+
 B = J(0, 1e-7, @(u)dynamics(c.x_star, u, p));
 
 c.u_star = -B \dynamics(c.x_star, 0, p);
 
-Q = diag([10 10 10000 1000]);
+A = J(c.x_star, 1e-7*ones(1,4), @(x)dynamics(x,c.u_star,p));
+
+Q = diag([1 10 1 10]);
 R = 1e-6;
 
 sys = c2d(ss(A,B,eye(2,4), 0), 0.001);
@@ -63,8 +65,8 @@ c.K = lqr(sys, Q, R);
 [dA, dB, dC, dD] = ssdata(sys);
 
 BB = B;
-QN = 0.9;
-RN = eye(2);
+QN = 1;
+RN = eye(2)*20;
 
 kalsys = ss(A, [B BB], dC, 0);
 
@@ -99,6 +101,7 @@ for i = 1:50:length(output.time)
 end
 
 %% plot
+output = pendPos;
 
 figure(2)
 subplot(2,1,1)
@@ -111,6 +114,21 @@ plot(output.time(1:end-1)+diff(output.time), diff(output.signals.values(:,1))/0.
 hold on
 plot(pendEst.time, pendEst.signals.values(:,3),pendEst.time,pendEst.signals.values(:,4))
 legend("Encoder dq1", "Encoder dq2", "Kalman dq1", "Kalman dq2")
+
+%% PFL for link 1
+
+q1_ref = pi/2;
+
+kp = 29.8;
+kd = 8;
+
+x_ref = [pi/2; 0; 0; 0];
+
+controller = @(x) linearizedPD(x,x_ref,p,kp,kd);
+
+x0 = [-pi/2; 0; 0; 0];
+
+sol = ode45(@(t,x)dynamics(x, controller(x), p), linspace(0, 10,1000), x0);
 
 %% Trajectory Optimization
 
