@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.36
+ * Model version              : 1.42
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Thu Dec  4 17:18:11 2025
+ * C source code generated on : Fri Dec  5 13:30:04 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -26,20 +26,17 @@ P_ClosedLoopHW_T ClosedLoopHW_P = {
    * Referenced by: '<S3>/MATLAB Function'
    */
   {
-    { 0.99974436791598642, 0.00020348798945244267, -0.065674150788442687,
-      0.065960864569940117, 0.00020548447041177396, 0.99971617646168753,
-      0.023640486335375573, -0.10250384450187044, 0.00092483995743419486,
-      0.00030697194489008177, 0.98562314451834176, 0.024309745727368135,
-      -0.00019792608177175339, 0.00088670525779182652, 0.024311981416540743,
-      0.95135809692550566 },
+    { 0.99405400057146487, 0.0060897641379340081, -0.0645877217427553,
+      0.048065083281943, 0.0060848682626157523, 0.98815259264195676,
+      0.038215172329288262, -0.0921310933233955, 0.00099702632851538637,
+      3.0499433944151875e-6, 0.99996765437172164, 2.410382089106836e-5,
+      3.0483089314479885e-6, 0.00099406913134891784, 1.9178645230261207e-5,
+      0.999953818215144 },
 
-    { 6.1318003148373216e-5, -6.4830892192962888e-5, 0.0904910095391707,
-      -0.17150343382627772, 0.00021758086397578597, -0.00018299424530869579,
-      5.8431017708283336e-5, 0.00022705696072118959, -0.00018324798993051523,
-      0.00024057571860499729, -0.00028568191016043994, 7.0037900255575931e-5,
-      7.5038512527247133e-5, -0.00030687353870831319, 0.014343797837512898,
-      -0.024276349213349226, 0.00019802515706231782, 0.00011315996827434077,
-      -0.024299916026398149, 0.048590169895355632 }
+    { 3.6550329674608868e-5, -5.423146465885097e-5, 0.073466644455172925,
+      -0.10904157406440063, 0.0059317767511997211, -0.0060977565953577607,
+      0.036118653437311653, -0.064055308484936749, -0.0060878960888086893,
+      0.011845702598624974, -0.044275859714760085, 0.088720418097537571 }
   },
 
   /* Variable: p
@@ -64,20 +61,26 @@ P_ClosedLoopHW_T ClosedLoopHW_P = {
 
   /* Variable: c
    * Referenced by:
-   *   '<Root>/Constant1'
+   *   '<Root>/x_star'
    *   '<S3>/Constant'
+   *   '<S3>/Constant1'
    *   '<S5>/MATLAB Function'
    */
   {
     { -1.0471975511965976, -1.0471975511965976, 1.0471975511965976,
       1.0471975511965976 },
 
-    { -1.5707963267948966, -0.0, 0.0, 0.0 },
-    2.815050406471702e-17,
+    { -0.57079632679489656, -1.0, 0.0, 0.0 },
+    0.82733207386123653,
 
-    { -22.314584401831219, -22.037456376350438, 3.0465850879368395,
-      -4.0483652601608195 }
+    { 48.069704429893633, 9.8409735190229739, 9.640039682304689,
+      -2.6869505795371791 }
   },
+
+  /* Variable: dC
+   * Referenced by: '<Root>/Multiply'
+   */
+  { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0 },
 
   /* Variable: x0
    * Referenced by:
@@ -86,7 +89,7 @@ P_ClosedLoopHW_T ClosedLoopHW_P = {
    *   '<S2>/UD'
    *   '<S3>/Constant'
    */
-  { -1.4707963267948965, 0.0, 0.0, 0.0 },
+  { -1.5707963267948966, 0.0, 0.0, 0.0 },
 
   /* Mask Parameter: LowPassFilterDiscreteorContinuo
    * Referenced by: '<S4>/K'
@@ -203,10 +206,10 @@ P_ClosedLoopHW_T ClosedLoopHW_P = {
    */
   0.0,
 
-  /* Expression: 1/(1.2*0.4006*3.5)
+  /* Expression: 2/(1.2*0.4006*3.5)
    * Referenced by: '<Root>/Gain2'
    */
-  0.59434657537503266,
+  1.1886931507500653,
 
   /* Expression: 1
    * Referenced by: '<Root>/Saturation'
@@ -218,10 +221,20 @@ P_ClosedLoopHW_T ClosedLoopHW_P = {
    */
   -1.0,
 
-  /* Computed Parameter: DiscreteTimeIntegrator_gainval
-   * Referenced by: '<S1>/Discrete-Time Integrator'
+  /* Expression: -pi/2
+   * Referenced by: '<Root>/Constant'
    */
-  0.001,
+  -1.5707963267948966,
+
+  /* Expression: 2*pi/5000
+   * Referenced by: '<Root>/Gain'
+   */
+  0.0012566370614359172,
+
+  /* Expression: -2*pi/10000
+   * Referenced by: '<Root>/Gain1'
+   */
+  -0.00062831853071795862,
 
   /* Computed Parameter: Integrator_gainval
    * Referenced by: '<S15>/Integrator'
@@ -247,6 +260,11 @@ P_ClosedLoopHW_T ClosedLoopHW_P = {
    * Referenced by: '<S15>/Saturation'
    */
   0.0,
+
+  /* Computed Parameter: DiscreteTimeIntegrator_gainval
+   * Referenced by: '<S1>/Discrete-Time Integrator'
+   */
+  0.001,
 
   /* Computed Parameter: TSamp_WtEt
    * Referenced by: '<S2>/TSamp'

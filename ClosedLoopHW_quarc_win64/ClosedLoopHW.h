@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.36
+ * Model version              : 1.42
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Thu Dec  4 17:18:11 2025
+ * C source code generated on : Fri Dec  5 13:30:04 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -868,14 +868,17 @@
 typedef struct {
   real_T Delay[4];                     /* '<Root>/Delay' */
   real_T Saturation;                   /* '<Root>/Saturation' */
-  real_T Constant1[4];                 /* '<S1>/Constant1' */
-  real_T x[4];                         /* '<S1>/Discrete-Time Integrator' */
-  real_T Reshape[2];                   /* '<Root>/Reshape' */
+  real_T Add;                          /* '<Root>/Add' */
+  real_T Gain1;                        /* '<Root>/Gain1' */
+  real_T y[2];
   real_T Probe[2];                     /* '<S8>/Probe' */
   real_T Constant[2];                  /* '<S13>/Constant' */
   real_T Saturation_c[2];              /* '<S15>/Saturation' */
-  real_T Subtract[4];                  /* '<Root>/Subtract' */
+  real_T Multiply[2];                  /* '<Root>/Multiply' */
   real_T Sum[4];                       /* '<Root>/Sum' */
+  real_T Reshape1[4];                  /* '<Root>/Reshape1' */
+  real_T Constant1[4];                 /* '<S1>/Constant1' */
+  real_T x[4];                         /* '<S1>/Discrete-Time Integrator' */
   real_T TSamp[2];                     /* '<S2>/TSamp' */
   real_T uT[2];                        /* '<S4>/1//T' */
   real_T Step;                         /* '<Root>/Step' */
@@ -888,9 +891,9 @@ typedef struct {
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
   real_T Delay_DSTATE[4];              /* '<Root>/Delay' */
-  real_T DiscreteTimeIntegrator_DSTATE[4];/* '<S1>/Discrete-Time Integrator' */
   real_T Integrator_DSTATE[2];         /* '<S15>/Integrator' */
   real_T Delay_DSTATE_m[4];            /* '<S3>/Delay' */
+  real_T DiscreteTimeIntegrator_DSTATE[4];/* '<S1>/Discrete-Time Integrator' */
   real_T UD_DSTATE[2];                 /* '<S2>/UD' */
   real_T HILInitialize_AIMinimums[4];  /* '<Root>/HIL Initialize' */
   real_T HILInitialize_AIMaximums[4];  /* '<Root>/HIL Initialize' */
@@ -900,6 +903,7 @@ typedef struct {
   real_T HILInitialize_FilterFrequency[4];/* '<Root>/HIL Initialize' */
   t_card HILInitialize_Card;           /* '<Root>/HIL Initialize' */
   void *HILWriteAnalog_PWORK;          /* '<Root>/HIL Write Analog' */
+  void *HILReadEncoder_PWORK;          /* '<Root>/HIL Read Encoder' */
   struct {
     void *LoggedData;
   } Scope_PWORK;                       /* '<Root>/Scope' */
@@ -928,7 +932,10 @@ typedef struct {
     void *LoggedData;
   } ToWorkspace_PWORK;                 /* '<Root>/To Workspace' */
 
-  void *HILReadEncoder_PWORK;          /* '<Root>/HIL Read Encoder' */
+  struct {
+    void *LoggedData;
+  } ToWorkspace1_PWORK;                /* '<Root>/To Workspace1' */
+
   struct {
     void *LoggedData;
   } TRIGGER_SCOPE_PWORK;               /* '<Root>/TRIGGER_SCOPE' */
@@ -959,7 +966,7 @@ typedef struct {
 
 /* Parameters (default storage) */
 struct P_ClosedLoopHW_T_ {
-  struct_l7qQ3aUsmVDXJZFdOcCNiB est_param;/* Variable: est_param
+  struct_8dcRBKd2sugfTo5czTP1GD est_param;/* Variable: est_param
                                            * Referenced by: '<S3>/MATLAB Function'
                                            */
   struct_EyhfgjFUMIaPmLVzByLI3F p;     /* Variable: p
@@ -967,9 +974,13 @@ struct P_ClosedLoopHW_T_ {
                                         */
   struct_IikMKrhxguvBv6I6XHfpIC c;     /* Variable: c
                                         * Referenced by:
-                                        *   '<Root>/Constant1'
+                                        *   '<Root>/x_star'
                                         *   '<S3>/Constant'
+                                        *   '<S3>/Constant1'
                                         *   '<S5>/MATLAB Function'
+                                        */
+  real_T dC[8];                        /* Variable: dC
+                                        * Referenced by: '<Root>/Multiply'
                                         */
   real_T x0[4];                        /* Variable: x0
                                         * Referenced by:
@@ -1051,7 +1062,7 @@ struct P_ClosedLoopHW_T_ {
   real_T HILInitialize_POInitial;      /* Expression: initial_pwm_outputs
                                         * Referenced by: '<Root>/HIL Initialize'
                                         */
-  real_T Gain2_Gain;                   /* Expression: 1/(1.2*0.4006*3.5)
+  real_T Gain2_Gain;                   /* Expression: 2/(1.2*0.4006*3.5)
                                         * Referenced by: '<Root>/Gain2'
                                         */
   real_T Saturation_UpperSat;          /* Expression: 1
@@ -1060,10 +1071,15 @@ struct P_ClosedLoopHW_T_ {
   real_T Saturation_LowerSat;          /* Expression: -1
                                         * Referenced by: '<Root>/Saturation'
                                         */
-  real_T DiscreteTimeIntegrator_gainval;
-                           /* Computed Parameter: DiscreteTimeIntegrator_gainval
-                            * Referenced by: '<S1>/Discrete-Time Integrator'
-                            */
+  real_T Constant_Value_o;             /* Expression: -pi/2
+                                        * Referenced by: '<Root>/Constant'
+                                        */
+  real_T Gain_Gain;                    /* Expression: 2*pi/5000
+                                        * Referenced by: '<Root>/Gain'
+                                        */
+  real_T Gain1_Gain;                   /* Expression: -2*pi/10000
+                                        * Referenced by: '<Root>/Gain1'
+                                        */
   real_T Integrator_gainval;           /* Computed Parameter: Integrator_gainval
                                         * Referenced by: '<S15>/Integrator'
                                         */
@@ -1079,6 +1095,10 @@ struct P_ClosedLoopHW_T_ {
   real_T Saturation_LowerSat_b;        /* Expression: windupLowerLimit
                                         * Referenced by: '<S15>/Saturation'
                                         */
+  real_T DiscreteTimeIntegrator_gainval;
+                           /* Computed Parameter: DiscreteTimeIntegrator_gainval
+                            * Referenced by: '<S1>/Discrete-Time Integrator'
+                            */
   real_T TSamp_WtEt;                   /* Computed Parameter: TSamp_WtEt
                                         * Referenced by: '<S2>/TSamp'
                                         */

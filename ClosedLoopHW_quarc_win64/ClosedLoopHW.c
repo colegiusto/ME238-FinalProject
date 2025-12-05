@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.36
+ * Model version              : 1.42
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Thu Dec  4 17:18:11 2025
+ * C source code generated on : Fri Dec  5 13:30:04 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -43,18 +43,16 @@ RT_MODEL_ClosedLoopHW_T *const ClosedLoopHW_M = &ClosedLoopHW_M_;
 /* Model output function */
 void ClosedLoopHW_output(void)
 {
-  /* local block i/o variables */
-  real_T rtb_raag[2];
-  __m128d tmp_1;
-  real_T tmp[5];
-  real_T tmp_0[4];
+  __m128d tmp_2;
+  real_T rtb_Integrator[2];
   real_T Delay_DSTATE_m;
   real_T Delay_DSTATE_m_0;
   real_T Delay_DSTATE_m_1;
-  real_T phi1_tmp;
   real_T rtb_Max;
+  real_T tmp;
+  real_T tmp_0;
+  real_T tmp_1;
   int32_T i;
-  int32_T i_0;
 
   /* MATLAB Function: '<S5>/MATLAB Function' */
   ClosedLoopHW_DW.sfEvent = ClosedLoopHW_CALL_EVENT;
@@ -109,33 +107,36 @@ void ClosedLoopHW_output(void)
     }
   }
 
-  /* Constant: '<S1>/Constant1' */
-  ClosedLoopHW_B.Constant1[0] = ClosedLoopHW_P.x0[0];
+  /* S-Function (hil_read_encoder_block): '<Root>/HIL Read Encoder' */
 
-  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
-  ClosedLoopHW_B.x[0] = ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0];
+  /* S-Function Block: ClosedLoopHW/HIL Read Encoder (hil_read_encoder_block) */
+  {
+    t_error result = hil_read_encoder(ClosedLoopHW_DW.HILInitialize_Card,
+      ClosedLoopHW_P.HILReadEncoder_channels, 2,
+      &ClosedLoopHW_DW.HILReadEncoder_Buffer[0]);
+    if (result < 0) {
+      msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
+        (_rt_error_message));
+      rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
+    } else {
+      rtb_Integrator[0] = ClosedLoopHW_DW.HILReadEncoder_Buffer[0];
+      rtb_Integrator[1] = ClosedLoopHW_DW.HILReadEncoder_Buffer[1];
+    }
+  }
 
-  /* Constant: '<S1>/Constant1' */
-  ClosedLoopHW_B.Constant1[1] = ClosedLoopHW_P.x0[1];
+  /* Sum: '<Root>/Add' incorporates:
+   *  Constant: '<Root>/Constant'
+   *  Gain: '<Root>/Gain'
+   */
+  ClosedLoopHW_B.Add = ClosedLoopHW_P.Gain_Gain * rtb_Integrator[0] +
+    ClosedLoopHW_P.Constant_Value_o;
 
-  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
-  ClosedLoopHW_B.x[1] = ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[1];
+  /* Gain: '<Root>/Gain1' */
+  ClosedLoopHW_B.Gain1 = ClosedLoopHW_P.Gain1_Gain * rtb_Integrator[1];
 
-  /* Constant: '<S1>/Constant1' */
-  ClosedLoopHW_B.Constant1[2] = ClosedLoopHW_P.x0[2];
-
-  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
-  ClosedLoopHW_B.x[2] = ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[2];
-
-  /* Constant: '<S1>/Constant1' */
-  ClosedLoopHW_B.Constant1[3] = ClosedLoopHW_P.x0[3];
-
-  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
-  ClosedLoopHW_B.x[3] = ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[3];
-
-  /* Reshape: '<Root>/Reshape' */
-  ClosedLoopHW_B.Reshape[0] = ClosedLoopHW_B.x[0];
-  ClosedLoopHW_B.Reshape[1] = ClosedLoopHW_B.x[1];
+  /* SignalConversion generated from: '<Root>/To Workspace' */
+  ClosedLoopHW_B.y[0] = ClosedLoopHW_B.Add;
+  ClosedLoopHW_B.y[1] = ClosedLoopHW_B.Gain1;
 
   /* Logic: '<S8>/Logical Operator' incorporates:
    *  Constant: '<S11>/Constant'
@@ -176,66 +177,72 @@ void ClosedLoopHW_output(void)
     }
   }
 
+  rtb_Max = ClosedLoopHW_DW.Integrator_DSTATE[0];
   if (ClosedLoopHW_DW.Integrator_DSTATE[0] >= ClosedLoopHW_P.Integrator_UpperSat)
   {
+    rtb_Max = ClosedLoopHW_P.Integrator_UpperSat;
     ClosedLoopHW_DW.Integrator_DSTATE[0] = ClosedLoopHW_P.Integrator_UpperSat;
   } else if (ClosedLoopHW_DW.Integrator_DSTATE[0] <=
              ClosedLoopHW_P.Integrator_LowerSat) {
+    rtb_Max = ClosedLoopHW_P.Integrator_LowerSat;
     ClosedLoopHW_DW.Integrator_DSTATE[0] = ClosedLoopHW_P.Integrator_LowerSat;
   }
 
   /* Saturate: '<S15>/Saturation' incorporates:
    *  DiscreteIntegrator: '<S15>/Integrator'
    */
-  if (ClosedLoopHW_DW.Integrator_DSTATE[0] >
-      ClosedLoopHW_P.Saturation_UpperSat_e) {
+  if (rtb_Max > ClosedLoopHW_P.Saturation_UpperSat_e) {
     /* Saturate: '<S15>/Saturation' */
     ClosedLoopHW_B.Saturation_c[0] = ClosedLoopHW_P.Saturation_UpperSat_e;
-  } else if (ClosedLoopHW_DW.Integrator_DSTATE[0] <
-             ClosedLoopHW_P.Saturation_LowerSat_b) {
+  } else if (rtb_Max < ClosedLoopHW_P.Saturation_LowerSat_b) {
     /* Saturate: '<S15>/Saturation' */
     ClosedLoopHW_B.Saturation_c[0] = ClosedLoopHW_P.Saturation_LowerSat_b;
   } else {
     /* Saturate: '<S15>/Saturation' */
-    ClosedLoopHW_B.Saturation_c[0] = ClosedLoopHW_DW.Integrator_DSTATE[0];
+    ClosedLoopHW_B.Saturation_c[0] = rtb_Max;
   }
 
   /* DiscreteIntegrator: '<S15>/Integrator' */
+  rtb_Max = ClosedLoopHW_DW.Integrator_DSTATE[1];
   if (ClosedLoopHW_DW.Integrator_DSTATE[1] >= ClosedLoopHW_P.Integrator_UpperSat)
   {
+    rtb_Max = ClosedLoopHW_P.Integrator_UpperSat;
     ClosedLoopHW_DW.Integrator_DSTATE[1] = ClosedLoopHW_P.Integrator_UpperSat;
   } else if (ClosedLoopHW_DW.Integrator_DSTATE[1] <=
              ClosedLoopHW_P.Integrator_LowerSat) {
+    rtb_Max = ClosedLoopHW_P.Integrator_LowerSat;
     ClosedLoopHW_DW.Integrator_DSTATE[1] = ClosedLoopHW_P.Integrator_LowerSat;
   }
 
   /* Saturate: '<S15>/Saturation' incorporates:
    *  DiscreteIntegrator: '<S15>/Integrator'
    */
-  if (ClosedLoopHW_DW.Integrator_DSTATE[1] >
-      ClosedLoopHW_P.Saturation_UpperSat_e) {
+  if (rtb_Max > ClosedLoopHW_P.Saturation_UpperSat_e) {
     /* Saturate: '<S15>/Saturation' */
     ClosedLoopHW_B.Saturation_c[1] = ClosedLoopHW_P.Saturation_UpperSat_e;
-  } else if (ClosedLoopHW_DW.Integrator_DSTATE[1] <
-             ClosedLoopHW_P.Saturation_LowerSat_b) {
+  } else if (rtb_Max < ClosedLoopHW_P.Saturation_LowerSat_b) {
     /* Saturate: '<S15>/Saturation' */
     ClosedLoopHW_B.Saturation_c[1] = ClosedLoopHW_P.Saturation_LowerSat_b;
   } else {
     /* Saturate: '<S15>/Saturation' */
-    ClosedLoopHW_B.Saturation_c[1] = ClosedLoopHW_DW.Integrator_DSTATE[1];
+    ClosedLoopHW_B.Saturation_c[1] = rtb_Max;
   }
 
   /* Sum: '<Root>/Subtract' incorporates:
-   *  Constant: '<Root>/Constant1'
+   *  Constant: '<Root>/x_star'
    */
-  ClosedLoopHW_B.Subtract[0] = ClosedLoopHW_B.Reshape[0] -
-    ClosedLoopHW_P.c.x_star[0];
-  ClosedLoopHW_B.Subtract[2] = ClosedLoopHW_B.Saturation_c[0] -
-    ClosedLoopHW_P.c.x_star[2];
-  ClosedLoopHW_B.Subtract[1] = ClosedLoopHW_B.Reshape[1] -
-    ClosedLoopHW_P.c.x_star[1];
-  ClosedLoopHW_B.Subtract[3] = ClosedLoopHW_B.Saturation_c[1] -
-    ClosedLoopHW_P.c.x_star[3];
+  rtb_Max = ClosedLoopHW_B.Add - ClosedLoopHW_P.c.x_star[0];
+  tmp = ClosedLoopHW_B.Gain1 - ClosedLoopHW_P.c.x_star[1];
+  tmp_0 = ClosedLoopHW_B.Saturation_c[0] - ClosedLoopHW_P.c.x_star[2];
+  tmp_1 = ClosedLoopHW_B.Saturation_c[1] - ClosedLoopHW_P.c.x_star[3];
+  for (i = 0; i <= 0; i += 2) {
+    /* Gain: '<Root>/Multiply' */
+    _mm_storeu_pd(&ClosedLoopHW_B.Multiply[i], _mm_add_pd(_mm_add_pd(_mm_add_pd
+      (_mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.dC[i + 2]), _mm_set1_pd(tmp)),
+       _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.dC[i]), _mm_set1_pd(rtb_Max))),
+      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.dC[i + 4]), _mm_set1_pd(tmp_0))),
+      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.dC[i + 6]), _mm_set1_pd(tmp_1))));
+  }
 
   /* Delay: '<S3>/Delay' incorporates:
    *  Constant: '<S3>/Constant'
@@ -251,14 +258,19 @@ void ClosedLoopHW_output(void)
       ClosedLoopHW_P.c.x_star[3];
   }
 
-  /* MATLAB Function: '<S3>/MATLAB Function' */
+  /* MATLAB Function: '<S3>/MATLAB Function' incorporates:
+   *  Constant: '<S3>/Constant1'
+   *  Sum: '<S3>/Subtract'
+   */
   ClosedLoopHW_DW.sfEvent_k = ClosedLoopHW_CALL_EVENT;
-  tmp[0] = ClosedLoopHW_B.u;
+  rtb_Max = ClosedLoopHW_B.u - ClosedLoopHW_P.c.u_star;
+  tmp = ClosedLoopHW_B.Multiply[0];
+  tmp_0 = ClosedLoopHW_B.Multiply[1];
 
   /* Delay: '<S3>/Delay' incorporates:
    *  MATLAB Function: '<S3>/MATLAB Function'
    */
-  rtb_Max = ClosedLoopHW_DW.Delay_DSTATE_m[1];
+  tmp_1 = ClosedLoopHW_DW.Delay_DSTATE_m[1];
   Delay_DSTATE_m = ClosedLoopHW_DW.Delay_DSTATE_m[0];
   Delay_DSTATE_m_0 = ClosedLoopHW_DW.Delay_DSTATE_m[2];
   Delay_DSTATE_m_1 = ClosedLoopHW_DW.Delay_DSTATE_m[3];
@@ -266,60 +278,80 @@ void ClosedLoopHW_output(void)
     /* MATLAB Function: '<S3>/MATLAB Function' incorporates:
      *  Delay: '<S3>/Delay'
      */
-    tmp_1 = _mm_loadu_pd(&ClosedLoopHW_B.Subtract[i]);
-    _mm_storeu_pd(&tmp[i + 1], tmp_1);
-    _mm_storeu_pd(&tmp_0[i], _mm_add_pd(_mm_add_pd(_mm_add_pd(_mm_mul_pd
-      (_mm_loadu_pd(&ClosedLoopHW_P.est_param.A[i + 4]), _mm_set1_pd(rtb_Max)),
-      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.est_param.A[i]), _mm_set1_pd
-                 (Delay_DSTATE_m))), _mm_mul_pd(_mm_loadu_pd
-      (&ClosedLoopHW_P.est_param.A[i + 8]), _mm_set1_pd(Delay_DSTATE_m_0))),
-      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.est_param.A[i + 12]), _mm_set1_pd
-                 (Delay_DSTATE_m_1))));
-  }
-
-  for (i_0 = 0; i_0 < 4; i_0++) {
-    /* MATLAB Function: '<S3>/MATLAB Function' */
-    rtb_Max = 0.0;
-    for (i = 0; i < 5; i++) {
-      rtb_Max += ClosedLoopHW_P.est_param.B[(i << 2) + i_0] * tmp[i];
-    }
-
-    rtb_Max += tmp_0[i_0];
-    ClosedLoopHW_B.x_hat[i_0] = rtb_Max;
+    tmp_2 = _mm_add_pd(_mm_add_pd(_mm_add_pd(_mm_add_pd(_mm_mul_pd(_mm_loadu_pd(
+      &ClosedLoopHW_P.est_param.A[i + 4]), _mm_set1_pd(tmp_1)), _mm_mul_pd
+      (_mm_loadu_pd(&ClosedLoopHW_P.est_param.A[i]), _mm_set1_pd(Delay_DSTATE_m))),
+      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.est_param.A[i + 8]), _mm_set1_pd
+                 (Delay_DSTATE_m_0))), _mm_mul_pd(_mm_loadu_pd
+      (&ClosedLoopHW_P.est_param.A[i + 12]), _mm_set1_pd(Delay_DSTATE_m_1))),
+                       _mm_add_pd(_mm_add_pd(_mm_mul_pd(_mm_loadu_pd
+      (&ClosedLoopHW_P.est_param.B[i + 4]), _mm_set1_pd(tmp)), _mm_mul_pd
+      (_mm_loadu_pd(&ClosedLoopHW_P.est_param.B[i]), _mm_set1_pd(rtb_Max))),
+      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.est_param.B[i + 8]), _mm_set1_pd
+                 (tmp_0))));
+    _mm_storeu_pd(&ClosedLoopHW_B.x_hat[i], tmp_2);
 
     /* Sum: '<Root>/Sum' incorporates:
-     *  Constant: '<Root>/Constant1'
+     *  Constant: '<Root>/x_star'
+     *  MATLAB Function: '<S3>/MATLAB Function'
      */
-    ClosedLoopHW_B.Sum[i_0] = rtb_Max + ClosedLoopHW_P.c.x_star[i_0];
+    _mm_storeu_pd(&ClosedLoopHW_B.Sum[i], _mm_add_pd(tmp_2, _mm_loadu_pd
+      (&ClosedLoopHW_P.c.x_star[i])));
   }
+
+  /* Reshape: '<Root>/Reshape1' */
+  ClosedLoopHW_B.Reshape1[0] = ClosedLoopHW_B.Sum[0];
+  ClosedLoopHW_B.Reshape1[1] = ClosedLoopHW_B.Sum[1];
+  ClosedLoopHW_B.Reshape1[2] = ClosedLoopHW_B.Sum[2];
+  ClosedLoopHW_B.Reshape1[3] = ClosedLoopHW_B.Sum[3];
+
+  /* Constant: '<S1>/Constant1' */
+  ClosedLoopHW_B.Constant1[0] = ClosedLoopHW_P.x0[0];
+
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_B.x[0] = ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0];
+
+  /* Constant: '<S1>/Constant1' */
+  ClosedLoopHW_B.Constant1[1] = ClosedLoopHW_P.x0[1];
+
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_B.x[1] = ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[1];
+
+  /* Constant: '<S1>/Constant1' */
+  ClosedLoopHW_B.Constant1[2] = ClosedLoopHW_P.x0[2];
+
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_B.x[2] = ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[2];
+
+  /* Constant: '<S1>/Constant1' */
+  ClosedLoopHW_B.Constant1[3] = ClosedLoopHW_P.x0[3];
+
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_B.x[3] = ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[3];
 
   /* MATLAB Function: '<S1>/MATLAB Function' incorporates:
    *  DiscreteIntegrator: '<S1>/Discrete-Time Integrator'
    */
   ClosedLoopHW_DW.sfEvent_c = ClosedLoopHW_CALL_EVENT;
-  Delay_DSTATE_m = cos(ClosedLoopHW_B.x[1]);
-  Delay_DSTATE_m_0 = 2.0 * ClosedLoopHW_P.p.T3;
-  rtb_Max = Delay_DSTATE_m_0 * Delay_DSTATE_m + (ClosedLoopHW_P.p.T1 +
-    ClosedLoopHW_P.p.T2);
-  Delay_DSTATE_m = ClosedLoopHW_P.p.T3 * Delay_DSTATE_m + ClosedLoopHW_P.p.T2;
-  Delay_DSTATE_m_1 = sin(ClosedLoopHW_B.x[1]);
-  phi1_tmp = ClosedLoopHW_P.p.T5 * ClosedLoopHW_P.p.g * cos(ClosedLoopHW_B.x[0]
-    + ClosedLoopHW_B.x[1]);
+  tmp = cos(ClosedLoopHW_B.x[1]);
+  tmp_0 = 2.0 * ClosedLoopHW_P.p.T3;
+  rtb_Max = tmp_0 * tmp + (ClosedLoopHW_P.p.T1 + ClosedLoopHW_P.p.T2);
+  tmp = ClosedLoopHW_P.p.T3 * tmp + ClosedLoopHW_P.p.T2;
+  tmp_1 = sin(ClosedLoopHW_B.x[1]);
+  Delay_DSTATE_m = ClosedLoopHW_P.p.T5 * ClosedLoopHW_P.p.g * cos
+    (ClosedLoopHW_B.x[0] + ClosedLoopHW_B.x[1]);
   ClosedLoopHW_B.dx[0] = ClosedLoopHW_B.x[2];
   ClosedLoopHW_B.dx[1] = ClosedLoopHW_B.x[3];
-  Delay_DSTATE_m_0 = ((-ClosedLoopHW_P.p.T3 * Delay_DSTATE_m_1 *
-                       (ClosedLoopHW_B.x[3] * ClosedLoopHW_B.x[3]) -
-                       Delay_DSTATE_m_0 * Delay_DSTATE_m_1 * ClosedLoopHW_B.x[3]
-                       * ClosedLoopHW_B.x[2]) + (ClosedLoopHW_P.p.T4 *
-    ClosedLoopHW_P.p.g * cos(ClosedLoopHW_B.x[0]) + phi1_tmp)) -
-    ClosedLoopHW_B.u;
-  Delay_DSTATE_m_1 = ClosedLoopHW_P.p.T3 * Delay_DSTATE_m_1 * (ClosedLoopHW_B.x
-    [2] * ClosedLoopHW_B.x[2]) + phi1_tmp;
-  phi1_tmp = rtb_Max * ClosedLoopHW_P.p.T2 - Delay_DSTATE_m * Delay_DSTATE_m;
-  ClosedLoopHW_B.dx[2] = (Delay_DSTATE_m_1 * Delay_DSTATE_m - Delay_DSTATE_m_0 *
-    ClosedLoopHW_P.p.T2) / phi1_tmp;
-  ClosedLoopHW_B.dx[3] = (Delay_DSTATE_m_0 * Delay_DSTATE_m - Delay_DSTATE_m_1 *
-    rtb_Max) / phi1_tmp;
+  tmp_0 = ((-ClosedLoopHW_P.p.T3 * tmp_1 * (ClosedLoopHW_B.x[3] *
+             ClosedLoopHW_B.x[3]) - tmp_0 * tmp_1 * ClosedLoopHW_B.x[3] *
+            ClosedLoopHW_B.x[2]) + (ClosedLoopHW_P.p.T4 * ClosedLoopHW_P.p.g *
+            cos(ClosedLoopHW_B.x[0]) + Delay_DSTATE_m)) - ClosedLoopHW_B.u;
+  tmp_1 = ClosedLoopHW_P.p.T3 * tmp_1 * (ClosedLoopHW_B.x[2] * ClosedLoopHW_B.x
+    [2]) + Delay_DSTATE_m;
+  Delay_DSTATE_m = rtb_Max * ClosedLoopHW_P.p.T2 - tmp * tmp;
+  ClosedLoopHW_B.dx[2] = (tmp_1 * tmp - tmp_0 * ClosedLoopHW_P.p.T2) /
+    Delay_DSTATE_m;
+  ClosedLoopHW_B.dx[3] = (tmp_0 * tmp - tmp_1 * rtb_Max) / Delay_DSTATE_m;
 
   /* MinMax: '<S8>/Max' incorporates:
    *  Constant: '<S8>/Time constant'
@@ -341,8 +373,8 @@ void ClosedLoopHW_output(void)
    * About '<S2>/TSamp':
    *  y = u * K where K = 1 / ( w * Ts )
    */
-  Delay_DSTATE_m = ClosedLoopHW_B.Reshape[0] * ClosedLoopHW_P.TSamp_WtEt;
-  ClosedLoopHW_B.TSamp[0] = Delay_DSTATE_m;
+  tmp = ClosedLoopHW_B.y[0] * ClosedLoopHW_P.TSamp_WtEt;
+  ClosedLoopHW_B.TSamp[0] = tmp;
 
   /* Product: '<S4>/1//T' incorporates:
    *  Gain: '<S4>/K'
@@ -350,7 +382,7 @@ void ClosedLoopHW_output(void)
    *  Sum: '<S4>/Sum1'
    *  UnitDelay: '<S2>/UD'
    */
-  ClosedLoopHW_B.uT[0] = ((Delay_DSTATE_m - ClosedLoopHW_DW.UD_DSTATE[0]) *
+  ClosedLoopHW_B.uT[0] = ((tmp - ClosedLoopHW_DW.UD_DSTATE[0]) *
     ClosedLoopHW_P.LowPassFilterDiscreteorContinuo -
     ClosedLoopHW_B.Saturation_c[0]) * (1.0 / rtb_Max);
 
@@ -359,8 +391,8 @@ void ClosedLoopHW_output(void)
    * About '<S2>/TSamp':
    *  y = u * K where K = 1 / ( w * Ts )
    */
-  Delay_DSTATE_m = ClosedLoopHW_B.Reshape[1] * ClosedLoopHW_P.TSamp_WtEt;
-  ClosedLoopHW_B.TSamp[1] = Delay_DSTATE_m;
+  tmp = ClosedLoopHW_B.y[1] * ClosedLoopHW_P.TSamp_WtEt;
+  ClosedLoopHW_B.TSamp[1] = tmp;
 
   /* Product: '<S4>/1//T' incorporates:
    *  Gain: '<S4>/K'
@@ -368,26 +400,9 @@ void ClosedLoopHW_output(void)
    *  Sum: '<S4>/Sum1'
    *  UnitDelay: '<S2>/UD'
    */
-  ClosedLoopHW_B.uT[1] = ((Delay_DSTATE_m - ClosedLoopHW_DW.UD_DSTATE[1]) *
+  ClosedLoopHW_B.uT[1] = ((tmp - ClosedLoopHW_DW.UD_DSTATE[1]) *
     ClosedLoopHW_P.LowPassFilterDiscreteorContinuo -
     ClosedLoopHW_B.Saturation_c[1]) * (1.0 / rtb_Max);
-
-  /* S-Function (hil_read_encoder_block): '<Root>/HIL Read Encoder' */
-
-  /* S-Function Block: ClosedLoopHW/HIL Read Encoder (hil_read_encoder_block) */
-  {
-    t_error result = hil_read_encoder(ClosedLoopHW_DW.HILInitialize_Card,
-      ClosedLoopHW_P.HILReadEncoder_channels, 2,
-      &ClosedLoopHW_DW.HILReadEncoder_Buffer[0]);
-    if (result < 0) {
-      msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
-        (_rt_error_message));
-      rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
-    } else {
-      rtb_raag[0] = ClosedLoopHW_DW.HILReadEncoder_Buffer[0];
-      rtb_raag[1] = ClosedLoopHW_DW.HILReadEncoder_Buffer[1];
-    }
-  }
 
   /* Step: '<Root>/Step' */
   if (ClosedLoopHW_M->Timing.t[0] < ClosedLoopHW_P.Step_Time) {
@@ -406,41 +421,11 @@ void ClosedLoopHW_update(void)
 {
   real_T Integrator_DSTATE;
 
-  /* Update for Delay: '<Root>/Delay' incorporates:
-   *  Sum: '<Root>/Sum'
-   */
+  /* Update for Delay: '<Root>/Delay' */
   ClosedLoopHW_DW.Delay_DSTATE[0] = ClosedLoopHW_B.Sum[0];
-
-  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
-  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0] +=
-    ClosedLoopHW_P.DiscreteTimeIntegrator_gainval * ClosedLoopHW_B.dx[0];
-
-  /* Update for Delay: '<Root>/Delay' incorporates:
-   *  Sum: '<Root>/Sum'
-   */
   ClosedLoopHW_DW.Delay_DSTATE[1] = ClosedLoopHW_B.Sum[1];
-
-  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
-  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[1] +=
-    ClosedLoopHW_P.DiscreteTimeIntegrator_gainval * ClosedLoopHW_B.dx[1];
-
-  /* Update for Delay: '<Root>/Delay' incorporates:
-   *  Sum: '<Root>/Sum'
-   */
   ClosedLoopHW_DW.Delay_DSTATE[2] = ClosedLoopHW_B.Sum[2];
-
-  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
-  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[2] +=
-    ClosedLoopHW_P.DiscreteTimeIntegrator_gainval * ClosedLoopHW_B.dx[2];
-
-  /* Update for Delay: '<Root>/Delay' incorporates:
-   *  Sum: '<Root>/Sum'
-   */
   ClosedLoopHW_DW.Delay_DSTATE[3] = ClosedLoopHW_B.Sum[3];
-
-  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
-  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[3] +=
-    ClosedLoopHW_P.DiscreteTimeIntegrator_gainval * ClosedLoopHW_B.dx[3];
 
   /* Update for DiscreteIntegrator: '<S15>/Integrator' */
   Integrator_DSTATE = ClosedLoopHW_P.Integrator_gainval * ClosedLoopHW_B.uT[0] +
@@ -469,9 +454,31 @@ void ClosedLoopHW_update(void)
   /* Update for Delay: '<S3>/Delay' */
   ClosedLoopHW_DW.icLoad = false;
   ClosedLoopHW_DW.Delay_DSTATE_m[0] = ClosedLoopHW_B.x_hat[0];
+
+  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0] +=
+    ClosedLoopHW_P.DiscreteTimeIntegrator_gainval * ClosedLoopHW_B.dx[0];
+
+  /* Update for Delay: '<S3>/Delay' */
   ClosedLoopHW_DW.Delay_DSTATE_m[1] = ClosedLoopHW_B.x_hat[1];
+
+  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[1] +=
+    ClosedLoopHW_P.DiscreteTimeIntegrator_gainval * ClosedLoopHW_B.dx[1];
+
+  /* Update for Delay: '<S3>/Delay' */
   ClosedLoopHW_DW.Delay_DSTATE_m[2] = ClosedLoopHW_B.x_hat[2];
+
+  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[2] +=
+    ClosedLoopHW_P.DiscreteTimeIntegrator_gainval * ClosedLoopHW_B.dx[2];
+
+  /* Update for Delay: '<S3>/Delay' */
   ClosedLoopHW_DW.Delay_DSTATE_m[3] = ClosedLoopHW_B.x_hat[3];
+
+  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[3] +=
+    ClosedLoopHW_P.DiscreteTimeIntegrator_gainval * ClosedLoopHW_B.dx[3];
 
   /* Update for UnitDelay: '<S2>/UD' */
   ClosedLoopHW_DW.UD_DSTATE[0] = ClosedLoopHW_B.TSamp[0];
@@ -727,12 +734,6 @@ void ClosedLoopHW_initialize(void)
     }
   }
 
-  /* Start for Constant: '<S1>/Constant1' */
-  ClosedLoopHW_B.Constant1[0] = ClosedLoopHW_P.x0[0];
-  ClosedLoopHW_B.Constant1[1] = ClosedLoopHW_P.x0[1];
-  ClosedLoopHW_B.Constant1[2] = ClosedLoopHW_P.x0[2];
-  ClosedLoopHW_B.Constant1[3] = ClosedLoopHW_P.x0[3];
-
   /* Start for Probe: '<S8>/Probe' */
   ClosedLoopHW_B.Probe[0] = 0.001;
   ClosedLoopHW_B.Probe[1] = 0.0;
@@ -741,43 +742,17 @@ void ClosedLoopHW_initialize(void)
   ClosedLoopHW_B.Constant[0] = ClosedLoopHW_P.LowPassFilterDiscreteorContin_g[0];
   ClosedLoopHW_B.Constant[1] = ClosedLoopHW_P.LowPassFilterDiscreteorContin_g[1];
 
+  /* Start for Constant: '<S1>/Constant1' */
+  ClosedLoopHW_B.Constant1[0] = ClosedLoopHW_P.x0[0];
+  ClosedLoopHW_B.Constant1[1] = ClosedLoopHW_P.x0[1];
+  ClosedLoopHW_B.Constant1[2] = ClosedLoopHW_P.x0[2];
+  ClosedLoopHW_B.Constant1[3] = ClosedLoopHW_P.x0[3];
+
   /* InitializeConditions for Delay: '<Root>/Delay' */
   ClosedLoopHW_DW.Delay_DSTATE[0] = ClosedLoopHW_P.x0[0];
-
-  /* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' incorporates:
-   *  Constant: '<S1>/Constant1'
-   */
-  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0] = ClosedLoopHW_B.Constant1[0];
-
-  /* InitializeConditions for Delay: '<Root>/Delay' */
   ClosedLoopHW_DW.Delay_DSTATE[1] = ClosedLoopHW_P.x0[1];
-
-  /* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' incorporates:
-   *  Constant: '<S1>/Constant1'
-   */
-  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[1] = ClosedLoopHW_B.Constant1[1];
-
-  /* InitializeConditions for Delay: '<Root>/Delay' */
   ClosedLoopHW_DW.Delay_DSTATE[2] = ClosedLoopHW_P.x0[2];
-
-  /* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' incorporates:
-   *  Constant: '<S1>/Constant1'
-   */
-  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[2] = ClosedLoopHW_B.Constant1[2];
-
-  /* InitializeConditions for Delay: '<Root>/Delay' */
   ClosedLoopHW_DW.Delay_DSTATE[3] = ClosedLoopHW_P.x0[3];
-
-  /* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' incorporates:
-   *  Constant: '<S1>/Constant1'
-   */
-  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[3] = ClosedLoopHW_B.Constant1[3];
-
-  /* InitializeConditions for DiscreteIntegrator: '<S15>/Integrator' */
-  ClosedLoopHW_DW.Integrator_PrevResetState = 0;
-
-  /* InitializeConditions for Delay: '<S3>/Delay' */
-  ClosedLoopHW_DW.icLoad = true;
 
   /* InitializeConditions for DiscreteIntegrator: '<S15>/Integrator' */
   ClosedLoopHW_DW.Integrator_DSTATE[0] = ClosedLoopHW_B.Constant[0];
@@ -787,10 +762,6 @@ void ClosedLoopHW_initialize(void)
     ClosedLoopHW_DW.Integrator_DSTATE[0] = ClosedLoopHW_P.Integrator_LowerSat;
   }
 
-  /* InitializeConditions for UnitDelay: '<S2>/UD' */
-  ClosedLoopHW_DW.UD_DSTATE[0] = ClosedLoopHW_P.x0[0] / 0.001;
-
-  /* InitializeConditions for DiscreteIntegrator: '<S15>/Integrator' */
   ClosedLoopHW_DW.Integrator_DSTATE[1] = ClosedLoopHW_B.Constant[1];
   if (ClosedLoopHW_B.Constant[1] >= ClosedLoopHW_P.Integrator_UpperSat) {
     ClosedLoopHW_DW.Integrator_DSTATE[1] = ClosedLoopHW_P.Integrator_UpperSat;
@@ -798,7 +769,23 @@ void ClosedLoopHW_initialize(void)
     ClosedLoopHW_DW.Integrator_DSTATE[1] = ClosedLoopHW_P.Integrator_LowerSat;
   }
 
+  ClosedLoopHW_DW.Integrator_PrevResetState = 0;
+
+  /* End of InitializeConditions for DiscreteIntegrator: '<S15>/Integrator' */
+
+  /* InitializeConditions for Delay: '<S3>/Delay' */
+  ClosedLoopHW_DW.icLoad = true;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' incorporates:
+   *  Constant: '<S1>/Constant1'
+   */
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0] = ClosedLoopHW_B.Constant1[0];
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[1] = ClosedLoopHW_B.Constant1[1];
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[2] = ClosedLoopHW_B.Constant1[2];
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[3] = ClosedLoopHW_B.Constant1[3];
+
   /* InitializeConditions for UnitDelay: '<S2>/UD' */
+  ClosedLoopHW_DW.UD_DSTATE[0] = ClosedLoopHW_P.x0[0] / 0.001;
   ClosedLoopHW_DW.UD_DSTATE[1] = ClosedLoopHW_P.x0[1] / 0.001;
 
   /* SystemInitialize for MATLAB Function: '<S5>/MATLAB Function' */
@@ -967,10 +954,10 @@ RT_MODEL_ClosedLoopHW_T *ClosedLoopHW(void)
   ClosedLoopHW_M->Timing.stepSize1 = 0.001;
 
   /* External mode info */
-  ClosedLoopHW_M->Sizes.checksums[0] = (1304436763U);
-  ClosedLoopHW_M->Sizes.checksums[1] = (3369799376U);
-  ClosedLoopHW_M->Sizes.checksums[2] = (285161258U);
-  ClosedLoopHW_M->Sizes.checksums[3] = (281098238U);
+  ClosedLoopHW_M->Sizes.checksums[0] = (291345330U);
+  ClosedLoopHW_M->Sizes.checksums[1] = (3452196352U);
+  ClosedLoopHW_M->Sizes.checksums[2] = (3481132561U);
+  ClosedLoopHW_M->Sizes.checksums[3] = (2268132520U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -1030,9 +1017,9 @@ RT_MODEL_ClosedLoopHW_T *ClosedLoopHW(void)
   ClosedLoopHW_M->Sizes.numU = (0);    /* Number of model inputs */
   ClosedLoopHW_M->Sizes.sysDirFeedThru = (0);/* The model is not direct feedthrough */
   ClosedLoopHW_M->Sizes.numSampTimes = (2);/* Number of sample times */
-  ClosedLoopHW_M->Sizes.numBlocks = (50);/* Number of blocks */
-  ClosedLoopHW_M->Sizes.numBlockIO = (17);/* Number of block outputs */
-  ClosedLoopHW_M->Sizes.numBlockPrms = (102);/* Sum of parameter "widths" */
+  ClosedLoopHW_M->Sizes.numBlocks = (59);/* Number of blocks */
+  ClosedLoopHW_M->Sizes.numBlockIO = (20);/* Number of block outputs */
+  ClosedLoopHW_M->Sizes.numBlockPrms = (113);/* Sum of parameter "widths" */
   return ClosedLoopHW_M;
 }
 

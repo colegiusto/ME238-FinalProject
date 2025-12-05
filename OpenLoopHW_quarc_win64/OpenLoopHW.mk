@@ -2,7 +2,7 @@
 ## Makefile generated for component 'OpenLoopHW'. 
 ## 
 ## Makefile     : OpenLoopHW.mk
-## Generated on : Thu Dec 04 15:50:38 2025
+## Generated on : Fri Dec 05 12:03:43 2025
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)\OpenLoopHW.rt-win64
 ## Product type : executable
 ## 
@@ -23,7 +23,7 @@ MAKEFILE                  = OpenLoopHW.mk
 MATLAB_ROOT               = C:\PROGRA~1\MATLAB\R2023a
 MATLAB_BIN                = C:\PROGRA~1\MATLAB\R2023a\bin
 MATLAB_ARCH_BIN           = $(MATLAB_BIN)\win64
-START_DIR                 = C:\Users\colegiusto\ME238-FinalProject
+START_DIR                 = C:\Users\colegiusto\Documents\ME238-FinalProject
 SOLVER                    = 
 SOLVER_OBJ                = 
 CLASSIC_INTERFACE         = 1

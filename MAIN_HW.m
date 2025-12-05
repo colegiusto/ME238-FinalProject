@@ -8,6 +8,7 @@ x0 = [-pi/2; 0; 0; 0];
 t_control = linspace(0,10,100);
 ut = (t_control>=1)*0.2;
 
+%%
 model = 'OpenLoopHW';
 
 set_param(model, 'SimulationMode', 'external')
@@ -50,10 +51,10 @@ B = J(0, 1e-7, @(u)dynamics(c.x_star, u, p));
 
 c.u_star = -B \dynamics(c.x_star, 0, p);
 
-Q = diag([1 1 100 100]);
-R = 1e-5;
+Q = diag([10 10 10000 1000]);
+R = 1e-6;
 
-sys = c2d(ss(A,B,eye(4), 0), 0.001);
+sys = c2d(ss(A,B,eye(2,4), 0), 0.001);
 
 c.K = lqr(sys, Q, R);
 
@@ -62,8 +63,8 @@ c.K = lqr(sys, Q, R);
 [dA, dB, dC, dD] = ssdata(sys);
 
 BB = B;
-QN = 0.1;
-RN = eye(4);
+QN = 0.9;
+RN = eye(2);
 
 kalsys = ss(A, [B BB], dC, 0);
 
@@ -76,6 +77,7 @@ est_param.B = est.B;
 %%
 model = 'ClosedLoopHW';
 set_param(model, 'Dirty', 'on')
+rtwbuild(model)
 
 set_param(model, 'SimulationMode', 'external')
 set_param(model, 'SimulationCommand', 'connect')
@@ -88,12 +90,27 @@ pause(11)
 output = pendPos;
 ap.l1 = 1;
 ap.l2 = 1.5;
+figure(1)
 for i = 1:50:length(output.time)
     clf; hold on;
     animate(output.time(i), output.signals.values(i,:), ap)
 
     drawnow; pause(0.05); 
 end
+
+%% plot
+
+figure(2)
+subplot(2,1,1)
+plot(output.time, output.signals.values(:,1), output.time, output.signals.values(:,2))
+hold on
+plot(pendEst.time, pendEst.signals.values(:,1),pendEst.time,pendEst.signals.values(:,2))
+legend("Encoder q1", "Encoder q2", "Kalman q1", "Kalman q2")
+subplot(2,1,2)
+plot(output.time(1:end-1)+diff(output.time), diff(output.signals.values(:,1))/0.001, output.time(1:end-1)+diff(output.time), diff(output.signals.values(:,2))/0.001)
+hold on
+plot(pendEst.time, pendEst.signals.values(:,3),pendEst.time,pendEst.signals.values(:,4))
+legend("Encoder dq1", "Encoder dq2", "Kalman dq1", "Kalman dq2")
 
 %% Trajectory Optimization
 

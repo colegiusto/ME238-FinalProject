@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.36
+ * Model version              : 1.42
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Thu Dec  4 17:18:11 2025
+ * C source code generated on : Fri Dec  5 13:30:04 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -37,9 +37,9 @@ static uint_T rtDataTypeSizes[] = {
   sizeof(action_T),
   2*sizeof(uint32_T),
   sizeof(int32_T),
-  sizeof(struct_IikMKrhxguvBv6I6XHfpIC),
   sizeof(struct_EyhfgjFUMIaPmLVzByLI3F),
-  sizeof(struct_l7qQ3aUsmVDXJZFdOcCNiB),
+  sizeof(struct_IikMKrhxguvBv6I6XHfpIC),
+  sizeof(struct_8dcRBKd2sugfTo5czTP1GD),
   sizeof(t_card),
   sizeof(uint_T),
   sizeof(char_T),
@@ -64,9 +64,9 @@ static const char_T * rtDataTypeNames[] = {
   "action_T",
   "timer_uint32_pair_T",
   "physical_connection",
-  "struct_IikMKrhxguvBv6I6XHfpIC",
   "struct_EyhfgjFUMIaPmLVzByLI3F",
-  "struct_l7qQ3aUsmVDXJZFdOcCNiB",
+  "struct_IikMKrhxguvBv6I6XHfpIC",
+  "struct_8dcRBKd2sugfTo5czTP1GD",
   "t_card",
   "uint_T",
   "char_T",
@@ -76,7 +76,7 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&ClosedLoopHW_B.Delay[0]), 0, 0, 43 },
+  { (char_T *)(&ClosedLoopHW_B.Delay[0]), 0, 0, 47 },
 
   { (char_T *)(&ClosedLoopHW_B.LogicalOperator), 8, 0, 1 }
   ,
@@ -85,7 +85,7 @@ static DataTypeTransition rtBTransitions[] = {
 
   { (char_T *)(&ClosedLoopHW_DW.HILInitialize_Card), 18, 0, 1 },
 
-  { (char_T *)(&ClosedLoopHW_DW.HILWriteAnalog_PWORK), 11, 0, 10 },
+  { (char_T *)(&ClosedLoopHW_DW.HILWriteAnalog_PWORK), 11, 0, 11 },
 
   { (char_T *)(&ClosedLoopHW_DW.HILInitialize_QuadratureModes[0]), 6, 0, 13 },
 
@@ -106,15 +106,15 @@ static DataTypeTransitionTable rtBTransTable = {
 static DataTypeTransition rtPTransitions[] = {
   { (char_T *)(&ClosedLoopHW_P.est_param), 17, 0, 1 },
 
-  { (char_T *)(&ClosedLoopHW_P.p), 16, 0, 1 },
+  { (char_T *)(&ClosedLoopHW_P.p), 15, 0, 1 },
 
-  { (char_T *)(&ClosedLoopHW_P.c), 15, 0, 1 },
+  { (char_T *)(&ClosedLoopHW_P.c), 16, 0, 1 },
 
-  { (char_T *)(&ClosedLoopHW_P.x0[0]), 0, 0, 10 },
+  { (char_T *)(&ClosedLoopHW_P.dC[0]), 0, 0, 18 },
 
   { (char_T *)(&ClosedLoopHW_P.HILWriteAnalog_channels), 7, 0, 3 },
 
-  { (char_T *)(&ClosedLoopHW_P.Constant_Value), 0, 0, 29 },
+  { (char_T *)(&ClosedLoopHW_P.Constant_Value), 0, 0, 32 },
 
   { (char_T *)(&ClosedLoopHW_P.HILInitialize_CKChannels[0]), 6, 0, 7 },
 

@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.36
+ * Model version              : 1.42
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Thu Dec  4 17:18:11 2025
+ * C source code generated on : Fri Dec  5 13:30:04 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -21,18 +21,6 @@
 #ifndef RTW_HEADER_ClosedLoopHW_types_h_
 #define RTW_HEADER_ClosedLoopHW_types_h_
 #include "rtwtypes.h"
-#ifndef DEFINED_TYPEDEF_FOR_struct_IikMKrhxguvBv6I6XHfpIC_
-#define DEFINED_TYPEDEF_FOR_struct_IikMKrhxguvBv6I6XHfpIC_
-
-typedef struct {
-  real_T bounds[4];
-  real_T x_star[4];
-  real_T u_star;
-  real_T K[4];
-} struct_IikMKrhxguvBv6I6XHfpIC;
-
-#endif
-
 #ifndef DEFINED_TYPEDEF_FOR_struct_EyhfgjFUMIaPmLVzByLI3F_
 #define DEFINED_TYPEDEF_FOR_struct_EyhfgjFUMIaPmLVzByLI3F_
 
@@ -55,13 +43,25 @@ typedef struct {
 
 #endif
 
-#ifndef DEFINED_TYPEDEF_FOR_struct_l7qQ3aUsmVDXJZFdOcCNiB_
-#define DEFINED_TYPEDEF_FOR_struct_l7qQ3aUsmVDXJZFdOcCNiB_
+#ifndef DEFINED_TYPEDEF_FOR_struct_IikMKrhxguvBv6I6XHfpIC_
+#define DEFINED_TYPEDEF_FOR_struct_IikMKrhxguvBv6I6XHfpIC_
+
+typedef struct {
+  real_T bounds[4];
+  real_T x_star[4];
+  real_T u_star;
+  real_T K[4];
+} struct_IikMKrhxguvBv6I6XHfpIC;
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_struct_8dcRBKd2sugfTo5czTP1GD_
+#define DEFINED_TYPEDEF_FOR_struct_8dcRBKd2sugfTo5czTP1GD_
 
 typedef struct {
   real_T A[16];
-  real_T B[20];
-} struct_l7qQ3aUsmVDXJZFdOcCNiB;
+  real_T B[12];
+} struct_8dcRBKd2sugfTo5czTP1GD;
 
 #endif
 
