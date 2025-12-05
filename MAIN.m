@@ -47,6 +47,7 @@ R = 1e-3;
 sys = c2d(ss(A,B,eye(4), 0), 0.001);
 
 c.K = lqr(sys, Q, R);
+% c.K(3:4) = 0;
 
 x0 = [0;0;0;0];
 
@@ -58,7 +59,6 @@ set_param(model, 'SimulationMode', 'normal')
 set_param(model, 'SimulationCommand', 'connect')
 pause(1)
 set_param(model, 'SimulationCommand', 'start')
-pause(11)
 
 %% animate result
 
