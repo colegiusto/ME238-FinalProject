@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.17
+ * Model version              : 1.36
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Wed Dec  3 14:00:40 2025
+ * C source code generated on : Thu Dec  4 17:18:11 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -866,28 +866,32 @@
 
 /* Block signals (default storage) */
 typedef struct {
-  real_T Add;                          /* '<Root>/Add' */
-  real_T Gain1;                        /* '<Root>/Gain1' */
-  real_T Probe[2];                     /* '<S59>/Probe' */
-  real_T y[2];
-  real_T TSamp[2];                     /* '<S1>/TSamp' */
-  real_T Saturation[2];                /* '<S65>/Saturation' */
+  real_T Delay[4];                     /* '<Root>/Delay' */
+  real_T Saturation;                   /* '<Root>/Saturation' */
+  real_T Constant1[4];                 /* '<S1>/Constant1' */
+  real_T x[4];                         /* '<S1>/Discrete-Time Integrator' */
+  real_T Reshape[2];                   /* '<Root>/Reshape' */
+  real_T Probe[2];                     /* '<S8>/Probe' */
+  real_T Constant[2];                  /* '<S13>/Constant' */
+  real_T Saturation_c[2];              /* '<S15>/Saturation' */
+  real_T Subtract[4];                  /* '<Root>/Subtract' */
   real_T Sum[4];                       /* '<Root>/Sum' */
-  real_T Saturation_p;                 /* '<Root>/Saturation' */
-  real_T Add_k[4];                     /* '<S25>/Add' */
-  real_T uT[2];                        /* '<S3>/1//T' */
+  real_T TSamp[2];                     /* '<S2>/TSamp' */
+  real_T uT[2];                        /* '<S4>/1//T' */
   real_T Step;                         /* '<Root>/Step' */
-  real_T u;                            /* '<S4>/MATLAB Function' */
-  real_T Product2[4];                  /* '<S58>/Product2' */
-  real_T Product3[4];                  /* '<S56>/Product3' */
-  boolean_T LogicalOperator;           /* '<S59>/Logical Operator' */
+  real_T u;                            /* '<S5>/MATLAB Function' */
+  real_T x_hat[4];                     /* '<S3>/MATLAB Function' */
+  real_T dx[4];                        /* '<S1>/MATLAB Function' */
+  boolean_T LogicalOperator;           /* '<S8>/Logical Operator' */
 } B_ClosedLoopHW_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  real_T UD_DSTATE[2];                 /* '<S1>/UD' */
-  real_T Integrator_DSTATE[2];         /* '<S65>/Integrator' */
-  real_T MemoryX_DSTATE[4];            /* '<S2>/MemoryX' */
+  real_T Delay_DSTATE[4];              /* '<Root>/Delay' */
+  real_T DiscreteTimeIntegrator_DSTATE[4];/* '<S1>/Discrete-Time Integrator' */
+  real_T Integrator_DSTATE[2];         /* '<S15>/Integrator' */
+  real_T Delay_DSTATE_m[4];            /* '<S3>/Delay' */
+  real_T UD_DSTATE[2];                 /* '<S2>/UD' */
   real_T HILInitialize_AIMinimums[4];  /* '<Root>/HIL Initialize' */
   real_T HILInitialize_AIMaximums[4];  /* '<Root>/HIL Initialize' */
   real_T HILInitialize_AOMinimums[4];  /* '<Root>/HIL Initialize' */
@@ -895,7 +899,6 @@ typedef struct {
   real_T HILInitialize_AOVoltages[4];  /* '<Root>/HIL Initialize' */
   real_T HILInitialize_FilterFrequency[4];/* '<Root>/HIL Initialize' */
   t_card HILInitialize_Card;           /* '<Root>/HIL Initialize' */
-  void *HILReadEncoder_PWORK;          /* '<Root>/HIL Read Encoder' */
   void *HILWriteAnalog_PWORK;          /* '<Root>/HIL Write Analog' */
   struct {
     void *LoggedData;
@@ -919,8 +922,13 @@ typedef struct {
 
   struct {
     void *LoggedData;
+  } Scope5_PWORK;                      /* '<Root>/Scope5' */
+
+  struct {
+    void *LoggedData;
   } ToWorkspace_PWORK;                 /* '<Root>/To Workspace' */
 
+  void *HILReadEncoder_PWORK;          /* '<Root>/HIL Read Encoder' */
   struct {
     void *LoggedData;
   } TRIGGER_SCOPE_PWORK;               /* '<Root>/TRIGGER_SCOPE' */
@@ -928,19 +936,17 @@ typedef struct {
   int32_T HILInitialize_QuadratureModes[4];/* '<Root>/HIL Initialize' */
   int32_T HILInitialize_InitialEICounts[4];/* '<Root>/HIL Initialize' */
   int32_T HILReadEncoder_Buffer[2];    /* '<Root>/HIL Read Encoder' */
-  int32_T sfEvent;                     /* '<S4>/MATLAB Function' */
-  int32_T sfEvent_e;                   /* '<S54>/SqrtUsedFcn' */
-  int8_T Integrator_PrevResetState;    /* '<S65>/Integrator' */
-  int8_T EnabledSubsystem_SubsysRanBC; /* '<S32>/Enabled Subsystem' */
-  int8_T MeasurementUpdate_SubsysRanBC;/* '<S25>/MeasurementUpdate' */
-  uint8_T Integrator_IC_LOADING;       /* '<S65>/Integrator' */
-  uint8_T is_active_c2_ClosedLoopHW;   /* '<S4>/MATLAB Function' */
-  uint8_T is_active_c7_ctrlSharedLib;  /* '<S54>/SqrtUsedFcn' */
-  boolean_T icLoad;                    /* '<S2>/MemoryX' */
-  boolean_T doneDoubleBufferReInit;    /* '<S4>/MATLAB Function' */
-  boolean_T doneDoubleBufferReInit_e;  /* '<S54>/SqrtUsedFcn' */
-  boolean_T EnabledSubsystem_MODE;     /* '<S32>/Enabled Subsystem' */
-  boolean_T MeasurementUpdate_MODE;    /* '<S25>/MeasurementUpdate' */
+  int32_T sfEvent;                     /* '<S5>/MATLAB Function' */
+  int32_T sfEvent_k;                   /* '<S3>/MATLAB Function' */
+  int32_T sfEvent_c;                   /* '<S1>/MATLAB Function' */
+  int8_T Integrator_PrevResetState;    /* '<S15>/Integrator' */
+  uint8_T is_active_c2_ClosedLoopHW;   /* '<S5>/MATLAB Function' */
+  uint8_T is_active_c3_ClosedLoopHW;   /* '<S3>/MATLAB Function' */
+  uint8_T is_active_c1_ClosedLoopHW;   /* '<S1>/MATLAB Function' */
+  boolean_T icLoad;                    /* '<S3>/Delay' */
+  boolean_T doneDoubleBufferReInit;    /* '<S5>/MATLAB Function' */
+  boolean_T doneDoubleBufferReInit_i;  /* '<S3>/MATLAB Function' */
+  boolean_T doneDoubleBufferReInit_d;  /* '<S1>/MATLAB Function' */
 } DW_ClosedLoopHW_T;
 
 /* Backward compatible GRT Identifiers */
@@ -953,44 +959,52 @@ typedef struct {
 
 /* Parameters (default storage) */
 struct P_ClosedLoopHW_T_ {
+  struct_l7qQ3aUsmVDXJZFdOcCNiB est_param;/* Variable: est_param
+                                           * Referenced by: '<S3>/MATLAB Function'
+                                           */
+  struct_EyhfgjFUMIaPmLVzByLI3F p;     /* Variable: p
+                                        * Referenced by: '<S1>/MATLAB Function'
+                                        */
   struct_IikMKrhxguvBv6I6XHfpIC c;     /* Variable: c
                                         * Referenced by:
                                         *   '<Root>/Constant1'
-                                        *   '<S4>/MATLAB Function'
+                                        *   '<S3>/Constant'
+                                        *   '<S5>/MATLAB Function'
                                         */
-  real_T DiscreteDerivative_ICPrevScaled[2];
-                              /* Mask Parameter: DiscreteDerivative_ICPrevScaled
-                               * Referenced by: '<S1>/UD'
-                               */
+  real_T x0[4];                        /* Variable: x0
+                                        * Referenced by:
+                                        *   '<Root>/Delay'
+                                        *   '<S1>/Constant1'
+                                        *   '<S2>/UD'
+                                        *   '<S3>/Constant'
+                                        */
   real_T LowPassFilterDiscreteorContinuo;
                               /* Mask Parameter: LowPassFilterDiscreteorContinuo
-                               * Referenced by: '<S3>/K'
+                               * Referenced by: '<S4>/K'
                                */
   real_T LowPassFilterDiscreteorContin_k;
                               /* Mask Parameter: LowPassFilterDiscreteorContin_k
-                               * Referenced by: '<S59>/Time constant'
+                               * Referenced by: '<S8>/Time constant'
                                */
   real_T CompareToConstant_const;     /* Mask Parameter: CompareToConstant_const
-                                       * Referenced by: '<S62>/Constant'
+                                       * Referenced by: '<S11>/Constant'
                                        */
   real_T LowPassFilterDiscreteorContin_l;
                               /* Mask Parameter: LowPassFilterDiscreteorContin_l
-                               * Referenced by: '<S59>/Constant'
+                               * Referenced by: '<S8>/Constant'
                                */
-  uint32_T HILReadEncoder_channels[2];/* Mask Parameter: HILReadEncoder_channels
-                                       * Referenced by: '<Root>/HIL Read Encoder'
-                                       */
+  real_T LowPassFilterDiscreteorContin_g[2];
+                              /* Mask Parameter: LowPassFilterDiscreteorContin_g
+                               * Referenced by: '<S13>/Constant'
+                               */
   uint32_T HILWriteAnalog_channels;   /* Mask Parameter: HILWriteAnalog_channels
                                        * Referenced by: '<Root>/HIL Write Analog'
                                        */
-  real_T Lykyhatkk1_Y0;                /* Expression: 0
-                                        * Referenced by: '<S56>/L*(y[k]-yhat[k|k-1])'
-                                        */
-  real_T deltax_Y0;                    /* Expression: 0
-                                        * Referenced by: '<S58>/deltax'
-                                        */
+  uint32_T HILReadEncoder_channels[2];/* Mask Parameter: HILReadEncoder_channels
+                                       * Referenced by: '<Root>/HIL Read Encoder'
+                                       */
   real_T Constant_Value;               /* Expression: 0
-                                        * Referenced by: '<S63>/Constant'
+                                        * Referenced by: '<S12>/Constant'
                                         */
   real_T HILInitialize_OOTerminate;/* Expression: set_other_outputs_at_terminate
                                     * Referenced by: '<Root>/HIL Initialize'
@@ -1037,65 +1051,36 @@ struct P_ClosedLoopHW_T_ {
   real_T HILInitialize_POInitial;      /* Expression: initial_pwm_outputs
                                         * Referenced by: '<Root>/HIL Initialize'
                                         */
-  real_T KalmanGainM_Value[16];        /* Expression: pInitialization.M
-                                        * Referenced by: '<S5>/KalmanGainM'
-                                        */
-  real_T C_Value[16];                  /* Expression: pInitialization.C
-                                        * Referenced by: '<S2>/C'
-                                        */
-  real_T Constant_Value_o;             /* Expression: -pi/2
-                                        * Referenced by: '<Root>/Constant'
-                                        */
-  real_T Gain_Gain;                    /* Expression: 2*pi/5000
-                                        * Referenced by: '<Root>/Gain'
-                                        */
-  real_T Gain1_Gain;                   /* Expression: -2*pi/10000
-                                        * Referenced by: '<Root>/Gain1'
-                                        */
-  real_T TSamp_WtEt;                   /* Computed Parameter: TSamp_WtEt
-                                        * Referenced by: '<S1>/TSamp'
-                                        */
-  real_T Integrator_gainval;           /* Computed Parameter: Integrator_gainval
-                                        * Referenced by: '<S65>/Integrator'
-                                        */
-  real_T Integrator_UpperSat;          /* Expression: antiwindupUpperLimit
-                                        * Referenced by: '<S65>/Integrator'
-                                        */
-  real_T Integrator_LowerSat;          /* Expression: antiwindupLowerLimit
-                                        * Referenced by: '<S65>/Integrator'
-                                        */
-  real_T Saturation_UpperSat;          /* Expression: windupUpperLimit
-                                        * Referenced by: '<S65>/Saturation'
-                                        */
-  real_T Saturation_LowerSat;          /* Expression: windupLowerLimit
-                                        * Referenced by: '<S65>/Saturation'
-                                        */
-  real_T X0_Value[4];                  /* Expression: pInitialization.X0
-                                        * Referenced by: '<S2>/X0'
-                                        */
   real_T Gain2_Gain;                   /* Expression: 1/(1.2*0.4006*3.5)
                                         * Referenced by: '<Root>/Gain2'
                                         */
-  real_T Saturation_UpperSat_g;        /* Expression: 1
+  real_T Saturation_UpperSat;          /* Expression: 1
                                         * Referenced by: '<Root>/Saturation'
                                         */
-  real_T Saturation_LowerSat_o;        /* Expression: -1
+  real_T Saturation_LowerSat;          /* Expression: -1
                                         * Referenced by: '<Root>/Saturation'
                                         */
-  real_T A_Value[16];                  /* Expression: pInitialization.A
-                                        * Referenced by: '<S2>/A'
+  real_T DiscreteTimeIntegrator_gainval;
+                           /* Computed Parameter: DiscreteTimeIntegrator_gainval
+                            * Referenced by: '<S1>/Discrete-Time Integrator'
+                            */
+  real_T Integrator_gainval;           /* Computed Parameter: Integrator_gainval
+                                        * Referenced by: '<S15>/Integrator'
                                         */
-  real_T B_Value[4];                   /* Expression: pInitialization.B
-                                        * Referenced by: '<S2>/B'
+  real_T Integrator_UpperSat;          /* Expression: antiwindupUpperLimit
+                                        * Referenced by: '<S15>/Integrator'
                                         */
-  real_T CovarianceZ_Value[16];        /* Expression: pInitialization.Z
-                                        * Referenced by: '<S5>/CovarianceZ'
+  real_T Integrator_LowerSat;          /* Expression: antiwindupLowerLimit
+                                        * Referenced by: '<S15>/Integrator'
                                         */
-  real_T KalmanGainL_Value[16];        /* Expression: pInitialization.L
-                                        * Referenced by: '<S5>/KalmanGainL'
+  real_T Saturation_UpperSat_e;        /* Expression: windupUpperLimit
+                                        * Referenced by: '<S15>/Saturation'
                                         */
-  real_T D_Value[4];                   /* Expression: pInitialization.D
-                                        * Referenced by: '<S2>/D'
+  real_T Saturation_LowerSat_b;        /* Expression: windupLowerLimit
+                                        * Referenced by: '<S15>/Saturation'
+                                        */
+  real_T TSamp_WtEt;                   /* Computed Parameter: TSamp_WtEt
+                                        * Referenced by: '<S2>/TSamp'
                                         */
   real_T Step_Time;                    /* Expression: 0.001
                                         * Referenced by: '<Root>/Step'
@@ -1248,18 +1233,12 @@ struct P_ClosedLoopHW_T_ {
                                   /* Computed Parameter: HILInitialize_DOInitial
                                    * Referenced by: '<Root>/HIL Initialize'
                                    */
-  boolean_T HILReadEncoder_Active;  /* Computed Parameter: HILReadEncoder_Active
-                                     * Referenced by: '<Root>/HIL Read Encoder'
-                                     */
-  boolean_T Enable_Value;              /* Expression: true()
-                                        * Referenced by: '<S2>/Enable'
-                                        */
   boolean_T HILWriteAnalog_Active;  /* Computed Parameter: HILWriteAnalog_Active
                                      * Referenced by: '<Root>/HIL Write Analog'
                                      */
-  boolean_T isSqrtUsed_Value;          /* Expression: pInitialization.isSqrtUsed
-                                        * Referenced by: '<S54>/isSqrtUsed'
-                                        */
+  boolean_T HILReadEncoder_Active;  /* Computed Parameter: HILReadEncoder_Active
+                                     * Referenced by: '<Root>/HIL Read Encoder'
+                                     */
 };
 
 /* Real-time Model Data Structure */
@@ -1407,71 +1386,21 @@ extern RT_MODEL_ClosedLoopHW_T *const ClosedLoopHW_M;
  * Here is the system hierarchy for this model
  *
  * '<Root>' : 'ClosedLoopHW'
- * '<S1>'   : 'ClosedLoopHW/Discrete Derivative'
- * '<S2>'   : 'ClosedLoopHW/Kalman Filter'
- * '<S3>'   : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)'
- * '<S4>'   : 'ClosedLoopHW/Subsystem'
- * '<S5>'   : 'ClosedLoopHW/Kalman Filter/CalculatePL'
- * '<S6>'   : 'ClosedLoopHW/Kalman Filter/CalculateYhat'
- * '<S7>'   : 'ClosedLoopHW/Kalman Filter/CovarianceOutputConfigurator'
- * '<S8>'   : 'ClosedLoopHW/Kalman Filter/DataTypeConversionA'
- * '<S9>'   : 'ClosedLoopHW/Kalman Filter/DataTypeConversionB'
- * '<S10>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionC'
- * '<S11>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionD'
- * '<S12>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionEnable'
- * '<S13>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionG'
- * '<S14>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionH'
- * '<S15>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionN'
- * '<S16>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionP'
- * '<S17>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionP0'
- * '<S18>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionQ'
- * '<S19>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionR'
- * '<S20>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionReset'
- * '<S21>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionX'
- * '<S22>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionX0'
- * '<S23>'  : 'ClosedLoopHW/Kalman Filter/DataTypeConversionu'
- * '<S24>'  : 'ClosedLoopHW/Kalman Filter/MemoryP'
- * '<S25>'  : 'ClosedLoopHW/Kalman Filter/Observer'
- * '<S26>'  : 'ClosedLoopHW/Kalman Filter/ReducedQRN'
- * '<S27>'  : 'ClosedLoopHW/Kalman Filter/Reset'
- * '<S28>'  : 'ClosedLoopHW/Kalman Filter/Reshapeyhat'
- * '<S29>'  : 'ClosedLoopHW/Kalman Filter/ScalarExpansionP0'
- * '<S30>'  : 'ClosedLoopHW/Kalman Filter/ScalarExpansionQ'
- * '<S31>'  : 'ClosedLoopHW/Kalman Filter/ScalarExpansionR'
- * '<S32>'  : 'ClosedLoopHW/Kalman Filter/UseCurrentEstimator'
- * '<S33>'  : 'ClosedLoopHW/Kalman Filter/checkA'
- * '<S34>'  : 'ClosedLoopHW/Kalman Filter/checkB'
- * '<S35>'  : 'ClosedLoopHW/Kalman Filter/checkC'
- * '<S36>'  : 'ClosedLoopHW/Kalman Filter/checkD'
- * '<S37>'  : 'ClosedLoopHW/Kalman Filter/checkEnable'
- * '<S38>'  : 'ClosedLoopHW/Kalman Filter/checkG'
- * '<S39>'  : 'ClosedLoopHW/Kalman Filter/checkH'
- * '<S40>'  : 'ClosedLoopHW/Kalman Filter/checkN'
- * '<S41>'  : 'ClosedLoopHW/Kalman Filter/checkP0'
- * '<S42>'  : 'ClosedLoopHW/Kalman Filter/checkQ'
- * '<S43>'  : 'ClosedLoopHW/Kalman Filter/checkR'
- * '<S44>'  : 'ClosedLoopHW/Kalman Filter/checkReset'
- * '<S45>'  : 'ClosedLoopHW/Kalman Filter/checkX0'
- * '<S46>'  : 'ClosedLoopHW/Kalman Filter/checku'
- * '<S47>'  : 'ClosedLoopHW/Kalman Filter/checky'
- * '<S48>'  : 'ClosedLoopHW/Kalman Filter/CalculatePL/DataTypeConversionL'
- * '<S49>'  : 'ClosedLoopHW/Kalman Filter/CalculatePL/DataTypeConversionM'
- * '<S50>'  : 'ClosedLoopHW/Kalman Filter/CalculatePL/DataTypeConversionP'
- * '<S51>'  : 'ClosedLoopHW/Kalman Filter/CalculatePL/DataTypeConversionZ'
- * '<S52>'  : 'ClosedLoopHW/Kalman Filter/CalculatePL/Ground'
- * '<S53>'  : 'ClosedLoopHW/Kalman Filter/CalculateYhat/Ground'
- * '<S54>'  : 'ClosedLoopHW/Kalman Filter/CovarianceOutputConfigurator/decideOutput'
- * '<S55>'  : 'ClosedLoopHW/Kalman Filter/CovarianceOutputConfigurator/decideOutput/SqrtUsedFcn'
- * '<S56>'  : 'ClosedLoopHW/Kalman Filter/Observer/MeasurementUpdate'
- * '<S57>'  : 'ClosedLoopHW/Kalman Filter/ReducedQRN/Ground'
- * '<S58>'  : 'ClosedLoopHW/Kalman Filter/UseCurrentEstimator/Enabled Subsystem'
- * '<S59>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Enable//disable time constant'
- * '<S60>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Initialization'
- * '<S61>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Integrator (Discrete or Continuous)'
- * '<S62>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Enable//disable time constant/Compare To Constant'
- * '<S63>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Enable//disable time constant/Compare To Zero'
- * '<S64>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Initialization/Init_u'
- * '<S65>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Integrator (Discrete or Continuous)/Discrete'
- * '<S66>'  : 'ClosedLoopHW/Subsystem/MATLAB Function'
+ * '<S1>'   : 'ClosedLoopHW/DigitalTwin'
+ * '<S2>'   : 'ClosedLoopHW/Discrete Derivative'
+ * '<S3>'   : 'ClosedLoopHW/Estimator'
+ * '<S4>'   : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)'
+ * '<S5>'   : 'ClosedLoopHW/Subsystem'
+ * '<S6>'   : 'ClosedLoopHW/DigitalTwin/MATLAB Function'
+ * '<S7>'   : 'ClosedLoopHW/Estimator/MATLAB Function'
+ * '<S8>'   : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Enable//disable time constant'
+ * '<S9>'   : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Initialization'
+ * '<S10>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Integrator (Discrete or Continuous)'
+ * '<S11>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Enable//disable time constant/Compare To Constant'
+ * '<S12>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Enable//disable time constant/Compare To Zero'
+ * '<S13>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Initialization/Init_param'
+ * '<S14>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Initialization/Init_param/Data Type Conversion Inherited'
+ * '<S15>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Integrator (Discrete or Continuous)/Discrete'
+ * '<S16>'  : 'ClosedLoopHW/Subsystem/MATLAB Function'
  */
 #endif                                 /* RTW_HEADER_ClosedLoopHW_h_ */

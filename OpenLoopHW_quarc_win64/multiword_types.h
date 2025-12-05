@@ -7,9 +7,9 @@
  *
  * Code generation for model "OpenLoopHW".
  *
- * Model version              : 1.13
+ * Model version              : 1.14
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Wed Dec  3 11:34:54 2025
+ * C source code generated on : Thu Dec  4 15:53:30 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping

@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.17
+ * Model version              : 1.36
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Wed Dec  3 14:00:40 2025
+ * C source code generated on : Thu Dec  4 17:18:11 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -30,6 +30,38 @@ typedef struct {
   real_T u_star;
   real_T K[4];
 } struct_IikMKrhxguvBv6I6XHfpIC;
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_struct_EyhfgjFUMIaPmLVzByLI3F_
+#define DEFINED_TYPEDEF_FOR_struct_EyhfgjFUMIaPmLVzByLI3F_
+
+typedef struct {
+  real_T g;
+  real_T T1;
+  real_T T2;
+  real_T T3;
+  real_T T4;
+  real_T T5;
+  real_T m1;
+  real_T m2;
+  real_T I1;
+  real_T I2;
+  real_T l1;
+  real_T l2;
+  real_T lc1;
+  real_T lc2;
+} struct_EyhfgjFUMIaPmLVzByLI3F;
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_struct_l7qQ3aUsmVDXJZFdOcCNiB_
+#define DEFINED_TYPEDEF_FOR_struct_l7qQ3aUsmVDXJZFdOcCNiB_
+
+typedef struct {
+  real_T A[16];
+  real_T B[20];
+} struct_l7qQ3aUsmVDXJZFdOcCNiB;
 
 #endif
 

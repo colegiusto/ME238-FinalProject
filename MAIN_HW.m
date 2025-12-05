@@ -35,6 +35,8 @@ end
 
 
 %% Stabilize Downward
+
+%lqr
 clear c
 c.bounds = [-pi/3 pi/3; -pi/3 pi/3];
 
@@ -55,6 +57,21 @@ sys = c2d(ss(A,B,eye(4), 0), 0.001);
 
 c.K = lqr(sys, Q, R);
 
+%lqg
+
+[dA, dB, dC, dD] = ssdata(sys);
+
+BB = B;
+QN = 0.1;
+RN = eye(4);
+
+kalsys = ss(A, [B BB], dC, 0);
+
+[est, L, P] = kalman(kalsys, QN, RN);
+
+est = c2d(est, 0.001);
+est_param.A = est.A;
+est_param.B = est.B;
 
 %%
 model = 'ClosedLoopHW';
@@ -68,12 +85,12 @@ pause(11)
 
 %% animate result
 
-output = out.pendPos;
+output = pendPos;
 ap.l1 = 1;
 ap.l2 = 1.5;
 for i = 1:50:length(output.time)
     clf; hold on;
-    animate(output.time(i), output.signals.values(:,:,i), ap)
+    animate(output.time(i), output.signals.values(i,:), ap)
 
     drawnow; pause(0.05); 
 end

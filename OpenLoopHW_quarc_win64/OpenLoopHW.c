@@ -7,9 +7,9 @@
  *
  * Code generation for model "OpenLoopHW".
  *
- * Model version              : 1.13
+ * Model version              : 1.14
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Wed Dec  3 11:34:54 2025
+ * C source code generated on : Thu Dec  4 15:53:30 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -20,10 +20,14 @@
 
 #include "OpenLoopHW.h"
 #include "rtwtypes.h"
+#include <math.h>
 #include "OpenLoopHW_private.h"
 #include <string.h>
 #include "rt_nonfinite.h"
 #include "OpenLoopHW_dt.h"
+
+/* Named constants for MATLAB Function: '<S1>/MATLAB Function' */
+#define OpenLoopHW_CALL_EVENT          (-1)
 
 /* Block signals (default storage) */
 B_OpenLoopHW_T OpenLoopHW_B;
@@ -94,7 +98,13 @@ real_T look1_binlxpw(real_T u0, const real_T bp0[], const real_T table[],
 /* Model output function */
 void OpenLoopHW_output(void)
 {
+  /* local block i/o variables */
   real_T rtb_raag[2];
+  real_T d11;
+  real_T d11_tmp;
+  real_T d11_tmp_0;
+  real_T h1_tmp;
+  real_T phi1_tmp;
 
   /* Gain: '<Root>/Gain2' incorporates:
    *  Clock: '<Root>/Clock'
@@ -117,6 +127,58 @@ void OpenLoopHW_output(void)
     }
   }
 
+  /* Constant: '<S1>/Constant1' */
+  OpenLoopHW_B.Constant1[0] = OpenLoopHW_P.x0[0];
+
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  OpenLoopHW_B.x[0] = OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0];
+
+  /* Constant: '<S1>/Constant1' */
+  OpenLoopHW_B.Constant1[1] = OpenLoopHW_P.x0[1];
+
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  OpenLoopHW_B.x[1] = OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE[1];
+
+  /* Constant: '<S1>/Constant1' */
+  OpenLoopHW_B.Constant1[2] = OpenLoopHW_P.x0[2];
+
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  OpenLoopHW_B.x[2] = OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE[2];
+
+  /* Constant: '<S1>/Constant1' */
+  OpenLoopHW_B.Constant1[3] = OpenLoopHW_P.x0[3];
+
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  OpenLoopHW_B.x[3] = OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE[3];
+
+  /* Reshape: '<Root>/Reshape' */
+  OpenLoopHW_B.Reshape[0] = OpenLoopHW_B.x[0];
+  OpenLoopHW_B.Reshape[1] = OpenLoopHW_B.x[1];
+
+  /* MATLAB Function: '<S1>/MATLAB Function' incorporates:
+   *  DiscreteIntegrator: '<S1>/Discrete-Time Integrator'
+   */
+  OpenLoopHW_DW.sfEvent = OpenLoopHW_CALL_EVENT;
+  d11_tmp = cos(OpenLoopHW_B.x[1]);
+  d11_tmp_0 = 2.0 * OpenLoopHW_P.p.T3;
+  d11 = d11_tmp_0 * d11_tmp + (OpenLoopHW_P.p.T1 + OpenLoopHW_P.p.T2);
+  d11_tmp = OpenLoopHW_P.p.T3 * d11_tmp + OpenLoopHW_P.p.T2;
+  h1_tmp = sin(OpenLoopHW_B.x[1]);
+  phi1_tmp = OpenLoopHW_P.p.T5 * OpenLoopHW_P.p.g * cos(OpenLoopHW_B.x[0] +
+    OpenLoopHW_B.x[1]);
+  OpenLoopHW_B.dx[0] = OpenLoopHW_B.x[2];
+  OpenLoopHW_B.dx[1] = OpenLoopHW_B.x[3];
+  d11_tmp_0 = ((-OpenLoopHW_P.p.T3 * h1_tmp * (OpenLoopHW_B.x[3] *
+    OpenLoopHW_B.x[3]) - d11_tmp_0 * h1_tmp * OpenLoopHW_B.x[3] *
+                OpenLoopHW_B.x[2]) + (OpenLoopHW_P.p.T4 * OpenLoopHW_P.p.g * cos
+    (OpenLoopHW_B.x[0]) + phi1_tmp)) - OpenLoopHW_B.Gain2;
+  h1_tmp = OpenLoopHW_P.p.T3 * h1_tmp * (OpenLoopHW_B.x[2] * OpenLoopHW_B.x[2])
+    + phi1_tmp;
+  phi1_tmp = d11 * OpenLoopHW_P.p.T2 - d11_tmp * d11_tmp;
+  OpenLoopHW_B.dx[2] = (h1_tmp * d11_tmp - d11_tmp_0 * OpenLoopHW_P.p.T2) /
+    phi1_tmp;
+  OpenLoopHW_B.dx[3] = (d11_tmp_0 * d11_tmp - h1_tmp * d11) / phi1_tmp;
+
   /* S-Function (hil_read_encoder_block): '<Root>/HIL Read Encoder' */
 
   /* S-Function Block: OpenLoopHW/HIL Read Encoder (hil_read_encoder_block) */
@@ -134,20 +196,6 @@ void OpenLoopHW_output(void)
     }
   }
 
-  /* Sum: '<Root>/Add' incorporates:
-   *  Constant: '<Root>/Constant'
-   *  Gain: '<Root>/Gain'
-   */
-  OpenLoopHW_B.Add = OpenLoopHW_P.Gain_Gain * rtb_raag[0] +
-    OpenLoopHW_P.Constant_Value;
-
-  /* Gain: '<Root>/Gain1' */
-  OpenLoopHW_B.Gain1 = OpenLoopHW_P.Gain1_Gain * rtb_raag[1];
-
-  /* SignalConversion generated from: '<Root>/To Workspace' */
-  OpenLoopHW_B.TmpSignalConversionAtToWorkspac[0] = OpenLoopHW_B.Add;
-  OpenLoopHW_B.TmpSignalConversionAtToWorkspac[1] = OpenLoopHW_B.Gain1;
-
   /* Step: '<Root>/Step' */
   if (OpenLoopHW_M->Timing.t[0] < OpenLoopHW_P.Step_Time) {
     /* Step: '<Root>/Step' */
@@ -163,6 +211,16 @@ void OpenLoopHW_output(void)
 /* Model update function */
 void OpenLoopHW_update(void)
 {
+  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0] +=
+    OpenLoopHW_P.DiscreteTimeIntegrator_gainval * OpenLoopHW_B.dx[0];
+  OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE[1] +=
+    OpenLoopHW_P.DiscreteTimeIntegrator_gainval * OpenLoopHW_B.dx[1];
+  OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE[2] +=
+    OpenLoopHW_P.DiscreteTimeIntegrator_gainval * OpenLoopHW_B.dx[2];
+  OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE[3] +=
+    OpenLoopHW_P.DiscreteTimeIntegrator_gainval * OpenLoopHW_B.dx[3];
+
   /* Update absolute time for base rate */
   /* The "clockTick0" counts the number of times the code of this task has
    * been executed. The absolute time is the multiplication of "clockTick0"
@@ -409,6 +467,24 @@ void OpenLoopHW_initialize(void)
       }
     }
   }
+
+  /* Start for Constant: '<S1>/Constant1' */
+  OpenLoopHW_B.Constant1[0] = OpenLoopHW_P.x0[0];
+  OpenLoopHW_B.Constant1[1] = OpenLoopHW_P.x0[1];
+  OpenLoopHW_B.Constant1[2] = OpenLoopHW_P.x0[2];
+  OpenLoopHW_B.Constant1[3] = OpenLoopHW_P.x0[3];
+
+  /* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' incorporates:
+   *  Constant: '<S1>/Constant1'
+   */
+  OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0] = OpenLoopHW_B.Constant1[0];
+  OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE[1] = OpenLoopHW_B.Constant1[1];
+  OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE[2] = OpenLoopHW_B.Constant1[2];
+  OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE[3] = OpenLoopHW_B.Constant1[3];
+
+  /* SystemInitialize for MATLAB Function: '<S1>/MATLAB Function' */
+  OpenLoopHW_DW.sfEvent = OpenLoopHW_CALL_EVENT;
+  OpenLoopHW_DW.is_active_c1_OpenLoopHW = 0U;
 }
 
 /* Model terminate function */
@@ -556,18 +632,19 @@ RT_MODEL_OpenLoopHW_T *OpenLoopHW(void)
   OpenLoopHW_M->Timing.stepSize1 = 0.001;
 
   /* External mode info */
-  OpenLoopHW_M->Sizes.checksums[0] = (2042779469U);
-  OpenLoopHW_M->Sizes.checksums[1] = (88069056U);
-  OpenLoopHW_M->Sizes.checksums[2] = (3443097409U);
-  OpenLoopHW_M->Sizes.checksums[3] = (292651698U);
+  OpenLoopHW_M->Sizes.checksums[0] = (999757008U);
+  OpenLoopHW_M->Sizes.checksums[1] = (1753653639U);
+  OpenLoopHW_M->Sizes.checksums[2] = (1024256718U);
+  OpenLoopHW_M->Sizes.checksums[3] = (127736267U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
     static RTWExtModeInfo rt_ExtModeInfo;
-    static const sysRanDType *systemRan[1];
+    static const sysRanDType *systemRan[2];
     OpenLoopHW_M->extModeInfo = (&rt_ExtModeInfo);
     rteiSetSubSystemActiveVectorAddresses(&rt_ExtModeInfo, systemRan);
     systemRan[0] = &rtAlwaysEnabled;
+    systemRan[1] = &rtAlwaysEnabled;
     rteiSetModelMappingInfoPtr(OpenLoopHW_M->extModeInfo,
       &OpenLoopHW_M->SpecialInfo.mappingInfo);
     rteiSetChecksumsPtr(OpenLoopHW_M->extModeInfo, OpenLoopHW_M->Sizes.checksums);
@@ -598,7 +675,7 @@ RT_MODEL_OpenLoopHW_T *OpenLoopHW(void)
     (void) memset((char_T *) &dtInfo, 0,
                   sizeof(dtInfo));
     OpenLoopHW_M->SpecialInfo.mappingInfo = (&dtInfo);
-    dtInfo.numDataTypes = 20;
+    dtInfo.numDataTypes = 21;
     dtInfo.dataTypeSizes = &rtDataTypeSizes[0];
     dtInfo.dataTypeNames = &rtDataTypeNames[0];
 
@@ -616,8 +693,8 @@ RT_MODEL_OpenLoopHW_T *OpenLoopHW(void)
   OpenLoopHW_M->Sizes.sysDirFeedThru = (0);/* The model is not direct feedthrough */
   OpenLoopHW_M->Sizes.numSampTimes = (2);/* Number of sample times */
   OpenLoopHW_M->Sizes.numBlocks = (16);/* Number of blocks */
-  OpenLoopHW_M->Sizes.numBlockIO = (5);/* Number of block outputs */
-  OpenLoopHW_M->Sizes.numBlockPrms = (282);/* Sum of parameter "widths" */
+  OpenLoopHW_M->Sizes.numBlockIO = (6);/* Number of block outputs */
+  OpenLoopHW_M->Sizes.numBlockPrms = (285);/* Sum of parameter "widths" */
   return OpenLoopHW_M;
 }
 
