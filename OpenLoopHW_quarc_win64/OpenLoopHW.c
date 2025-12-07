@@ -7,9 +7,9 @@
  *
  * Code generation for model "OpenLoopHW".
  *
- * Model version              : 1.15
+ * Model version              : 1.16
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Sat Dec  6 14:49:49 2025
+ * C source code generated on : Sat Dec  6 17:32:46 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -218,6 +218,15 @@ void OpenLoopHW_initialize(void)
     }
 
     is_switching = false;
+    result = hil_set_card_specific_options(OpenLoopHW_DW.HILInitialize_Card, " ",
+      2);
+    if (result < 0) {
+      msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
+        (_rt_error_message));
+      rtmSetErrorStatus(OpenLoopHW_M, _rt_error_message);
+      return;
+    }
+
     if ((OpenLoopHW_P.HILInitialize_CKPStart && !is_switching) ||
         (OpenLoopHW_P.HILInitialize_CKPEnter && is_switching)) {
       result = hil_set_clock_mode(OpenLoopHW_DW.HILInitialize_Card, (t_clock *)
@@ -542,15 +551,15 @@ RT_MODEL_OpenLoopHW_T *OpenLoopHW(void)
     OpenLoopHW_M->Timing.sampleHits = (&mdlSampleHits[0]);
   }
 
-  rtmSetTFinal(OpenLoopHW_M, 10.0);
+  rtmSetTFinal(OpenLoopHW_M, 8.0);
   OpenLoopHW_M->Timing.stepSize0 = 0.001;
   OpenLoopHW_M->Timing.stepSize1 = 0.001;
 
   /* External mode info */
-  OpenLoopHW_M->Sizes.checksums[0] = (3455594286U);
-  OpenLoopHW_M->Sizes.checksums[1] = (1033492548U);
-  OpenLoopHW_M->Sizes.checksums[2] = (658589428U);
-  OpenLoopHW_M->Sizes.checksums[3] = (4210315646U);
+  OpenLoopHW_M->Sizes.checksums[0] = (1666486668U);
+  OpenLoopHW_M->Sizes.checksums[1] = (530823346U);
+  OpenLoopHW_M->Sizes.checksums[2] = (1604855656U);
+  OpenLoopHW_M->Sizes.checksums[3] = (3805099371U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;

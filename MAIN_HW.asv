@@ -3,7 +3,7 @@ J = @(x,h,F)(F(repmat(x,size(x'))+diag(h))-F(repmat(x,size(x'))))./h';
 load guess.mat 
 
 %% Test Open Loop
-x0 = [-pi/2; 0; 0; 0]; 
+x0 = [-pi/2+0.3; 0; 0; 0];
 
 t_control = linspace(0,10,100);
 ut = (t_control>=1)*0.2;
@@ -53,8 +53,8 @@ c.u_star = -B \dynamics(c.x_star, 0, p);
 
 A = J(c.x_star, 1e-7*ones(1,4), @(x)dynamics(x,c.u_star,p));
 
-Q = diag([10000 100 100 100])*1e4;
-R = 1e-8;
+Q = diag([1 10 1 10]);
+R = 1e-6;
 
 sys = c2d(ss(A,B,eye(2,4), 0), 0.001);
 
@@ -66,15 +66,15 @@ c.K = lqr(sys, Q, R);
 
 BB = B;
 QN = 1;
-RN = eye(2)*1e-1;
+RN = eye(2)*20;
 
 kalsys = ss(A, [B BB], dC, 0);
 
 [est, L, P] = kalman(kalsys, QN, RN);
 
-estd = c2d(est, 0.001);
-est_param.A = estd.A;
-est_param.B = estd.B;
+est = c2d(est, 0.001);
+est_param.A = est.A;
+est_param.B = est.B;
 
 %%
 model = 'ClosedLoopHW';
@@ -105,7 +105,7 @@ end
 %% plot
 output = pendPos;
 
-figure(2);clf;
+figure(2)
 subplot(2,1,1)
 plot(output.time, output.signals.values(:,1), output.time, output.signals.values(:,2))
 hold on
@@ -172,7 +172,7 @@ problem.guess = guess;
 
 % Select a solver:
 problem.options.method = 'trapezoid';
-problem.options.defaultAccuracy = 'medium';
+problem.options.defaultAccuracy = 'high';
 problem.options.trapezoid.nGrid = 100;
 % problem.options.nlpOpt = optimoptions('fmincon');
 % problem.options.nlpOpt.MaxIterations = 1000;
@@ -237,7 +237,6 @@ x0 = [-pi/2; 0; 0; 0];
 t_control = t;
 ut = u;
 
-%%
 model = 'OpenLoopHW';
 
 set_param(model, "StopTime", string(t(end)))
@@ -251,7 +250,7 @@ pause(11)
 
 %% animate result
 
-output = pendPos;
+output = out.pendPos;
 ap.l1 = 1;
 ap.l2 = 1.5;
 for i = 1:50:length(output.time)
@@ -272,8 +271,8 @@ c.bounds = [-pi/3 pi/3; -pi/3 pi/3]*inf;
 
 c.K = zeros(1,4,length(t));
 
-Q = diag([10000 100 100 100])*1e4;
-R = 1e-8;
+Q = diag([0.01, 7, 0.1, 0.9]);
+R = 1e-2;
 
 
 % Calculate K for each knot point
@@ -290,17 +289,13 @@ end
 % Perform LQG for each knot point
 
 for i = 1:length(t)
-    A = J(c.x_star(:,i), 1e-5*ones(4,1), @(x)dynamics(x, u(i), p));
-    B = J(u(i), 1e-5, @(u)dynamics(c.x_star(:,i), u, p));
-
     sys = c2d(ss(A,B,eye(2,4), 0), 0.001);
     
     BB = B;
+    QN = 1;
+    RN = eye(2)*20;
     
     kalsys = ss(A, [B BB], dC, 0);
-
-    QN = 1;
-    RN = eye(2)*1e-1;
     
     [est, L, P] = kalman(kalsys, QN, RN);
     
@@ -313,7 +308,7 @@ end
 %%
 
 model = 'TOLQRClosedLoopHW';
-%set_param(model, "StopTime", string(t(end)+5))
+set_param(model, "StopTime", string(t(end)+5))
 
 %set_param(model, 'Dirty', 'on')
 
