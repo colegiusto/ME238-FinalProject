@@ -3,7 +3,7 @@ J = @(x,h,F)(F(repmat(x,size(x'))+diag(h))-F(repmat(x,size(x'))))./h';
 load guess.mat 
 
 %% Test Open Loop
-x0 = [-pi/2+0.3; 0; 0; 0];
+x0 = [-pi/2; 0; 0; 0]; 
 
 t_control = linspace(0,10,100);
 ut = (t_control>=1)*0.2;
@@ -53,8 +53,8 @@ c.u_star = -B \dynamics(c.x_star, 0, p);
 
 A = J(c.x_star, 1e-7*ones(1,4), @(x)dynamics(x,c.u_star,p));
 
-Q = diag([1 10 1 10]);
-R = 1e-6;
+Q = diag([10000 100 100 100])*1e4;
+R = 1e-8;
 
 sys = c2d(ss(A,B,eye(2,4), 0), 0.001);
 
@@ -66,15 +66,15 @@ c.K = lqr(sys, Q, R);
 
 BB = B;
 QN = 1;
-RN = eye(2)*20;
+RN = eye(2)*1e-1;
 
 kalsys = ss(A, [B BB], dC, 0);
 
 [est, L, P] = kalman(kalsys, QN, RN);
 
-est = c2d(est, 0.001);
-est_param.A = est.A;
-est_param.B = est.B;
+estd = c2d(est, 0.001);
+est_param.A = estd.A;
+est_param.B = estd.B;
 
 %%
 model = 'ClosedLoopHW';
@@ -103,7 +103,7 @@ end
 %% plot
 output = pendPos;
 
-figure(2)
+figure(2);clf;
 subplot(2,1,1)
 plot(output.time, output.signals.values(:,1), output.time, output.signals.values(:,2))
 hold on

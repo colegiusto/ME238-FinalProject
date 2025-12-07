@@ -2,7 +2,7 @@
 ## Makefile generated for component 'ClosedLoopHW'. 
 ## 
 ## Makefile     : ClosedLoopHW.mk
-## Generated on : Fri Dec 05 15:31:51 2025
+## Generated on : Sat Dec 06 14:54:31 2025
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)\ClosedLoopHW.rt-win64
 ## Product type : executable
 ## 
@@ -23,7 +23,7 @@ MAKEFILE                  = ClosedLoopHW.mk
 MATLAB_ROOT               = C:\PROGRA~1\MATLAB\R2023a
 MATLAB_BIN                = C:\PROGRA~1\MATLAB\R2023a\bin
 MATLAB_ARCH_BIN           = $(MATLAB_BIN)\win64
-START_DIR                 = C:\Users\colegiusto\ME238-FinalProject
+START_DIR                 = C:\Users\colegiusto\Documents\ME238-FinalProject
 SOLVER                    = 
 SOLVER_OBJ                = 
 CLASSIC_INTERFACE         = 1
@@ -71,6 +71,7 @@ CFLAGS_ADDITIONAL     = $(SUPRESS_WARNINGS) -D_CRT_SECURE_NO_DEPRECATE
 CPPFLAGS_ADDITIONAL   = /EHsc- $(CFLAGS_ADDITIONAL)
 QUARC_LDFLAGS         = /LIBPATH:$(QUARC)\lib\win64
 QUARC_LIBS            = extmode_quarc_r2013b.lib quanser_communications.lib quanser_runtime.lib quanser_common.lib ippccmt.lib ippcvmt.lib ippimt.lib ippsmt.lib ippvmmt.lib ippcoremt.lib shell32.lib comdlg32.lib
+QUARC_SYS_LIBS        = libusb-1.0.lib
 NODEFAULTFLAGS_DEBUG  = /NODEFAULTLIB:libc.lib /NODEFAULTLIB:libcmt.lib /NODEFAULTLIB:msvcrt.lib  /NODEFAULTLIB:libcd.lib /NODEFAULTLIB:libcmtd.lib /NODEFAULTLIB:msvcprt.lib
 NODEFAULTFLAGS_NDEBUG = /NODEFAULTLIB:libc.lib /NODEFAULTLIB:libcmt.lib /NODEFAULTLIB:msvcrtd.lib /NODEFAULTLIB:libcd.lib /NODEFAULTLIB:libcmtd.lib /NODEFAULTLIB:msvcprtd.lib
 STDIO_LIBS            = legacy_stdio_definitions.lib
@@ -188,7 +189,7 @@ INCLUDES = $(INCLUDES_BUILDINFO)
 
 DEFINES_BUILD_ARGS = -DCLASSIC_INTERFACE=1 -DALLOCATIONFCN=0 -DEXT_MODE=1 -DMAT_FILE=0 -DONESTEPFCN=0 -DTERMFCN=1 -DMULTI_INSTANCE_CODE=0 -DINTEGER_CODE=0 -DMT=0
 DEFINES_CUSTOM = 
-DEFINES_OPTS = -DON_TARGET_WAIT_FOR_START=0 -DTID01EQ=1
+DEFINES_OPTS = -DON_TARGET_WAIT_FOR_START=1 -DTID01EQ=1
 DEFINES_STANDARD = -DMODEL=ClosedLoopHW -DNUMST=2 -DNCSTATES=0 -DHAVESTDIO -DRT -DUSE_RTMODEL
 
 DEFINES = $(DEFINES_BUILD_ARGS) $(DEFINES_CUSTOM) $(DEFINES_OPTS) $(DEFINES_STANDARD)
