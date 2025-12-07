@@ -289,17 +289,13 @@ end
 % Perform LQG for each knot point
 
 for i = 1:length(t)
-    A = J(c.x_star(:,i), 1e-5*ones(4,1), @(x)dynamics(x, u(i), p));
-    B = J(u(i), 1e-5, @(u)dynamics(c.x_star(:,i), u, p));
-
     sys = c2d(ss(A,B,eye(2,4), 0), 0.001);
     
     BB = B;
-    
-    kalsys = ss(A, [B BB], dC, 0);
-
     QN = 1;
     RN = eye(2)*20;
+    
+    kalsys = ss(A, [B BB], dC, 0);
     
     [est, L, P] = kalman(kalsys, QN, RN);
     
@@ -312,7 +308,7 @@ end
 %%
 
 model = 'TOLQRClosedLoopHW';
-%set_param(model, "StopTime", string(t(end)+5))
+set_param(model, "StopTime", string(t(end)+5))
 
 %set_param(model, 'Dirty', 'on')
 
