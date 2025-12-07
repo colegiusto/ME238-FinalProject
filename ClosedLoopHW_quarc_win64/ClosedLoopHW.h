@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.51
+ * Model version              : 1.52
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Sat Dec  6 17:25:14 2025
+ * C source code generated on : Sat Dec  6 18:24:02 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -867,6 +867,7 @@
 /* Block signals (default storage) */
 typedef struct {
   real_T Delay[4];                     /* '<Root>/Delay' */
+  real_T Saturation1;                  /* '<Root>/Saturation1' */
   real_T Saturation;                   /* '<Root>/Saturation' */
   real_T Add;                          /* '<Root>/Add' */
   real_T Gain1;                        /* '<Root>/Gain1' */
@@ -876,7 +877,6 @@ typedef struct {
   real_T Sum[4];                       /* '<Root>/Sum' */
   real_T Reshape1[4];                  /* '<Root>/Reshape1' */
   real_T Step;                         /* '<Root>/Step' */
-  real_T u;                            /* '<S3>/MATLAB Function' */
   real_T LowpassFilter[2];             /* '<Root>/Lowpass Filter' */
   real_T x_hat[4];                     /* '<S2>/MATLAB Function' */
 } B_ClosedLoopHW_T;
@@ -1025,6 +1025,12 @@ struct P_ClosedLoopHW_T_ {
                                         */
   real_T HILInitialize_POInitial;      /* Expression: initial_pwm_outputs
                                         * Referenced by: '<Root>/HIL Initialize'
+                                        */
+  real_T Saturation1_UpperSat;         /* Expression: 2
+                                        * Referenced by: '<Root>/Saturation1'
+                                        */
+  real_T Saturation1_LowerSat;         /* Expression: -2
+                                        * Referenced by: '<Root>/Saturation1'
                                         */
   real_T Gain2_Gain;                   /* Expression: 2/(1.2*0.4006*3.5)
                                         * Referenced by: '<Root>/Gain2'

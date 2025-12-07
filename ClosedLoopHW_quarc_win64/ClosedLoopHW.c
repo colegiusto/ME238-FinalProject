@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.51
+ * Model version              : 1.52
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Sat Dec  6 17:25:14 2025
+ * C source code generated on : Sat Dec  6 18:24:02 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -69,18 +69,30 @@ void ClosedLoopHW_output(void)
   /* MATLAB Function: '<S3>/MATLAB Function' incorporates:
    *  Delay: '<Root>/Delay'
    */
-  ClosedLoopHW_B.u = ((((ClosedLoopHW_DW.Delay_DSTATE[0] -
-    ClosedLoopHW_P.c.x_star[0]) * -ClosedLoopHW_P.c.K[0] +
-                        (ClosedLoopHW_DW.Delay_DSTATE[1] -
-    ClosedLoopHW_P.c.x_star[1]) * -ClosedLoopHW_P.c.K[1]) +
-                       (ClosedLoopHW_DW.Delay_DSTATE[2] -
-                        ClosedLoopHW_P.c.x_star[2]) * -ClosedLoopHW_P.c.K[2]) +
-                      (ClosedLoopHW_DW.Delay_DSTATE[3] -
-                       ClosedLoopHW_P.c.x_star[3]) * -ClosedLoopHW_P.c.K[3]) +
+  u0 = ((((ClosedLoopHW_DW.Delay_DSTATE[0] - ClosedLoopHW_P.c.x_star[0]) *
+          -ClosedLoopHW_P.c.K[0] + (ClosedLoopHW_DW.Delay_DSTATE[1] -
+           ClosedLoopHW_P.c.x_star[1]) * -ClosedLoopHW_P.c.K[1]) +
+         (ClosedLoopHW_DW.Delay_DSTATE[2] - ClosedLoopHW_P.c.x_star[2]) *
+         -ClosedLoopHW_P.c.K[2]) + (ClosedLoopHW_DW.Delay_DSTATE[3] -
+         ClosedLoopHW_P.c.x_star[3]) * -ClosedLoopHW_P.c.K[3]) +
     ClosedLoopHW_P.c.u_star;
 
+  /* Saturate: '<Root>/Saturation1' */
+  if (u0 > ClosedLoopHW_P.Saturation1_UpperSat) {
+    /* Saturate: '<Root>/Saturation1' */
+    ClosedLoopHW_B.Saturation1 = ClosedLoopHW_P.Saturation1_UpperSat;
+  } else if (u0 < ClosedLoopHW_P.Saturation1_LowerSat) {
+    /* Saturate: '<Root>/Saturation1' */
+    ClosedLoopHW_B.Saturation1 = ClosedLoopHW_P.Saturation1_LowerSat;
+  } else {
+    /* Saturate: '<Root>/Saturation1' */
+    ClosedLoopHW_B.Saturation1 = u0;
+  }
+
+  /* End of Saturate: '<Root>/Saturation1' */
+
   /* Gain: '<Root>/Gain2' */
-  u0 = ClosedLoopHW_P.Gain2_Gain * ClosedLoopHW_B.u;
+  u0 = ClosedLoopHW_P.Gain2_Gain * ClosedLoopHW_B.Saturation1;
 
   /* Saturate: '<Root>/Saturation' */
   if (u0 > ClosedLoopHW_P.Saturation_UpperSat) {
@@ -234,7 +246,7 @@ void ClosedLoopHW_output(void)
    *  Sum: '<S2>/Subtract'
    */
   ClosedLoopHW_DW.sfEvent_k = ClosedLoopHW_CALL_EVENT;
-  u0 = ClosedLoopHW_B.u - ClosedLoopHW_P.c.u_star;
+  u0 = ClosedLoopHW_B.Saturation1 - ClosedLoopHW_P.c.u_star;
   zNext = ClosedLoopHW_B.Multiply[0];
   zCurr = ClosedLoopHW_B.Multiply[1];
 
@@ -830,15 +842,15 @@ RT_MODEL_ClosedLoopHW_T *ClosedLoopHW(void)
     ClosedLoopHW_M->Timing.sampleHits = (&mdlSampleHits[0]);
   }
 
-  rtmSetTFinal(ClosedLoopHW_M, 10.0);
+  rtmSetTFinal(ClosedLoopHW_M, 30.0);
   ClosedLoopHW_M->Timing.stepSize0 = 0.001;
   ClosedLoopHW_M->Timing.stepSize1 = 0.001;
 
   /* External mode info */
-  ClosedLoopHW_M->Sizes.checksums[0] = (4255979775U);
-  ClosedLoopHW_M->Sizes.checksums[1] = (1403245424U);
-  ClosedLoopHW_M->Sizes.checksums[2] = (2007932484U);
-  ClosedLoopHW_M->Sizes.checksums[3] = (341745385U);
+  ClosedLoopHW_M->Sizes.checksums[0] = (1798303350U);
+  ClosedLoopHW_M->Sizes.checksums[1] = (1441189245U);
+  ClosedLoopHW_M->Sizes.checksums[2] = (447826125U);
+  ClosedLoopHW_M->Sizes.checksums[3] = (4182097784U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -898,9 +910,9 @@ RT_MODEL_ClosedLoopHW_T *ClosedLoopHW(void)
   ClosedLoopHW_M->Sizes.numU = (0);    /* Number of model inputs */
   ClosedLoopHW_M->Sizes.sysDirFeedThru = (0);/* The model is not direct feedthrough */
   ClosedLoopHW_M->Sizes.numSampTimes = (2);/* Number of sample times */
-  ClosedLoopHW_M->Sizes.numBlocks = (40);/* Number of blocks */
-  ClosedLoopHW_M->Sizes.numBlockIO = (13);/* Number of block outputs */
-  ClosedLoopHW_M->Sizes.numBlockPrms = (99);/* Sum of parameter "widths" */
+  ClosedLoopHW_M->Sizes.numBlocks = (41);/* Number of blocks */
+  ClosedLoopHW_M->Sizes.numBlockIO = (14);/* Number of block outputs */
+  ClosedLoopHW_M->Sizes.numBlockPrms = (101);/* Sum of parameter "widths" */
   return ClosedLoopHW_M;
 }
 

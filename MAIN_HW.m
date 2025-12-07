@@ -41,9 +41,11 @@ end
 clear c
 c.bounds = [-pi/3 pi/3; -pi/3 pi/3];
 
-offset = 0.6;
+offset = pi;
 
-c.x_star = [-pi/2+offset; -offset; 0; 0];
+% x0 = [-pi/2+offset-0.1; -offset; 0; 0]; 
+
+c.x_star = [-pi/2+offset; 0; 0; 0];
 
 
 
@@ -268,7 +270,7 @@ x0 = [-pi/2;0;0;0];
 c.t_k = t;
 c.u_star = u;
 c.x_star = soln.grid.state;
-c.bounds = [-pi/3 pi/3; -pi/3 pi/3]*inf;
+c.bounds = [-pi/3 pi/3; -pi/3 pi/3];
 
 c.K = zeros(1,4,length(t));
 
@@ -281,8 +283,10 @@ for i = 1:length(t)
     A = J(c.x_star(:,i), 1e-5*ones(4,1), @(x)dynamics(x, u(i), p));
 
     B = J(u(i), 1e-5, @(u)dynamics(c.x_star(:,i), u, p));
+    sys = c2d(ss(A,B,eye(2,4), 0), 0.001);
 
-    c.K(:,:, i) = lqr(A, B, Q, R);
+    
+    c.K(:,:, i) = lqr(sys, Q, R);
     
 end
 
@@ -309,10 +313,9 @@ for i = 1:length(t)
     c.B(:,:,i) = est.B;
 end
 
-
 %%
 
-model = 'TOLQRClosedLoopHW';
+model = 'TOLQRClosedLoopHW2023';
 %set_param(model, "StopTime", string(t(end)+5))
 
 %set_param(model, 'Dirty', 'on')
@@ -325,7 +328,7 @@ pause(11)
 
 %% animate result
 
-output = out.pendPos;
+output = pendPos;
 ap.l1 = 1;
 ap.l2 = 1.5;
 for i = 1:50:length(output.time)
@@ -335,3 +338,17 @@ for i = 1:50:length(output.time)
 
     drawnow; pause(0.05); 
 end
+%%
+output = pendPos;
+
+figure(2);clf;
+subplot(2,1,1)
+plot(output.time, output.signals.values(:,1), output.time, output.signals.values(:,2))
+hold on
+plot(pendEst.time, pendEst.signals.values(:,1),pendEst.time,pendEst.signals.values(:,2))
+legend("Encoder q1", "Encoder q2", "Kalman q1", "Kalman q2")
+subplot(2,1,2)
+plot(output.time(1:end-1)+diff(output.time), diff(output.signals.values(:,1))/0.001, output.time(1:end-1)+diff(output.time), diff(output.signals.values(:,2))/0.001)
+hold on
+plot(pendEst.time, pendEst.signals.values(:,3),pendEst.time,pendEst.signals.values(:,4))
+legend("Encoder dq1", "Encoder dq2", "Kalman dq1", "Kalman dq2")
