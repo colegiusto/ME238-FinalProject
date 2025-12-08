@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.48
+ * Model version              : 1.52
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Fri Dec  5 15:31:47 2025
+ * C source code generated on : Sat Dec  6 18:24:02 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -21,28 +21,6 @@
 #ifndef RTW_HEADER_ClosedLoopHW_types_h_
 #define RTW_HEADER_ClosedLoopHW_types_h_
 #include "rtwtypes.h"
-#ifndef DEFINED_TYPEDEF_FOR_struct_EyhfgjFUMIaPmLVzByLI3F_
-#define DEFINED_TYPEDEF_FOR_struct_EyhfgjFUMIaPmLVzByLI3F_
-
-typedef struct {
-  real_T g;
-  real_T T1;
-  real_T T2;
-  real_T T3;
-  real_T T4;
-  real_T T5;
-  real_T m1;
-  real_T m2;
-  real_T I1;
-  real_T I2;
-  real_T l1;
-  real_T l2;
-  real_T lc1;
-  real_T lc2;
-} struct_EyhfgjFUMIaPmLVzByLI3F;
-
-#endif
-
 #ifndef DEFINED_TYPEDEF_FOR_struct_IikMKrhxguvBv6I6XHfpIC_
 #define DEFINED_TYPEDEF_FOR_struct_IikMKrhxguvBv6I6XHfpIC_
 
@@ -64,6 +42,86 @@ typedef struct {
 } struct_8dcRBKd2sugfTo5czTP1GD;
 
 #endif
+
+#ifndef struct_tag_jB9SLzkz3eVf9leLxH4yWF
+#define struct_tag_jB9SLzkz3eVf9leLxH4yWF
+
+struct tag_jB9SLzkz3eVf9leLxH4yWF
+{
+  int32_T S0_isInitialized;
+  real_T W0_states[85];
+  real_T P0_InitialStates;
+  real_T P1_Coefficients[86];
+};
+
+#endif                                 /* struct_tag_jB9SLzkz3eVf9leLxH4yWF */
+
+#ifndef typedef_b_dsp_FIRFilter_0_ClosedLoopH_T
+#define typedef_b_dsp_FIRFilter_0_ClosedLoopH_T
+
+typedef struct tag_jB9SLzkz3eVf9leLxH4yWF b_dsp_FIRFilter_0_ClosedLoopH_T;
+
+#endif                             /* typedef_b_dsp_FIRFilter_0_ClosedLoopH_T */
+
+#ifndef struct_tag_Y3g8dL5mymaSXqvMAOPGHG
+#define struct_tag_Y3g8dL5mymaSXqvMAOPGHG
+
+struct tag_Y3g8dL5mymaSXqvMAOPGHG
+{
+  boolean_T matlabCodegenIsDeleted;
+  int32_T isInitialized;
+  boolean_T isSetupComplete;
+  b_dsp_FIRFilter_0_ClosedLoopH_T cSFunObject;
+};
+
+#endif                                 /* struct_tag_Y3g8dL5mymaSXqvMAOPGHG */
+
+#ifndef typedef_b_dspcodegen_FIRFilter_Closed_T
+#define typedef_b_dspcodegen_FIRFilter_Closed_T
+
+typedef struct tag_Y3g8dL5mymaSXqvMAOPGHG b_dspcodegen_FIRFilter_Closed_T;
+
+#endif                             /* typedef_b_dspcodegen_FIRFilter_Closed_T */
+
+#ifndef struct_tag_BlgwLpgj2bjudmbmVKWwDE
+#define struct_tag_BlgwLpgj2bjudmbmVKWwDE
+
+struct tag_BlgwLpgj2bjudmbmVKWwDE
+{
+  uint32_T f1[8];
+};
+
+#endif                                 /* struct_tag_BlgwLpgj2bjudmbmVKWwDE */
+
+#ifndef typedef_cell_wrap_ClosedLoopHW_T
+#define typedef_cell_wrap_ClosedLoopHW_T
+
+typedef struct tag_BlgwLpgj2bjudmbmVKWwDE cell_wrap_ClosedLoopHW_T;
+
+#endif                                 /* typedef_cell_wrap_ClosedLoopHW_T */
+
+#ifndef struct_tag_p30oaDSryE2FkRWfPbQTH
+#define struct_tag_p30oaDSryE2FkRWfPbQTH
+
+struct tag_p30oaDSryE2FkRWfPbQTH
+{
+  boolean_T matlabCodegenIsDeleted;
+  int32_T isInitialized;
+  boolean_T isSetupComplete;
+  cell_wrap_ClosedLoopHW_T inputVarSize;
+  int32_T NumChannels;
+  b_dspcodegen_FIRFilter_Closed_T *FilterObj;
+  b_dspcodegen_FIRFilter_Closed_T _pobj0;
+};
+
+#endif                                 /* struct_tag_p30oaDSryE2FkRWfPbQTH */
+
+#ifndef typedef_dsp_simulink_LowpassFilter_Cl_T
+#define typedef_dsp_simulink_LowpassFilter_Cl_T
+
+typedef struct tag_p30oaDSryE2FkRWfPbQTH dsp_simulink_LowpassFilter_Cl_T;
+
+#endif                             /* typedef_dsp_simulink_LowpassFilter_Cl_T */
 
 /* Parameters (default storage) */
 typedef struct P_ClosedLoopHW_T_ P_ClosedLoopHW_T;

@@ -5,7 +5,7 @@
     ;%***********************
     
         nTotData      = 0; %add to this count as we go
-        nTotSects     = 7;
+        nTotSects     = 6;
         sectIdxOffset = 0;
 
         ;%
@@ -28,136 +28,129 @@
         ;%
         ;% Auto data (OpenLoopHW_P)
         ;%
-            section.nData     = 1;
-            section.data(1)  = dumData; %prealloc
+            section.nData     = 2;
+            section.data(2)  = dumData; %prealloc
 
-                    ;% OpenLoopHW_P.p
+                    ;% OpenLoopHW_P.t_control
                     section.data(1).logicalSrcIdx = 0;
                     section.data(1).dtTransOffset = 0;
 
-            nTotData = nTotData + section.nData;
-            paramMap.sections(1) = section;
-            clear section
-
-            section.nData     = 3;
-            section.data(3)  = dumData; %prealloc
-
-                    ;% OpenLoopHW_P.t_control
-                    section.data(1).logicalSrcIdx = 1;
-                    section.data(1).dtTransOffset = 0;
-
                     ;% OpenLoopHW_P.ut
-                    section.data(2).logicalSrcIdx = 2;
+                    section.data(2).logicalSrcIdx = 1;
                     section.data(2).dtTransOffset = 100;
 
-                    ;% OpenLoopHW_P.x0
-                    section.data(3).logicalSrcIdx = 3;
-                    section.data(3).dtTransOffset = 200;
-
             nTotData = nTotData + section.nData;
-            paramMap.sections(2) = section;
+            paramMap.sections(1) = section;
             clear section
 
             section.nData     = 2;
             section.data(2)  = dumData; %prealloc
 
                     ;% OpenLoopHW_P.HILWriteAnalog_channels
-                    section.data(1).logicalSrcIdx = 4;
+                    section.data(1).logicalSrcIdx = 2;
                     section.data(1).dtTransOffset = 0;
 
                     ;% OpenLoopHW_P.HILReadEncoder_channels
-                    section.data(2).logicalSrcIdx = 5;
+                    section.data(2).logicalSrcIdx = 3;
                     section.data(2).dtTransOffset = 1;
 
             nTotData = nTotData + section.nData;
-            paramMap.sections(3) = section;
+            paramMap.sections(2) = section;
             clear section
 
-            section.nData     = 20;
-            section.data(20)  = dumData; %prealloc
+            section.nData     = 22;
+            section.data(22)  = dumData; %prealloc
 
                     ;% OpenLoopHW_P.HILInitialize_OOTerminate
-                    section.data(1).logicalSrcIdx = 6;
+                    section.data(1).logicalSrcIdx = 4;
                     section.data(1).dtTransOffset = 0;
 
                     ;% OpenLoopHW_P.HILInitialize_OOExit
-                    section.data(2).logicalSrcIdx = 7;
+                    section.data(2).logicalSrcIdx = 5;
                     section.data(2).dtTransOffset = 1;
 
                     ;% OpenLoopHW_P.HILInitialize_OOStart
-                    section.data(3).logicalSrcIdx = 8;
+                    section.data(3).logicalSrcIdx = 6;
                     section.data(3).dtTransOffset = 2;
 
                     ;% OpenLoopHW_P.HILInitialize_OOEnter
-                    section.data(4).logicalSrcIdx = 9;
+                    section.data(4).logicalSrcIdx = 7;
                     section.data(4).dtTransOffset = 3;
 
                     ;% OpenLoopHW_P.HILInitialize_AOFinal
-                    section.data(5).logicalSrcIdx = 10;
+                    section.data(5).logicalSrcIdx = 8;
                     section.data(5).dtTransOffset = 4;
 
                     ;% OpenLoopHW_P.HILInitialize_POFinal
-                    section.data(6).logicalSrcIdx = 11;
+                    section.data(6).logicalSrcIdx = 9;
                     section.data(6).dtTransOffset = 5;
 
                     ;% OpenLoopHW_P.HILInitialize_AIHigh
-                    section.data(7).logicalSrcIdx = 12;
+                    section.data(7).logicalSrcIdx = 10;
                     section.data(7).dtTransOffset = 6;
 
                     ;% OpenLoopHW_P.HILInitialize_AILow
-                    section.data(8).logicalSrcIdx = 13;
+                    section.data(8).logicalSrcIdx = 11;
                     section.data(8).dtTransOffset = 7;
 
                     ;% OpenLoopHW_P.HILInitialize_AOHigh
-                    section.data(9).logicalSrcIdx = 14;
+                    section.data(9).logicalSrcIdx = 12;
                     section.data(9).dtTransOffset = 8;
 
                     ;% OpenLoopHW_P.HILInitialize_AOLow
-                    section.data(10).logicalSrcIdx = 15;
+                    section.data(10).logicalSrcIdx = 13;
                     section.data(10).dtTransOffset = 9;
 
                     ;% OpenLoopHW_P.HILInitialize_AOInitial
-                    section.data(11).logicalSrcIdx = 16;
+                    section.data(11).logicalSrcIdx = 14;
                     section.data(11).dtTransOffset = 10;
 
                     ;% OpenLoopHW_P.HILInitialize_AOWatchdog
-                    section.data(12).logicalSrcIdx = 17;
+                    section.data(12).logicalSrcIdx = 15;
                     section.data(12).dtTransOffset = 11;
 
                     ;% OpenLoopHW_P.HILInitialize_EIFrequency
-                    section.data(13).logicalSrcIdx = 18;
+                    section.data(13).logicalSrcIdx = 16;
                     section.data(13).dtTransOffset = 12;
 
                     ;% OpenLoopHW_P.HILInitialize_POFrequency
-                    section.data(14).logicalSrcIdx = 19;
+                    section.data(14).logicalSrcIdx = 17;
                     section.data(14).dtTransOffset = 13;
 
                     ;% OpenLoopHW_P.HILInitialize_POInitial
-                    section.data(15).logicalSrcIdx = 20;
+                    section.data(15).logicalSrcIdx = 18;
                     section.data(15).dtTransOffset = 14;
 
                     ;% OpenLoopHW_P.Gain2_Gain
-                    section.data(16).logicalSrcIdx = 21;
+                    section.data(16).logicalSrcIdx = 19;
                     section.data(16).dtTransOffset = 15;
 
-                    ;% OpenLoopHW_P.DiscreteTimeIntegrator_gainval
-                    section.data(17).logicalSrcIdx = 22;
+                    ;% OpenLoopHW_P.Constant_Value
+                    section.data(17).logicalSrcIdx = 20;
                     section.data(17).dtTransOffset = 16;
 
-                    ;% OpenLoopHW_P.Step_Time
-                    section.data(18).logicalSrcIdx = 23;
+                    ;% OpenLoopHW_P.Gain_Gain
+                    section.data(18).logicalSrcIdx = 21;
                     section.data(18).dtTransOffset = 17;
 
-                    ;% OpenLoopHW_P.Step_Y0
-                    section.data(19).logicalSrcIdx = 24;
+                    ;% OpenLoopHW_P.Gain1_Gain
+                    section.data(19).logicalSrcIdx = 22;
                     section.data(19).dtTransOffset = 18;
 
-                    ;% OpenLoopHW_P.Step_YFinal
-                    section.data(20).logicalSrcIdx = 25;
+                    ;% OpenLoopHW_P.Step_Time
+                    section.data(20).logicalSrcIdx = 23;
                     section.data(20).dtTransOffset = 19;
 
+                    ;% OpenLoopHW_P.Step_Y0
+                    section.data(21).logicalSrcIdx = 24;
+                    section.data(21).dtTransOffset = 20;
+
+                    ;% OpenLoopHW_P.Step_YFinal
+                    section.data(22).logicalSrcIdx = 25;
+                    section.data(22).dtTransOffset = 21;
+
             nTotData = nTotData + section.nData;
-            paramMap.sections(4) = section;
+            paramMap.sections(3) = section;
             clear section
 
             section.nData     = 5;
@@ -184,7 +177,7 @@
                     section.data(5).dtTransOffset = 6;
 
             nTotData = nTotData + section.nData;
-            paramMap.sections(5) = section;
+            paramMap.sections(4) = section;
             clear section
 
             section.nData     = 4;
@@ -207,7 +200,7 @@
                     section.data(4).dtTransOffset = 12;
 
             nTotData = nTotData + section.nData;
-            paramMap.sections(6) = section;
+            paramMap.sections(5) = section;
             clear section
 
             section.nData     = 37;
@@ -362,7 +355,7 @@
                     section.data(37).dtTransOffset = 36;
 
             nTotData = nTotData + section.nData;
-            paramMap.sections(7) = section;
+            paramMap.sections(6) = section;
             clear section
 
 
@@ -406,32 +399,28 @@
         ;%
         ;% Auto data (OpenLoopHW_B)
         ;%
-            section.nData     = 6;
-            section.data(6)  = dumData; %prealloc
+            section.nData     = 5;
+            section.data(5)  = dumData; %prealloc
 
                     ;% OpenLoopHW_B.Gain2
                     section.data(1).logicalSrcIdx = 0;
                     section.data(1).dtTransOffset = 0;
 
-                    ;% OpenLoopHW_B.Constant1
+                    ;% OpenLoopHW_B.Add
                     section.data(2).logicalSrcIdx = 1;
                     section.data(2).dtTransOffset = 1;
 
-                    ;% OpenLoopHW_B.x
+                    ;% OpenLoopHW_B.Gain1
                     section.data(3).logicalSrcIdx = 2;
-                    section.data(3).dtTransOffset = 5;
+                    section.data(3).dtTransOffset = 2;
 
-                    ;% OpenLoopHW_B.Reshape
+                    ;% OpenLoopHW_B.TmpSignalConversionAtToWorkspac
                     section.data(4).logicalSrcIdx = 3;
-                    section.data(4).dtTransOffset = 9;
+                    section.data(4).dtTransOffset = 3;
 
                     ;% OpenLoopHW_B.Step
                     section.data(5).logicalSrcIdx = 4;
-                    section.data(5).dtTransOffset = 11;
-
-                    ;% OpenLoopHW_B.dx
-                    section.data(6).logicalSrcIdx = 5;
-                    section.data(6).dtTransOffset = 12;
+                    section.data(5).dtTransOffset = 5;
 
             nTotData = nTotData + section.nData;
             sigMap.sections(1) = section;
@@ -455,7 +444,7 @@
     ;%*******************
     
         nTotData      = 0; %add to this count as we go
-        nTotSects     = 6;
+        nTotSects     = 4;
         sectIdxOffset = 1;
 
         ;%
@@ -478,36 +467,32 @@
         ;%
         ;% Auto data (OpenLoopHW_DW)
         ;%
-            section.nData     = 7;
-            section.data(7)  = dumData; %prealloc
+            section.nData     = 6;
+            section.data(6)  = dumData; %prealloc
 
-                    ;% OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE
+                    ;% OpenLoopHW_DW.HILInitialize_AIMinimums
                     section.data(1).logicalSrcIdx = 0;
                     section.data(1).dtTransOffset = 0;
 
-                    ;% OpenLoopHW_DW.HILInitialize_AIMinimums
+                    ;% OpenLoopHW_DW.HILInitialize_AIMaximums
                     section.data(2).logicalSrcIdx = 1;
                     section.data(2).dtTransOffset = 4;
 
-                    ;% OpenLoopHW_DW.HILInitialize_AIMaximums
+                    ;% OpenLoopHW_DW.HILInitialize_AOMinimums
                     section.data(3).logicalSrcIdx = 2;
                     section.data(3).dtTransOffset = 8;
 
-                    ;% OpenLoopHW_DW.HILInitialize_AOMinimums
+                    ;% OpenLoopHW_DW.HILInitialize_AOMaximums
                     section.data(4).logicalSrcIdx = 3;
                     section.data(4).dtTransOffset = 12;
 
-                    ;% OpenLoopHW_DW.HILInitialize_AOMaximums
+                    ;% OpenLoopHW_DW.HILInitialize_AOVoltages
                     section.data(5).logicalSrcIdx = 4;
                     section.data(5).dtTransOffset = 16;
 
-                    ;% OpenLoopHW_DW.HILInitialize_AOVoltages
+                    ;% OpenLoopHW_DW.HILInitialize_FilterFrequency
                     section.data(6).logicalSrcIdx = 5;
                     section.data(6).dtTransOffset = 20;
-
-                    ;% OpenLoopHW_DW.HILInitialize_FilterFrequency
-                    section.data(7).logicalSrcIdx = 6;
-                    section.data(7).dtTransOffset = 24;
 
             nTotData = nTotData + section.nData;
             dworkMap.sections(1) = section;
@@ -517,7 +502,7 @@
             section.data(1)  = dumData; %prealloc
 
                     ;% OpenLoopHW_DW.HILInitialize_Card
-                    section.data(1).logicalSrcIdx = 7;
+                    section.data(1).logicalSrcIdx = 6;
                     section.data(1).dtTransOffset = 0;
 
             nTotData = nTotData + section.nData;
@@ -528,76 +513,50 @@
             section.data(6)  = dumData; %prealloc
 
                     ;% OpenLoopHW_DW.HILWriteAnalog_PWORK
-                    section.data(1).logicalSrcIdx = 8;
+                    section.data(1).logicalSrcIdx = 7;
                     section.data(1).dtTransOffset = 0;
 
-                    ;% OpenLoopHW_DW.Scope_PWORK.LoggedData
-                    section.data(2).logicalSrcIdx = 9;
+                    ;% OpenLoopHW_DW.Scope1_PWORK.LoggedData
+                    section.data(2).logicalSrcIdx = 8;
                     section.data(2).dtTransOffset = 1;
 
-                    ;% OpenLoopHW_DW.Scope1_PWORK.LoggedData
-                    section.data(3).logicalSrcIdx = 10;
+                    ;% OpenLoopHW_DW.HILReadEncoder_PWORK
+                    section.data(3).logicalSrcIdx = 9;
                     section.data(3).dtTransOffset = 2;
 
-                    ;% OpenLoopHW_DW.ToWorkspace_PWORK.LoggedData
-                    section.data(4).logicalSrcIdx = 11;
+                    ;% OpenLoopHW_DW.Scope_PWORK.LoggedData
+                    section.data(4).logicalSrcIdx = 10;
                     section.data(4).dtTransOffset = 3;
 
-                    ;% OpenLoopHW_DW.HILReadEncoder_PWORK
-                    section.data(5).logicalSrcIdx = 12;
+                    ;% OpenLoopHW_DW.ToWorkspace_PWORK.LoggedData
+                    section.data(5).logicalSrcIdx = 11;
                     section.data(5).dtTransOffset = 4;
 
                     ;% OpenLoopHW_DW.TRIGGER_SCOPE_PWORK.LoggedData
-                    section.data(6).logicalSrcIdx = 13;
+                    section.data(6).logicalSrcIdx = 12;
                     section.data(6).dtTransOffset = 5;
 
             nTotData = nTotData + section.nData;
             dworkMap.sections(3) = section;
             clear section
 
-            section.nData     = 4;
-            section.data(4)  = dumData; %prealloc
+            section.nData     = 3;
+            section.data(3)  = dumData; %prealloc
 
                     ;% OpenLoopHW_DW.HILInitialize_QuadratureModes
-                    section.data(1).logicalSrcIdx = 14;
+                    section.data(1).logicalSrcIdx = 13;
                     section.data(1).dtTransOffset = 0;
 
                     ;% OpenLoopHW_DW.HILInitialize_InitialEICounts
-                    section.data(2).logicalSrcIdx = 15;
+                    section.data(2).logicalSrcIdx = 14;
                     section.data(2).dtTransOffset = 4;
 
                     ;% OpenLoopHW_DW.HILReadEncoder_Buffer
-                    section.data(3).logicalSrcIdx = 16;
+                    section.data(3).logicalSrcIdx = 15;
                     section.data(3).dtTransOffset = 8;
-
-                    ;% OpenLoopHW_DW.sfEvent
-                    section.data(4).logicalSrcIdx = 17;
-                    section.data(4).dtTransOffset = 10;
 
             nTotData = nTotData + section.nData;
             dworkMap.sections(4) = section;
-            clear section
-
-            section.nData     = 1;
-            section.data(1)  = dumData; %prealloc
-
-                    ;% OpenLoopHW_DW.is_active_c1_OpenLoopHW
-                    section.data(1).logicalSrcIdx = 18;
-                    section.data(1).dtTransOffset = 0;
-
-            nTotData = nTotData + section.nData;
-            dworkMap.sections(5) = section;
-            clear section
-
-            section.nData     = 1;
-            section.data(1)  = dumData; %prealloc
-
-                    ;% OpenLoopHW_DW.doneDoubleBufferReInit
-                    section.data(1).logicalSrcIdx = 19;
-                    section.data(1).dtTransOffset = 0;
-
-            nTotData = nTotData + section.nData;
-            dworkMap.sections(6) = section;
             clear section
 
 
@@ -626,8 +585,8 @@
     ;%
 
 
-    targMap.checksum0 = 3368250566;
-    targMap.checksum1 = 1952631749;
-    targMap.checksum2 = 1717565681;
-    targMap.checksum3 = 2220358810;
+    targMap.checksum0 = 1666486668;
+    targMap.checksum1 = 530823346;
+    targMap.checksum2 = 1604855656;
+    targMap.checksum3 = 3805099371;
 

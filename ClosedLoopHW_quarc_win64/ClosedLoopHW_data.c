@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.48
+ * Model version              : 1.52
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Fri Dec  5 15:31:47 2025
+ * C source code generated on : Sat Dec  6 18:24:02 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -23,58 +23,38 @@
 /* Block parameters (default storage) */
 P_ClosedLoopHW_T ClosedLoopHW_P = {
   /* Variable: est_param
-   * Referenced by: '<S3>/MATLAB Function'
+   * Referenced by: '<S2>/MATLAB Function'
    */
   {
-    { 0.99870289783697985, 0.00097183083224438313, -0.050481078155066049,
-      0.026515801118332214, 0.00097030087214362273, 0.99666465175510677,
-      0.023451259586486077, -0.095736901147557549, 0.00099935544023447057,
-      4.8407639015654509e-7, 0.9999747520578699, 1.3268656430191241e-5,
-      4.8356614919550721e-7, 0.00099833931089235613, 1.1736251024946298e-5,
-      0.99995210274266644 },
+    { 0.9817728558834109, 0.011221920801286655, -0.1638752201086105,
+      0.23826065254806719, 0.011227004051373357, 0.96690110759635761,
+      0.248602594792852, -0.50946538621886872, 0.00099086151501043122,
+      5.6397061700903959e-6, 0.99991757168315809, 0.00011998583602876543,
+      5.641407947628966e-6, 0.00098339005038182935, 0.00012515730542942503,
+      0.99974360676440976 },
 
-    { 4.1562577519353845e-5, -7.228406677090856e-5, 0.0832061212922221,
-      -0.14475217956886224, 0.0012724906082641372, -0.00095813411287155468,
-      0.001228560405438174, 0.00092316124795713153, -0.00096118573298054066,
-      0.0032903887700508811, -0.0051846879888380014, 0.0057141276550995088 }
-  },
-
-  /* Variable: p
-   * Referenced by: '<S1>/MATLAB Function'
-   */
-  {
-    9.8,
-    0.014806176,
-    0.005095632,
-    0.00456684,
-    0.100326264,
-    0.03028536,
-    1.0,
-    1.0,
-    1.0,
-    1.0,
-    1.0,
-    1.0,
-    0.5,
-    0.5
+    { 4.6052775837966685e-5, -8.7341407138934887e-5, 0.0933323453141869,
+      -0.17697926368004033, 0.018260282990116759, -0.011255762532312169,
+      0.23081566304041484, -0.3069499798310063, -0.011239144146749322,
+      0.033150924515960349, -0.27342626996878205, 0.61478160867632059 }
   },
 
   /* Variable: c
    * Referenced by:
    *   '<Root>/x_star'
-   *   '<S3>/Constant'
-   *   '<S3>/Constant1'
-   *   '<S5>/MATLAB Function'
+   *   '<S2>/Constant'
+   *   '<S2>/Constant1'
+   *   '<S3>/MATLAB Function'
    */
   {
     { -1.0471975511965976, -1.0471975511965976, 1.0471975511965976,
       1.0471975511965976 },
 
-    { -0.97079632679489658, -0.6, 0.0, 0.0 },
-    0.55515500515189742,
+    { 1.5707963267948966, 0.0, 0.0, 0.0 },
+    2.815050406471702e-17,
 
-    { -11.760200881355267, -18.071218325641507, 0.86639265765517182,
-      -6.4159582829986377 }
+    { -322.76081043688987, -273.97745074238139, -57.830144730465953,
+      -36.198873673221946 }
   },
 
   /* Variable: dC
@@ -85,66 +65,20 @@ P_ClosedLoopHW_T ClosedLoopHW_P = {
   /* Variable: x0
    * Referenced by:
    *   '<Root>/Delay'
-   *   '<S1>/Constant1'
-   *   '<S2>/UD'
-   *   '<S3>/Constant'
+   *   '<S1>/UD'
+   *   '<S2>/Constant'
    */
-  { -1.2707963267948965, 0.0, 0.0, 0.0 },
-
-  /* Mask Parameter: LowPassFilterDiscreteorContinuo
-   * Referenced by: '<S4>/K'
-   */
-  1.0,
-
-  /* Mask Parameter: LowPassFilterDiscreteorContin_k
-   * Referenced by: '<S8>/Time constant'
-   */
-  0.1,
-
-  /* Mask Parameter: CompareToConstant_const
-   * Referenced by: '<S11>/Constant'
-   */
-  2.0,
-
-  /* Mask Parameter: LowPassFilterDiscreteorContin_l
-   * Referenced by: '<S8>/Constant'
-   */
-  2.0,
-
-  /* Mask Parameter: LowPassFilterDiscreteorContin_g
-   * Referenced by: '<S13>/Constant'
-   */
-  { 0.0, 0.0 },
-
-  /* Mask Parameter: HILReadEncoder_channels
-   * Referenced by: '<Root>/HIL Read Encoder'
-   */
-  { 0U, 1U },
+  { -1.5707963267948966, 0.0, 0.0, 0.0 },
 
   /* Mask Parameter: HILWriteAnalog_channels
    * Referenced by: '<Root>/HIL Write Analog'
    */
   0U,
 
-  /* Expression: 2*pi/5000
-   * Referenced by: '<Root>/Gain'
+  /* Mask Parameter: HILReadEncoder_channels
+   * Referenced by: '<Root>/HIL Read Encoder'
    */
-  0.0012566370614359172,
-
-  /* Expression: -pi/2
-   * Referenced by: '<Root>/Constant'
-   */
-  -1.5707963267948966,
-
-  /* Expression: -2*pi/10000
-   * Referenced by: '<Root>/Gain1'
-   */
-  -0.00062831853071795862,
-
-  /* Expression: 0
-   * Referenced by: '<S12>/Constant'
-   */
-  0.0,
+  { 0U, 1U },
 
   /* Expression: set_other_outputs_at_terminate
    * Referenced by: '<Root>/HIL Initialize'
@@ -221,50 +155,15 @@ P_ClosedLoopHW_T ClosedLoopHW_P = {
    */
   0.0,
 
-  /* Expression: -1
-   * Referenced by: '<Root>/Constant1'
+  /* Expression: 2
+   * Referenced by: '<Root>/Saturation1'
    */
-  -1.0,
+  2.0,
 
-  /* Computed Parameter: DiscreteTimeIntegrator_gainval
-   * Referenced by: '<S1>/Discrete-Time Integrator'
+  /* Expression: -2
+   * Referenced by: '<Root>/Saturation1'
    */
-  0.001,
-
-  /* Expression: 0
-   * Referenced by: '<Root>/Switch'
-   */
-  0.0,
-
-  /* Computed Parameter: Integrator_gainval
-   * Referenced by: '<S15>/Integrator'
-   */
-  0.001,
-
-  /* Expression: antiwindupUpperLimit
-   * Referenced by: '<S15>/Integrator'
-   */
-  0.0,
-
-  /* Expression: antiwindupLowerLimit
-   * Referenced by: '<S15>/Integrator'
-   */
-  0.0,
-
-  /* Expression: windupUpperLimit
-   * Referenced by: '<S15>/Saturation'
-   */
-  0.0,
-
-  /* Expression: windupLowerLimit
-   * Referenced by: '<S15>/Saturation'
-   */
-  0.0,
-
-  /* Computed Parameter: TSamp_WtEt
-   * Referenced by: '<S2>/TSamp'
-   */
-  1000.0,
+  -2.0,
 
   /* Expression: 2/(1.2*0.4006*3.5)
    * Referenced by: '<Root>/Gain2'
@@ -280,6 +179,26 @@ P_ClosedLoopHW_T ClosedLoopHW_P = {
    * Referenced by: '<Root>/Saturation'
    */
   -1.0,
+
+  /* Expression: -pi/2
+   * Referenced by: '<Root>/Constant'
+   */
+  -1.5707963267948966,
+
+  /* Expression: 2*pi/5000
+   * Referenced by: '<Root>/Gain'
+   */
+  0.0012566370614359172,
+
+  /* Expression: -2*pi/10000
+   * Referenced by: '<Root>/Gain1'
+   */
+  -0.00062831853071795862,
+
+  /* Computed Parameter: TSamp_WtEt
+   * Referenced by: '<S1>/TSamp'
+   */
+  1000.0,
 
   /* Expression: 0.001
    * Referenced by: '<Root>/Step'
@@ -516,13 +435,13 @@ P_ClosedLoopHW_T ClosedLoopHW_P = {
    */
   true,
 
-  /* Computed Parameter: HILReadEncoder_Active
-   * Referenced by: '<Root>/HIL Read Encoder'
-   */
-  true,
-
   /* Computed Parameter: HILWriteAnalog_Active
    * Referenced by: '<Root>/HIL Write Analog'
    */
-  false
+  false,
+
+  /* Computed Parameter: HILReadEncoder_Active
+   * Referenced by: '<Root>/HIL Read Encoder'
+   */
+  true
 };

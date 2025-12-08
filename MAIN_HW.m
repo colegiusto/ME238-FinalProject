@@ -3,7 +3,7 @@ J = @(x,h,F)(F(repmat(x,size(x'))+diag(h))-F(repmat(x,size(x'))))./h';
 load guess.mat 
 
 %% Test Open Loop
-x0 = [-pi/2+0.3; 0; 0; 0];
+x0 = [-pi/2; 0; 0; 0]; 
 
 t_control = linspace(0,10,100);
 ut = (t_control>=1)*0.2;
@@ -11,12 +11,12 @@ ut = (t_control>=1)*0.2;
 %%
 model = 'OpenLoopHW';
 
-set_param(model, 'SimulationMode', 'external')
+set_param(model, 'SimulationMode', 'normal')
 set_param(model, 'SimulationCommand', 'connect')
 pause(1)
 set_param(model, 'SimulationCommand', 'start')
 pause(11)
-
+pendPos = out.pendPos;
 
 %% animate result
 
@@ -41,9 +41,11 @@ end
 clear c
 c.bounds = [-pi/3 pi/3; -pi/3 pi/3];
 
-offset = 0.6;
+offset = pi;
 
-c.x_star = [-pi/2+offset; -offset; 0; 0];
+% x0 = [-pi/2+offset-0.1; -offset; 0; 0]; 
+
+c.x_star = [-pi/2+offset; 0; 0; 0];
 
 
 
@@ -53,8 +55,8 @@ c.u_star = -B \dynamics(c.x_star, 0, p);
 
 A = J(c.x_star, 1e-7*ones(1,4), @(x)dynamics(x,c.u_star,p));
 
-Q = diag([1 10 1 10]);
-R = 1e-6;
+Q = diag([10000 100 100 100])*1e4;
+R = 1e-8;
 
 sys = c2d(ss(A,B,eye(2,4), 0), 0.001);
 
@@ -66,26 +68,28 @@ c.K = lqr(sys, Q, R);
 
 BB = B;
 QN = 1;
-RN = eye(2)*20;
+RN = eye(2)*1e-1;
 
 kalsys = ss(A, [B BB], dC, 0);
 
 [est, L, P] = kalman(kalsys, QN, RN);
 
-est = c2d(est, 0.001);
-est_param.A = est.A;
-est_param.B = est.B;
+estd = c2d(est, 0.001);
+est_param.A = estd.A;
+est_param.B = estd.B;
 
 %%
 model = 'ClosedLoopHW';
-set_param(model, 'Dirty', 'on')
-rtwbuild(model)
+% set_param(model, 'Dirty', 'on')
+% rtwbuild(model)
 
-set_param(model, 'SimulationMode', 'external')
+set_param(model, 'SimulationMode', 'normal')
 set_param(model, 'SimulationCommand', 'connect')
 pause(1)
 set_param(model, 'SimulationCommand', 'start')
 pause(11)
+
+pendPos = out.pendPos;
 
 %% animate result
 
@@ -103,7 +107,7 @@ end
 %% plot
 output = pendPos;
 
-figure(2)
+figure(2);clf;
 subplot(2,1,1)
 plot(output.time, output.signals.values(:,1), output.time, output.signals.values(:,2))
 hold on
@@ -135,13 +139,13 @@ sol = ode45(@(t,x)dynamics(x, controller(x), p), linspace(0, 10,1000), x0);
 addpath ../OptimTraj/
 
 problem.func.dynamics = @(t,x,u)( dynamics(x,u,p) );
-problem.func.pathObj = @(t,x,u)( u.^2 );
+problem.func.pathObj = @(t,x,u)( 1e-4* u.^2 );
 
 % Problem bounds
 problem.bounds.initialTime.low = 0;
 problem.bounds.initialTime.upp = 0;
 problem.bounds.finalTime.low = 5;
-problem.bounds.finalTime.upp = 30;
+problem.bounds.finalTime.upp = 10;
 
 problem.bounds.state.low = [-inf; -inf; -inf; -inf];
 problem.bounds.state.upp = [inf; inf; inf; inf];
@@ -150,8 +154,8 @@ problem.bounds.initialState.upp = [-pi/2;0;0;0];
 problem.bounds.finalState.low = [pi/2;0;0;0];
 problem.bounds.finalState.upp = [pi/2;0;0;0];
 
-problem.bounds.control.low = -inf; %-inf;
-problem.bounds.control.upp = inf;
+problem.bounds.control.low = -1; %-inf;
+problem.bounds.control.upp = 1;
 
 % Guess at the initial trajectory
 
@@ -170,7 +174,7 @@ problem.guess = guess;
 
 % Select a solver:
 problem.options.method = 'trapezoid';
-problem.options.defaultAccuracy = 'high';
+problem.options.defaultAccuracy = 'medium';
 problem.options.trapezoid.nGrid = 100;
 % problem.options.nlpOpt = optimoptions('fmincon');
 % problem.options.nlpOpt.MaxIterations = 1000;
@@ -235,7 +239,8 @@ x0 = [-pi/2; 0; 0; 0];
 t_control = t;
 ut = u;
 
-model = 'OpenLoop';
+%%
+model = 'OpenLoopHW';
 
 set_param(model, "StopTime", string(t(end)))
 set_param(model, 'SimulationMode', 'normal')
@@ -245,14 +250,15 @@ set_param(model, 'SimulationCommand', 'start')
 pause(11)
 
 
+
 %% animate result
 
-output = out.pendPos;
+output = pendPos;
 ap.l1 = 1;
 ap.l2 = 1.5;
 for i = 1:50:length(output.time)
     clf; hold on;
-    animate(output.time(i), output.signals.values(:,:,i), ap)
+    animate(output.time(i), output.signals.values(i,:), ap)
     animate(output.time(i), soln.grid.state(:,find(t>=output.time(i))), ap)
 
     drawnow; pause(0.05); 
@@ -264,30 +270,85 @@ x0 = [-pi/2;0;0;0];
 c.t_k = t;
 c.u_star = u;
 c.x_star = soln.grid.state;
-c.bounds = [-pi/3 pi/3; -pi/3 pi/3]*inf;
+c.bounds = [-pi/3 pi/3; -pi/3 pi/3];
 
 c.K = zeros(1,4,length(t));
 
-Q = diag([0.01, 7, 0.1, 0.9]);
-R = 6;
+Q = diag([10000 100 100 100])*1e4;
+R = 1e-8;
 
+
+% Calculate K for each knot point
 for i = 1:length(t)
     A = J(c.x_star(:,i), 1e-5*ones(4,1), @(x)dynamics(x, u(i), p));
 
     B = J(u(i), 1e-5, @(u)dynamics(c.x_star(:,i), u, p));
+    sys = c2d(ss(A,B,eye(2,4), 0), 0.001);
 
-    c.K(:,:, i) = lqr(A, B, Q, R);
+    
+    c.K(:,:, i) = lqr(sys, Q, R);
+    
+end
+
+
+% Perform LQG for each knot point
+
+for i = 1:length(t)
+    A = J(c.x_star(:,i), 1e-5*ones(4,1), @(x)dynamics(x, u(i), p));
+    B = J(u(i), 1e-5, @(u)dynamics(c.x_star(:,i), u, p));
+
+    sys = c2d(ss(A,B,eye(2,4), 0), 0.001);
+    
+    BB = B;
+    
+    kalsys = ss(A, [B BB], dC, 0);
+
+    QN = 1;
+    RN = eye(2)*1e-1;
+    
+    [est, L, P] = kalman(kalsys, QN, RN);
+    
+    est = c2d(est, 0.001);
+    c.A(:,:,i) = est.A;
+    c.B(:,:,i) = est.B;
 end
 
 %%
 
-model = 'ClosedLoop';
-set_param(model, "StopTime", string(t(end)+5))
+model = 'TOLQRClosedLoopHW2023';
+%set_param(model, "StopTime", string(t(end)+5))
 
-set_param(model, 'Dirty', 'on')
+%set_param(model, 'Dirty', 'on')
 
 set_param(model, 'SimulationMode', 'normal')
 set_param(model, 'SimulationCommand', 'connect')
 pause(1)
 set_param(model, 'SimulationCommand', 'start')
 pause(11)
+
+%% animate result
+
+output = pendPos;
+ap.l1 = 1;
+ap.l2 = 1.5;
+for i = 1:50:length(output.time)
+    clf; hold on;
+    animate(output.time(i), output.signals.values(i,:), ap)
+    animate(output.time(i), soln.grid.state(:,find(t>=output.time(i))), ap)
+
+    drawnow; pause(0.05); 
+end
+%%
+output = pendPos;
+
+figure(2);clf;
+subplot(2,1,1)
+plot(output.time, output.signals.values(:,1), output.time, output.signals.values(:,2))
+hold on
+plot(pendEst.time, pendEst.signals.values(:,1),pendEst.time,pendEst.signals.values(:,2))
+legend("Encoder q1", "Encoder q2", "Kalman q1", "Kalman q2")
+subplot(2,1,2)
+plot(output.time(1:end-1)+diff(output.time), diff(output.signals.values(:,1))/0.001, output.time(1:end-1)+diff(output.time), diff(output.signals.values(:,2))/0.001)
+hold on
+plot(pendEst.time, pendEst.signals.values(:,3),pendEst.time,pendEst.signals.values(:,4))
+legend("Encoder dq1", "Encoder dq2", "Kalman dq1", "Kalman dq2")

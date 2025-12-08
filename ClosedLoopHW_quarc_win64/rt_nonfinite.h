@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.48
+ * Model version              : 1.52
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Fri Dec  5 15:31:47 2025
+ * C source code generated on : Sat Dec  6 18:24:02 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
