@@ -41,7 +41,7 @@ end
 clear c
 c.bounds = [-pi/3 pi/3; -pi/3 pi/3];
 
-offset = 0;
+offset = pi;
 
 % x0 = [-pi/2+offset-0.1; -offset; 0; 0]; 
 
@@ -149,77 +149,19 @@ end
 %% Test with simulink
 
 x0 = [-pi/2; 0; 0; 0]; 
-x_ref = [pi/2; 0; 0; 0];
 
-clear c;
-c.p = p;
-c.kp = kp;
-c.kd = kd;
-c.x_ref = x_ref;
-c.x0 = x0;
-
-c.startTrig = 0.1;
-c.stabTrig = 0.0;
-c.stabAbort = 1;
-
+t_control = linspace(0,10,100);
+ut = (t_control>=1)*0.2;
 
 %%
-model = 'PFLControl';
+model = 'OpenLoopHW';
 
 set_param(model, 'SimulationMode', 'normal')
 set_param(model, 'SimulationCommand', 'connect')
 pause(1)
 set_param(model, 'SimulationCommand', 'start')
-pause(1)
+pause(11)
 pendPos = out.pendPos;
-
-%% animate result
-
-output = out.pendPos;
-ap.l1 = 1;
-ap.l2 = 1.5;
-figure(1)
-for i = 1:50:length(output.time)
-    clf; hold on;
-    animate(output.time(i), output.signals.values(i,:), ap)
-
-    drawnow; pause(0.05); 
-end
-
-%% add lqr
-
-% top stabilization
-A = J([pi/2; 0; 0; 0], 1e-5*ones(1,4), @(x)dynamics(x,0,p));
-B = J(0, 1e-5, @(u)dynamics([pi/2; 0; 0; 0], u, p));
-
-Q = eye(4);
-R = 1;
-
-c.top_K = lqr(A, B, Q, R);
-c.startTrig = 0.1;
-c.stabTrig = 0.5;
-c.stabAbort = 20;
-%%
-model = 'PFLControl';
-
-set_param(model, 'SimulationMode', 'normal')
-set_param(model, 'SimulationCommand', 'connect')
-pause(1)
-set_param(model, 'SimulationCommand', 'start')
-pause(1)
-pendPos = out.pendPos;
-%% animate result
-
-output = out.pendPos;
-ap.l1 = 1;
-ap.l2 = 1.5;
-figure(1)
-for i = 1:50:length(output.time)
-    clf; hold on;
-    animate(output.time(i), output.signals.values(i,:), ap)
-
-    drawnow; pause(0.05); 
-end
 
 %% Trajectory Optimization
 
