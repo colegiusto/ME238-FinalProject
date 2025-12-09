@@ -41,7 +41,7 @@ end
 clear c
 c.bounds = [-pi/3 pi/3; -pi/3 pi/3];
 
-offset = 0;
+offset = 1;
 
 % x0 = [-pi/2+offset-0.1; -offset; 0; 0]; 
 
@@ -55,16 +55,25 @@ c.u_star = -B \dynamics(c.x_star, 0, p);
 
 A = J(c.x_star, 1e-7*ones(1,4), @(x)dynamics(x,c.u_star,p));
 
-Q = diag([10000 100 100 100])*1e4;
-R = 1e-8;
+Q = diag([100 100 1 1]);
+R = 1e-2;
 
 sys = c2d(ss(A,B,eye(2,4), 0), 0.001);
 
-c.K = lqr(sys, Q, R);
+
+
+
+[dA, dB, dC, dD] = ssdata(sys);
+
+% c.K = lqr(sys, Q, R);
+K_dlqr = dlqr(dA, dB, Q, R);
+
+poles = eig(dA-dB*K_dlqr)*0.99;
+[K_placed, prec] = place(dA, dB, poles);
+c.K = K_placed;
 
 %lqg
 
-[dA, dB, dC, dD] = ssdata(sys);
 
 BB = B;
 QN = 1;

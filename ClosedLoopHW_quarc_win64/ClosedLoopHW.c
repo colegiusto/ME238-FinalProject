@@ -9,7 +9,7 @@
  *
  * Model version              : 1.53
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Tue Dec  9 11:22:27 2025
+ * C source code generated on : Tue Dec  9 14:50:42 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -20,14 +20,14 @@
 
 #include "ClosedLoopHW.h"
 #include "rtwtypes.h"
-#include "ClosedLoopHW_types.h"
 #include <emmintrin.h>
+#include <math.h>
+#include "rt_nonfinite.h"
 #include "ClosedLoopHW_private.h"
 #include <string.h>
-#include "rt_nonfinite.h"
 #include "ClosedLoopHW_dt.h"
 
-/* Named constants for MATLAB Function: '<S2>/MATLAB Function' */
+/* Named constants for MATLAB Function: '<S1>/MATLAB Function' */
 #define ClosedLoopHW_CALL_EVENT        (-1)
 
 /* Block signals (default storage) */
@@ -43,21 +43,47 @@ RT_MODEL_ClosedLoopHW_T *const ClosedLoopHW_M = &ClosedLoopHW_M_;
 /* Model output function */
 void ClosedLoopHW_output(void)
 {
-  __m128d tmp_0;
-  b_dsp_FIRFilter_0_ClosedLoopH_T *obj_0;
-  b_dspcodegen_FIRFilter_Closed_T *obj;
-  real_T rtb_raag[2];
+  __m128d tmp_2;
   real_T Delay_DSTATE_m;
   real_T Delay_DSTATE_m_0;
   real_T Delay_DSTATE_m_1;
+  real_T K_idx_0;
+  real_T K_idx_1;
+  real_T rtb_Max;
   real_T tmp;
-  real_T u0;
-  real_T zCurr;
-  real_T zNext;
-  int32_T k;
-  int32_T n;
+  real_T tmp_0;
+  real_T tmp_1;
+  int32_T i;
 
-  /* MATLAB Function: '<S3>/MATLAB Function' */
+  /* Constant: '<S1>/Constant1' */
+  ClosedLoopHW_B.Constant1[0] = ClosedLoopHW_P.x0[0];
+
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_B.x[0] = ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0];
+
+  /* Constant: '<S1>/Constant1' */
+  ClosedLoopHW_B.Constant1[1] = ClosedLoopHW_P.x0[1];
+
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_B.x[1] = ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[1];
+
+  /* Constant: '<S1>/Constant1' */
+  ClosedLoopHW_B.Constant1[2] = ClosedLoopHW_P.x0[2];
+
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_B.x[2] = ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[2];
+
+  /* Constant: '<S1>/Constant1' */
+  ClosedLoopHW_B.Constant1[3] = ClosedLoopHW_P.x0[3];
+
+  /* DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_B.x[3] = ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[3];
+
+  /* Reshape: '<Root>/Reshape' */
+  ClosedLoopHW_B.Reshape[0] = ClosedLoopHW_B.x[0];
+  ClosedLoopHW_B.Reshape[1] = ClosedLoopHW_B.x[1];
+
+  /* MATLAB Function: '<S5>/MATLAB Function' */
   ClosedLoopHW_DW.sfEvent = ClosedLoopHW_CALL_EVENT;
 
   /* Delay: '<Root>/Delay' */
@@ -66,169 +92,176 @@ void ClosedLoopHW_output(void)
   ClosedLoopHW_B.Delay[2] = ClosedLoopHW_DW.Delay_DSTATE[2];
   ClosedLoopHW_B.Delay[3] = ClosedLoopHW_DW.Delay_DSTATE[3];
 
-  /* MATLAB Function: '<S3>/MATLAB Function' incorporates:
+  /* MATLAB Function: '<S5>/MATLAB Function' incorporates:
    *  Delay: '<Root>/Delay'
    */
-  u0 = ((((ClosedLoopHW_DW.Delay_DSTATE[0] - ClosedLoopHW_P.c.x_star[0]) *
-          -ClosedLoopHW_P.c.K[0] + (ClosedLoopHW_DW.Delay_DSTATE[1] -
-           ClosedLoopHW_P.c.x_star[1]) * -ClosedLoopHW_P.c.K[1]) +
-         (ClosedLoopHW_DW.Delay_DSTATE[2] - ClosedLoopHW_P.c.x_star[2]) *
-         -ClosedLoopHW_P.c.K[2]) + (ClosedLoopHW_DW.Delay_DSTATE[3] -
-         ClosedLoopHW_P.c.x_star[3]) * -ClosedLoopHW_P.c.K[3]) +
+  K_idx_0 = ((((ClosedLoopHW_DW.Delay_DSTATE[0] - ClosedLoopHW_P.c.x_star[0]) *
+               -ClosedLoopHW_P.c.K[0] + (ClosedLoopHW_DW.Delay_DSTATE[1] -
+    ClosedLoopHW_P.c.x_star[1]) * -ClosedLoopHW_P.c.K[1]) +
+              (ClosedLoopHW_DW.Delay_DSTATE[2] - ClosedLoopHW_P.c.x_star[2]) *
+              -ClosedLoopHW_P.c.K[2]) + (ClosedLoopHW_DW.Delay_DSTATE[3] -
+              ClosedLoopHW_P.c.x_star[3]) * -ClosedLoopHW_P.c.K[3]) +
     ClosedLoopHW_P.c.u_star;
 
   /* Saturate: '<Root>/Saturation1' */
-  if (u0 > ClosedLoopHW_P.Saturation1_UpperSat) {
+  if (K_idx_0 > ClosedLoopHW_P.Saturation1_UpperSat) {
     /* Saturate: '<Root>/Saturation1' */
     ClosedLoopHW_B.Saturation1 = ClosedLoopHW_P.Saturation1_UpperSat;
-  } else if (u0 < ClosedLoopHW_P.Saturation1_LowerSat) {
+  } else if (K_idx_0 < ClosedLoopHW_P.Saturation1_LowerSat) {
     /* Saturate: '<Root>/Saturation1' */
     ClosedLoopHW_B.Saturation1 = ClosedLoopHW_P.Saturation1_LowerSat;
   } else {
     /* Saturate: '<Root>/Saturation1' */
-    ClosedLoopHW_B.Saturation1 = u0;
+    ClosedLoopHW_B.Saturation1 = K_idx_0;
   }
 
   /* End of Saturate: '<Root>/Saturation1' */
-
-  /* Gain: '<Root>/Gain2' */
-  u0 = ClosedLoopHW_P.Gain2_Gain * ClosedLoopHW_B.Saturation1;
-
-  /* Saturate: '<Root>/Saturation' */
-  if (u0 > ClosedLoopHW_P.Saturation_UpperSat) {
-    /* Saturate: '<Root>/Saturation' */
-    ClosedLoopHW_B.Saturation = ClosedLoopHW_P.Saturation_UpperSat;
-  } else if (u0 < ClosedLoopHW_P.Saturation_LowerSat) {
-    /* Saturate: '<Root>/Saturation' */
-    ClosedLoopHW_B.Saturation = ClosedLoopHW_P.Saturation_LowerSat;
-  } else {
-    /* Saturate: '<Root>/Saturation' */
-    ClosedLoopHW_B.Saturation = u0;
-  }
-
-  /* End of Saturate: '<Root>/Saturation' */
-
-  /* S-Function (hil_write_analog_block): '<Root>/HIL Write Analog' */
-
-  /* S-Function Block: ClosedLoopHW/HIL Write Analog (hil_write_analog_block) */
-  {
-    t_error result;
-    result = hil_write_analog(ClosedLoopHW_DW.HILInitialize_Card,
-      &ClosedLoopHW_P.HILWriteAnalog_channels, 1, &ClosedLoopHW_B.Saturation);
-    if (result < 0) {
-      msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
-        (_rt_error_message));
-      rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
-    }
-  }
-
-  /* S-Function (hil_read_encoder_block): '<Root>/HIL Read Encoder' */
-
-  /* S-Function Block: ClosedLoopHW/HIL Read Encoder (hil_read_encoder_block) */
-  {
-    t_error result = hil_read_encoder(ClosedLoopHW_DW.HILInitialize_Card,
-      ClosedLoopHW_P.HILReadEncoder_channels, 2,
-      &ClosedLoopHW_DW.HILReadEncoder_Buffer[0]);
-    if (result < 0) {
-      msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
-        (_rt_error_message));
-      rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
-    } else {
-      rtb_raag[0] = ClosedLoopHW_DW.HILReadEncoder_Buffer[0];
-      rtb_raag[1] = ClosedLoopHW_DW.HILReadEncoder_Buffer[1];
-    }
-  }
-
-  /* Sum: '<Root>/Add' incorporates:
-   *  Constant: '<Root>/Constant'
-   *  Gain: '<Root>/Gain'
+  /* Logic: '<S8>/Logical Operator' incorporates:
+   *  Constant: '<S11>/Constant'
+   *  Constant: '<S12>/Constant'
+   *  Constant: '<S8>/Constant'
+   *  Constant: '<S8>/Time constant'
+   *  RelationalOperator: '<S11>/Compare'
+   *  RelationalOperator: '<S12>/Compare'
+   *  Sum: '<S8>/Sum1'
    */
-  ClosedLoopHW_B.Add = ClosedLoopHW_P.Gain_Gain * rtb_raag[0] +
-    ClosedLoopHW_P.Constant_Value;
+  ClosedLoopHW_B.LogicalOperator =
+    ((ClosedLoopHW_P.LowPassFilterDiscreteorContin_n - ClosedLoopHW_B.Probe[0] <=
+      ClosedLoopHW_P.Constant_Value) &&
+     (ClosedLoopHW_P.LowPassFilterDiscreteorContin_b <
+      ClosedLoopHW_P.CompareToConstant_const));
 
-  /* Gain: '<Root>/Gain1' */
-  ClosedLoopHW_B.Gain1 = ClosedLoopHW_P.Gain1_Gain * rtb_raag[1];
-
-  /* SignalConversion generated from: '<Root>/To Workspace' */
-  ClosedLoopHW_B.TmpSignalConversionAtToWorkspac[0] = ClosedLoopHW_B.Add;
-  ClosedLoopHW_B.TmpSignalConversionAtToWorkspac[1] = ClosedLoopHW_B.Gain1;
-
-  /* SampleTimeMath: '<S1>/TSamp'
+  /* SampleTimeMath: '<S2>/TSamp'
    *
-   * About '<S1>/TSamp':
+   * About '<S2>/TSamp':
    *  y = u * K where K = 1 / ( w * Ts )
    */
-  ClosedLoopHW_B.TSamp[0] = ClosedLoopHW_B.TmpSignalConversionAtToWorkspac[0] *
-    ClosedLoopHW_P.TSamp_WtEt;
-  ClosedLoopHW_B.TSamp[1] = ClosedLoopHW_B.TmpSignalConversionAtToWorkspac[1] *
-    ClosedLoopHW_P.TSamp_WtEt;
+  K_idx_1 = ClosedLoopHW_B.Reshape[0] * ClosedLoopHW_P.TSamp_WtEt;
+  ClosedLoopHW_B.TSamp[0] = K_idx_1;
 
-  /* MATLABSystem: '<Root>/Lowpass Filter' incorporates:
-   *  Sum: '<S1>/Diff'
-   *  UnitDelay: '<S1>/UD'
+  /* Gain: '<S4>/K' incorporates:
+   *  Sum: '<S2>/Diff'
+   *  UnitDelay: '<S2>/UD'
    */
-  obj = ClosedLoopHW_DW.obj.FilterObj;
-  if (obj->isInitialized != 1) {
-    obj->isSetupComplete = false;
-    obj->isInitialized = 1;
-    obj->isSetupComplete = true;
+  K_idx_0 = (K_idx_1 - ClosedLoopHW_DW.UD_DSTATE[0]) *
+    ClosedLoopHW_P.LowPassFilterDiscreteorContinuo;
 
-    /* System object Initialization function: dsp.FIRFilter */
-    for (k = 0; k < 85; k++) {
-      obj->cSFunObject.W0_states[k] = obj->cSFunObject.P0_InitialStates;
+  /* SampleTimeMath: '<S2>/TSamp'
+   *
+   * About '<S2>/TSamp':
+   *  y = u * K where K = 1 / ( w * Ts )
+   */
+  K_idx_1 = ClosedLoopHW_B.Reshape[1] * ClosedLoopHW_P.TSamp_WtEt;
+  ClosedLoopHW_B.TSamp[1] = K_idx_1;
+
+  /* Gain: '<S4>/K' incorporates:
+   *  Sum: '<S2>/Diff'
+   *  UnitDelay: '<S2>/UD'
+   */
+  K_idx_1 = (K_idx_1 - ClosedLoopHW_DW.UD_DSTATE[1]) *
+    ClosedLoopHW_P.LowPassFilterDiscreteorContinuo;
+
+  /* DiscreteIntegrator: '<S14>/Integrator' */
+  if (ClosedLoopHW_DW.Integrator_IC_LOADING != 0) {
+    ClosedLoopHW_DW.Integrator_DSTATE[0] = K_idx_0;
+    if (K_idx_0 >= ClosedLoopHW_P.Integrator_UpperSat) {
+      ClosedLoopHW_DW.Integrator_DSTATE[0] = ClosedLoopHW_P.Integrator_UpperSat;
+    } else if (K_idx_0 <= ClosedLoopHW_P.Integrator_LowerSat) {
+      ClosedLoopHW_DW.Integrator_DSTATE[0] = ClosedLoopHW_P.Integrator_LowerSat;
+    }
+
+    ClosedLoopHW_DW.Integrator_DSTATE[1] = K_idx_1;
+    if (K_idx_1 >= ClosedLoopHW_P.Integrator_UpperSat) {
+      ClosedLoopHW_DW.Integrator_DSTATE[1] = ClosedLoopHW_P.Integrator_UpperSat;
+    } else if (K_idx_1 <= ClosedLoopHW_P.Integrator_LowerSat) {
+      ClosedLoopHW_DW.Integrator_DSTATE[1] = ClosedLoopHW_P.Integrator_LowerSat;
     }
   }
 
-  obj_0 = &obj->cSFunObject;
-
-  /* System object Outputs function: dsp.FIRFilter */
-  rtb_raag[0] = ClosedLoopHW_B.TSamp[0] - ClosedLoopHW_DW.UD_DSTATE[0];
-  rtb_raag[1] = ClosedLoopHW_B.TSamp[1] - ClosedLoopHW_DW.UD_DSTATE[1];
-  for (k = 0; k < 2; k++) {
-    u0 = 0.0;
-
-    /* load input sample */
-    zNext = rtb_raag[k];
-    for (n = 0; n < 85; n++) {
-      /* shift state */
-      zCurr = zNext;
-      zNext = obj_0->W0_states[n];
-      obj_0->W0_states[n] = zCurr;
-
-      /* compute one tap */
-      zCurr *= obj_0->P1_Coefficients[n];
-      u0 += zCurr;
+  if (ClosedLoopHW_B.LogicalOperator ||
+      (ClosedLoopHW_DW.Integrator_PrevResetState != 0)) {
+    ClosedLoopHW_DW.Integrator_DSTATE[0] = K_idx_0;
+    if (K_idx_0 >= ClosedLoopHW_P.Integrator_UpperSat) {
+      ClosedLoopHW_DW.Integrator_DSTATE[0] = ClosedLoopHW_P.Integrator_UpperSat;
+    } else if (K_idx_0 <= ClosedLoopHW_P.Integrator_LowerSat) {
+      ClosedLoopHW_DW.Integrator_DSTATE[0] = ClosedLoopHW_P.Integrator_LowerSat;
     }
 
-    /* compute last tap */
-    zCurr = obj_0->P1_Coefficients[n] * zNext;
-
-    /* store output sample */
-    rtb_raag[k] = u0 + zCurr;
+    ClosedLoopHW_DW.Integrator_DSTATE[1] = K_idx_1;
+    if (K_idx_1 >= ClosedLoopHW_P.Integrator_UpperSat) {
+      ClosedLoopHW_DW.Integrator_DSTATE[1] = ClosedLoopHW_P.Integrator_UpperSat;
+    } else if (K_idx_1 <= ClosedLoopHW_P.Integrator_LowerSat) {
+      ClosedLoopHW_DW.Integrator_DSTATE[1] = ClosedLoopHW_P.Integrator_LowerSat;
+    }
   }
 
-  /* MATLABSystem: '<Root>/Lowpass Filter' */
-  ClosedLoopHW_B.LowpassFilter[0] = rtb_raag[0];
-  ClosedLoopHW_B.LowpassFilter[1] = rtb_raag[1];
+  if (ClosedLoopHW_DW.Integrator_DSTATE[0] >= ClosedLoopHW_P.Integrator_UpperSat)
+  {
+    ClosedLoopHW_DW.Integrator_DSTATE[0] = ClosedLoopHW_P.Integrator_UpperSat;
+  } else if (ClosedLoopHW_DW.Integrator_DSTATE[0] <=
+             ClosedLoopHW_P.Integrator_LowerSat) {
+    ClosedLoopHW_DW.Integrator_DSTATE[0] = ClosedLoopHW_P.Integrator_LowerSat;
+  }
+
+  /* Saturate: '<S14>/Saturation' incorporates:
+   *  DiscreteIntegrator: '<S14>/Integrator'
+   */
+  if (ClosedLoopHW_DW.Integrator_DSTATE[0] > ClosedLoopHW_P.Saturation_UpperSat)
+  {
+    /* Saturate: '<S14>/Saturation' */
+    ClosedLoopHW_B.Saturation[0] = ClosedLoopHW_P.Saturation_UpperSat;
+  } else if (ClosedLoopHW_DW.Integrator_DSTATE[0] <
+             ClosedLoopHW_P.Saturation_LowerSat) {
+    /* Saturate: '<S14>/Saturation' */
+    ClosedLoopHW_B.Saturation[0] = ClosedLoopHW_P.Saturation_LowerSat;
+  } else {
+    /* Saturate: '<S14>/Saturation' */
+    ClosedLoopHW_B.Saturation[0] = ClosedLoopHW_DW.Integrator_DSTATE[0];
+  }
+
+  /* DiscreteIntegrator: '<S14>/Integrator' */
+  if (ClosedLoopHW_DW.Integrator_DSTATE[1] >= ClosedLoopHW_P.Integrator_UpperSat)
+  {
+    ClosedLoopHW_DW.Integrator_DSTATE[1] = ClosedLoopHW_P.Integrator_UpperSat;
+  } else if (ClosedLoopHW_DW.Integrator_DSTATE[1] <=
+             ClosedLoopHW_P.Integrator_LowerSat) {
+    ClosedLoopHW_DW.Integrator_DSTATE[1] = ClosedLoopHW_P.Integrator_LowerSat;
+  }
+
+  /* Saturate: '<S14>/Saturation' incorporates:
+   *  DiscreteIntegrator: '<S14>/Integrator'
+   */
+  if (ClosedLoopHW_DW.Integrator_DSTATE[1] > ClosedLoopHW_P.Saturation_UpperSat)
+  {
+    /* Saturate: '<S14>/Saturation' */
+    ClosedLoopHW_B.Saturation[1] = ClosedLoopHW_P.Saturation_UpperSat;
+  } else if (ClosedLoopHW_DW.Integrator_DSTATE[1] <
+             ClosedLoopHW_P.Saturation_LowerSat) {
+    /* Saturate: '<S14>/Saturation' */
+    ClosedLoopHW_B.Saturation[1] = ClosedLoopHW_P.Saturation_LowerSat;
+  } else {
+    /* Saturate: '<S14>/Saturation' */
+    ClosedLoopHW_B.Saturation[1] = ClosedLoopHW_DW.Integrator_DSTATE[1];
+  }
 
   /* Sum: '<Root>/Subtract' incorporates:
    *  Constant: '<Root>/x_star'
    */
-  u0 = ClosedLoopHW_B.Add - ClosedLoopHW_P.c.x_star[0];
-  zNext = ClosedLoopHW_B.Gain1 - ClosedLoopHW_P.c.x_star[1];
-  zCurr = ClosedLoopHW_B.LowpassFilter[0] - ClosedLoopHW_P.c.x_star[2];
-  tmp = ClosedLoopHW_B.LowpassFilter[1] - ClosedLoopHW_P.c.x_star[3];
-  for (k = 0; k <= 0; k += 2) {
+  tmp = ClosedLoopHW_B.Reshape[0] - ClosedLoopHW_P.c.x_star[0];
+  rtb_Max = ClosedLoopHW_B.Saturation[0] - ClosedLoopHW_P.c.x_star[2];
+  tmp_0 = ClosedLoopHW_B.Reshape[1] - ClosedLoopHW_P.c.x_star[1];
+  tmp_1 = ClosedLoopHW_B.Saturation[1] - ClosedLoopHW_P.c.x_star[3];
+  for (i = 0; i <= 0; i += 2) {
     /* Gain: '<Root>/Multiply' */
-    _mm_storeu_pd(&ClosedLoopHW_B.Multiply[k], _mm_add_pd(_mm_add_pd(_mm_add_pd
-      (_mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.dC[k + 2]), _mm_set1_pd(zNext)),
-       _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.dC[k]), _mm_set1_pd(u0))),
-      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.dC[k + 4]), _mm_set1_pd(zCurr))),
-      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.dC[k + 6]), _mm_set1_pd(tmp))));
+    _mm_storeu_pd(&ClosedLoopHW_B.Multiply[i], _mm_add_pd(_mm_add_pd(_mm_add_pd
+      (_mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.dC[i + 2]), _mm_set1_pd(tmp_0)),
+       _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.dC[i]), _mm_set1_pd(tmp))),
+      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.dC[i + 4]), _mm_set1_pd(rtb_Max))),
+      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.dC[i + 6]), _mm_set1_pd(tmp_1))));
   }
 
-  /* Delay: '<S2>/Delay' incorporates:
-   *  Constant: '<S2>/Constant'
+  /* Delay: '<S3>/Delay' incorporates:
+   *  Constant: '<S3>/Constant'
    */
   if (ClosedLoopHW_DW.icLoad) {
     ClosedLoopHW_DW.Delay_DSTATE_m[0] = ClosedLoopHW_P.x0[0] -
@@ -241,54 +274,98 @@ void ClosedLoopHW_output(void)
       ClosedLoopHW_P.c.x_star[3];
   }
 
-  /* MATLAB Function: '<S2>/MATLAB Function' incorporates:
-   *  Constant: '<S2>/Constant1'
-   *  Sum: '<S2>/Subtract'
+  /* MATLAB Function: '<S3>/MATLAB Function' incorporates:
+   *  Constant: '<S3>/Constant1'
+   *  Sum: '<S3>/Subtract'
    */
   ClosedLoopHW_DW.sfEvent_k = ClosedLoopHW_CALL_EVENT;
-  u0 = ClosedLoopHW_B.Saturation1 - ClosedLoopHW_P.c.u_star;
-  zNext = ClosedLoopHW_B.Multiply[0];
-  zCurr = ClosedLoopHW_B.Multiply[1];
+  tmp = ClosedLoopHW_B.Saturation1 - ClosedLoopHW_P.c.u_star;
+  tmp_0 = ClosedLoopHW_B.Multiply[0];
+  rtb_Max = ClosedLoopHW_B.Multiply[1];
 
-  /* Delay: '<S2>/Delay' incorporates:
-   *  MATLAB Function: '<S2>/MATLAB Function'
+  /* Delay: '<S3>/Delay' incorporates:
+   *  MATLAB Function: '<S3>/MATLAB Function'
    */
-  tmp = ClosedLoopHW_DW.Delay_DSTATE_m[1];
+  tmp_1 = ClosedLoopHW_DW.Delay_DSTATE_m[1];
   Delay_DSTATE_m = ClosedLoopHW_DW.Delay_DSTATE_m[0];
   Delay_DSTATE_m_0 = ClosedLoopHW_DW.Delay_DSTATE_m[2];
   Delay_DSTATE_m_1 = ClosedLoopHW_DW.Delay_DSTATE_m[3];
-  for (k = 0; k <= 2; k += 2) {
-    /* MATLAB Function: '<S2>/MATLAB Function' incorporates:
-     *  Delay: '<S2>/Delay'
+  for (i = 0; i <= 2; i += 2) {
+    /* MATLAB Function: '<S3>/MATLAB Function' incorporates:
+     *  Delay: '<S3>/Delay'
      */
-    tmp_0 = _mm_add_pd(_mm_add_pd(_mm_add_pd(_mm_add_pd(_mm_mul_pd(_mm_loadu_pd(
-      &ClosedLoopHW_P.est_param.A[k + 4]), _mm_set1_pd(tmp)), _mm_mul_pd
-      (_mm_loadu_pd(&ClosedLoopHW_P.est_param.A[k]), _mm_set1_pd(Delay_DSTATE_m))),
-      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.est_param.A[k + 8]), _mm_set1_pd
+    tmp_2 = _mm_add_pd(_mm_add_pd(_mm_add_pd(_mm_add_pd(_mm_mul_pd(_mm_loadu_pd(
+      &ClosedLoopHW_P.est_param.A[i + 4]), _mm_set1_pd(tmp_1)), _mm_mul_pd
+      (_mm_loadu_pd(&ClosedLoopHW_P.est_param.A[i]), _mm_set1_pd(Delay_DSTATE_m))),
+      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.est_param.A[i + 8]), _mm_set1_pd
                  (Delay_DSTATE_m_0))), _mm_mul_pd(_mm_loadu_pd
-      (&ClosedLoopHW_P.est_param.A[k + 12]), _mm_set1_pd(Delay_DSTATE_m_1))),
+      (&ClosedLoopHW_P.est_param.A[i + 12]), _mm_set1_pd(Delay_DSTATE_m_1))),
                        _mm_add_pd(_mm_add_pd(_mm_mul_pd(_mm_loadu_pd
-      (&ClosedLoopHW_P.est_param.B[k + 4]), _mm_set1_pd(zNext)), _mm_mul_pd
-      (_mm_loadu_pd(&ClosedLoopHW_P.est_param.B[k]), _mm_set1_pd(u0))),
-      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.est_param.B[k + 8]), _mm_set1_pd
-                 (zCurr))));
-    _mm_storeu_pd(&ClosedLoopHW_B.x_hat[k], tmp_0);
+      (&ClosedLoopHW_P.est_param.B[i + 4]), _mm_set1_pd(tmp_0)), _mm_mul_pd
+      (_mm_loadu_pd(&ClosedLoopHW_P.est_param.B[i]), _mm_set1_pd(tmp))),
+      _mm_mul_pd(_mm_loadu_pd(&ClosedLoopHW_P.est_param.B[i + 8]), _mm_set1_pd
+                 (rtb_Max))));
+    _mm_storeu_pd(&ClosedLoopHW_B.x_hat[i], tmp_2);
 
     /* Sum: '<Root>/Sum' incorporates:
      *  Constant: '<Root>/x_star'
-     *  MATLAB Function: '<S2>/MATLAB Function'
+     *  MATLAB Function: '<S3>/MATLAB Function'
      */
-    _mm_storeu_pd(&ClosedLoopHW_B.Sum[k], _mm_add_pd(tmp_0, _mm_loadu_pd
-      (&ClosedLoopHW_P.c.x_star[k])));
+    _mm_storeu_pd(&ClosedLoopHW_B.Sum[i], _mm_add_pd(tmp_2, _mm_loadu_pd
+      (&ClosedLoopHW_P.c.x_star[i])));
   }
 
-  /* Reshape: '<Root>/Reshape1' incorporates:
-   *  Sum: '<Root>/Sum'
-   */
+  /* Reshape: '<Root>/Reshape1' */
   ClosedLoopHW_B.Reshape1[0] = ClosedLoopHW_B.Sum[0];
   ClosedLoopHW_B.Reshape1[1] = ClosedLoopHW_B.Sum[1];
   ClosedLoopHW_B.Reshape1[2] = ClosedLoopHW_B.Sum[2];
   ClosedLoopHW_B.Reshape1[3] = ClosedLoopHW_B.Sum[3];
+
+  /* MATLAB Function: '<S1>/MATLAB Function' incorporates:
+   *  DiscreteIntegrator: '<S1>/Discrete-Time Integrator'
+   */
+  ClosedLoopHW_DW.sfEvent_c = ClosedLoopHW_CALL_EVENT;
+  tmp = cos(ClosedLoopHW_B.x[1]);
+  tmp_0 = 2.0 * ClosedLoopHW_P.p.T3;
+  rtb_Max = tmp_0 * tmp + (ClosedLoopHW_P.p.T1 + ClosedLoopHW_P.p.T2);
+  tmp = ClosedLoopHW_P.p.T3 * tmp + ClosedLoopHW_P.p.T2;
+  tmp_1 = sin(ClosedLoopHW_B.x[1]);
+  Delay_DSTATE_m = ClosedLoopHW_P.p.T5 * ClosedLoopHW_P.p.g * cos
+    (ClosedLoopHW_B.x[0] + ClosedLoopHW_B.x[1]);
+  ClosedLoopHW_B.dx[0] = ClosedLoopHW_B.x[2];
+  ClosedLoopHW_B.dx[1] = ClosedLoopHW_B.x[3];
+  tmp_0 = ((-ClosedLoopHW_P.p.T3 * tmp_1 * (ClosedLoopHW_B.x[3] *
+             ClosedLoopHW_B.x[3]) - tmp_0 * tmp_1 * ClosedLoopHW_B.x[3] *
+            ClosedLoopHW_B.x[2]) + (ClosedLoopHW_P.p.T4 * ClosedLoopHW_P.p.g *
+            cos(ClosedLoopHW_B.x[0]) + Delay_DSTATE_m)) -
+    ClosedLoopHW_B.Saturation1;
+  tmp_1 = ClosedLoopHW_P.p.T3 * tmp_1 * (ClosedLoopHW_B.x[2] * ClosedLoopHW_B.x
+    [2]) + Delay_DSTATE_m;
+  Delay_DSTATE_m = rtb_Max * ClosedLoopHW_P.p.T2 - tmp * tmp;
+  ClosedLoopHW_B.dx[2] = (tmp_1 * tmp - tmp_0 * ClosedLoopHW_P.p.T2) /
+    Delay_DSTATE_m;
+  ClosedLoopHW_B.dx[3] = (tmp_0 * tmp - tmp_1 * rtb_Max) / Delay_DSTATE_m;
+
+  /* MinMax: '<S8>/Max' incorporates:
+   *  Constant: '<S8>/Time constant'
+   */
+  if ((ClosedLoopHW_B.Probe[0] >= ClosedLoopHW_P.LowPassFilterDiscreteorContin_n)
+      || rtIsNaN(ClosedLoopHW_P.LowPassFilterDiscreteorContin_n)) {
+    rtb_Max = ClosedLoopHW_B.Probe[0];
+  } else {
+    rtb_Max = ClosedLoopHW_P.LowPassFilterDiscreteorContin_n;
+  }
+
+  /* End of MinMax: '<S8>/Max' */
+
+  /* Fcn: '<S8>/Avoid Divide by Zero' */
+  rtb_Max += (real_T)(rtb_Max == 0.0) * 2.2204460492503131e-16;
+
+  /* Product: '<S4>/1//T' incorporates:
+   *  Sum: '<S4>/Sum1'
+   */
+  ClosedLoopHW_B.uT[0] = 1.0 / rtb_Max * (K_idx_0 - ClosedLoopHW_B.Saturation[0]);
+  ClosedLoopHW_B.uT[1] = 1.0 / rtb_Max * (K_idx_1 - ClosedLoopHW_B.Saturation[1]);
 
   /* Step: '<Root>/Step' */
   if (ClosedLoopHW_M->Timing.t[0] < ClosedLoopHW_P.Step_Time) {
@@ -305,19 +382,69 @@ void ClosedLoopHW_output(void)
 /* Model update function */
 void ClosedLoopHW_update(void)
 {
-  /* Update for Delay: '<Root>/Delay' incorporates:
-   *  Sum: '<Root>/Sum'
-   */
+  real_T Integrator_DSTATE;
+
+  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0] +=
+    ClosedLoopHW_P.DiscreteTimeIntegrator_gainval * ClosedLoopHW_B.dx[0];
+
+  /* Update for Delay: '<Root>/Delay' */
   ClosedLoopHW_DW.Delay_DSTATE[0] = ClosedLoopHW_B.Sum[0];
+
+  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[1] +=
+    ClosedLoopHW_P.DiscreteTimeIntegrator_gainval * ClosedLoopHW_B.dx[1];
+
+  /* Update for Delay: '<Root>/Delay' */
   ClosedLoopHW_DW.Delay_DSTATE[1] = ClosedLoopHW_B.Sum[1];
+
+  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[2] +=
+    ClosedLoopHW_P.DiscreteTimeIntegrator_gainval * ClosedLoopHW_B.dx[2];
+
+  /* Update for Delay: '<Root>/Delay' */
   ClosedLoopHW_DW.Delay_DSTATE[2] = ClosedLoopHW_B.Sum[2];
+
+  /* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[3] +=
+    ClosedLoopHW_P.DiscreteTimeIntegrator_gainval * ClosedLoopHW_B.dx[3];
+
+  /* Update for Delay: '<Root>/Delay' */
   ClosedLoopHW_DW.Delay_DSTATE[3] = ClosedLoopHW_B.Sum[3];
 
-  /* Update for UnitDelay: '<S1>/UD' */
+  /* Update for DiscreteIntegrator: '<S14>/Integrator' */
+  ClosedLoopHW_DW.Integrator_IC_LOADING = 0U;
+
+  /* Update for UnitDelay: '<S2>/UD' */
   ClosedLoopHW_DW.UD_DSTATE[0] = ClosedLoopHW_B.TSamp[0];
+
+  /* Update for DiscreteIntegrator: '<S14>/Integrator' */
+  Integrator_DSTATE = ClosedLoopHW_P.Integrator_gainval * ClosedLoopHW_B.uT[0] +
+    ClosedLoopHW_DW.Integrator_DSTATE[0];
+  ClosedLoopHW_DW.Integrator_DSTATE[0] = Integrator_DSTATE;
+  if (Integrator_DSTATE >= ClosedLoopHW_P.Integrator_UpperSat) {
+    ClosedLoopHW_DW.Integrator_DSTATE[0] = ClosedLoopHW_P.Integrator_UpperSat;
+  } else if (Integrator_DSTATE <= ClosedLoopHW_P.Integrator_LowerSat) {
+    ClosedLoopHW_DW.Integrator_DSTATE[0] = ClosedLoopHW_P.Integrator_LowerSat;
+  }
+
+  /* Update for UnitDelay: '<S2>/UD' */
   ClosedLoopHW_DW.UD_DSTATE[1] = ClosedLoopHW_B.TSamp[1];
 
-  /* Update for Delay: '<S2>/Delay' */
+  /* Update for DiscreteIntegrator: '<S14>/Integrator' */
+  Integrator_DSTATE = ClosedLoopHW_P.Integrator_gainval * ClosedLoopHW_B.uT[1] +
+    ClosedLoopHW_DW.Integrator_DSTATE[1];
+  ClosedLoopHW_DW.Integrator_DSTATE[1] = Integrator_DSTATE;
+  if (Integrator_DSTATE >= ClosedLoopHW_P.Integrator_UpperSat) {
+    ClosedLoopHW_DW.Integrator_DSTATE[1] = ClosedLoopHW_P.Integrator_UpperSat;
+  } else if (Integrator_DSTATE <= ClosedLoopHW_P.Integrator_LowerSat) {
+    ClosedLoopHW_DW.Integrator_DSTATE[1] = ClosedLoopHW_P.Integrator_LowerSat;
+  }
+
+  ClosedLoopHW_DW.Integrator_PrevResetState = (int8_T)
+    ClosedLoopHW_B.LogicalOperator;
+
+  /* Update for Delay: '<S3>/Delay' */
   ClosedLoopHW_DW.icLoad = false;
   ClosedLoopHW_DW.Delay_DSTATE_m[0] = ClosedLoopHW_B.x_hat[0];
   ClosedLoopHW_DW.Delay_DSTATE_m[1] = ClosedLoopHW_B.x_hat[1];
@@ -364,47 +491,158 @@ void ClosedLoopHW_update(void)
 /* Model initialize function */
 void ClosedLoopHW_initialize(void)
 {
+  /* Start for S-Function (hil_initialize_block): '<Root>/HIL Initialize' */
+
+  /* S-Function Block: ClosedLoopHW/HIL Initialize (hil_initialize_block) */
   {
-    b_dspcodegen_FIRFilter_Closed_T *iobj_0;
-    int32_T i;
-    static const real_T tmp[86] = { -9.3648823352870375E-5,
-      -0.00013202995977890097, -0.0002190115309195932, -0.000337457500570388,
-      -0.00049219939901641791, -0.00068720118841426121, -0.00092505352308246754,
-      -0.0012064215669484425, -0.0015295106502653092, -0.0018895798478461919,
-      -0.0022784468383649642, -0.0026841124436411149, -0.003090461469910993,
-      -0.0034773420996495634, -0.0038205375280560214, -0.0040922686862605844,
-      -0.0042616192923135149, -0.0042953963894558226, -0.0041591637273872949,
-      -0.0038184329045463502, -0.0032400686895812866, -0.0023937289431901886,
-      -0.0012533738719836707, 0.00020113657996385746, 0.0019825984191955896,
-      0.0040953570015105677, 0.00653413743805201, 0.009283308624156739,
-      0.012316475978105944, 0.015596610293449727, 0.019076363274306542,
-      0.022698846497343626, 0.026399061753891222, 0.030105571351810356,
-      0.033742227274575071, 0.037230604700763628, 0.040492593606369753,
-      0.043452399947881026, 0.046039706077112948, 0.048191466249000892,
-      0.049854515175384619, 0.050987155259482483, 0.051560760909388367,
-      0.051560760909388367, 0.050987155259482483, 0.049854515175384619,
-      0.048191466249000892, 0.046039706077112948, 0.043452399947881026,
-      0.040492593606369753, 0.037230604700763628, 0.033742227274575071,
-      0.030105571351810356, 0.026399061753891222, 0.022698846497343626,
-      0.019076363274306542, 0.015596610293449727, 0.012316475978105944,
-      0.009283308624156739, 0.00653413743805201, 0.0040953570015105677,
-      0.0019825984191955896, 0.00020113657996385746, -0.0012533738719836707,
-      -0.0023937289431901886, -0.0032400686895812866, -0.0038184329045463502,
-      -0.0041591637273872949, -0.0042953963894558226, -0.0042616192923135149,
-      -0.0040922686862605844, -0.0038205375280560214, -0.0034773420996495634,
-      -0.003090461469910993, -0.0026841124436411149, -0.0022784468383649642,
-      -0.0018895798478461919, -0.0015295106502653092, -0.0012064215669484425,
-      -0.00092505352308246754, -0.00068720118841426121, -0.00049219939901641791,
-      -0.000337457500570388, -0.0002190115309195932, -0.00013202995977890097,
-      -9.3648823352870375E-5 };
+    t_int result;
+    t_boolean is_switching;
+    result = hil_open("q4", "0", &ClosedLoopHW_DW.HILInitialize_Card);
+    if (result < 0) {
+      msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
+        (_rt_error_message));
+      rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
+      return;
+    }
 
-    /* Start for S-Function (hil_initialize_block): '<Root>/HIL Initialize' */
+    is_switching = false;
+    if ((ClosedLoopHW_P.HILInitialize_CKPStart && !is_switching) ||
+        (ClosedLoopHW_P.HILInitialize_CKPEnter && is_switching)) {
+      result = hil_set_clock_mode(ClosedLoopHW_DW.HILInitialize_Card, (t_clock *)
+        ClosedLoopHW_P.HILInitialize_CKChannels, 2U, (t_clock_mode *)
+        ClosedLoopHW_P.HILInitialize_CKModes);
+      if (result < 0) {
+        msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
+          (_rt_error_message));
+        rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
+        return;
+      }
+    }
 
-    /* S-Function Block: ClosedLoopHW/HIL Initialize (hil_initialize_block) */
-    {
-      t_int result;
-      t_boolean is_switching;
-      result = hil_open("q4", "0", &ClosedLoopHW_DW.HILInitialize_Card);
+    result = hil_watchdog_clear(ClosedLoopHW_DW.HILInitialize_Card);
+    if (result < 0 && result != -QERR_HIL_WATCHDOG_CLEAR) {
+      msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
+        (_rt_error_message));
+      rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
+      return;
+    }
+
+    if ((ClosedLoopHW_P.HILInitialize_AIPStart && !is_switching) ||
+        (ClosedLoopHW_P.HILInitialize_AIPEnter && is_switching)) {
+      ClosedLoopHW_DW.HILInitialize_AIMinimums[0] =
+        (ClosedLoopHW_P.HILInitialize_AILow);
+      ClosedLoopHW_DW.HILInitialize_AIMinimums[1] =
+        (ClosedLoopHW_P.HILInitialize_AILow);
+      ClosedLoopHW_DW.HILInitialize_AIMinimums[2] =
+        (ClosedLoopHW_P.HILInitialize_AILow);
+      ClosedLoopHW_DW.HILInitialize_AIMinimums[3] =
+        (ClosedLoopHW_P.HILInitialize_AILow);
+      ClosedLoopHW_DW.HILInitialize_AIMaximums[0] =
+        ClosedLoopHW_P.HILInitialize_AIHigh;
+      ClosedLoopHW_DW.HILInitialize_AIMaximums[1] =
+        ClosedLoopHW_P.HILInitialize_AIHigh;
+      ClosedLoopHW_DW.HILInitialize_AIMaximums[2] =
+        ClosedLoopHW_P.HILInitialize_AIHigh;
+      ClosedLoopHW_DW.HILInitialize_AIMaximums[3] =
+        ClosedLoopHW_P.HILInitialize_AIHigh;
+      result = hil_set_analog_input_ranges(ClosedLoopHW_DW.HILInitialize_Card,
+        ClosedLoopHW_P.HILInitialize_AIChannels, 4U,
+        &ClosedLoopHW_DW.HILInitialize_AIMinimums[0],
+        &ClosedLoopHW_DW.HILInitialize_AIMaximums[0]);
+      if (result < 0) {
+        msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
+          (_rt_error_message));
+        rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
+        return;
+      }
+    }
+
+    if ((ClosedLoopHW_P.HILInitialize_AOPStart && !is_switching) ||
+        (ClosedLoopHW_P.HILInitialize_AOPEnter && is_switching)) {
+      ClosedLoopHW_DW.HILInitialize_AOMinimums[0] =
+        (ClosedLoopHW_P.HILInitialize_AOLow);
+      ClosedLoopHW_DW.HILInitialize_AOMinimums[1] =
+        (ClosedLoopHW_P.HILInitialize_AOLow);
+      ClosedLoopHW_DW.HILInitialize_AOMinimums[2] =
+        (ClosedLoopHW_P.HILInitialize_AOLow);
+      ClosedLoopHW_DW.HILInitialize_AOMinimums[3] =
+        (ClosedLoopHW_P.HILInitialize_AOLow);
+      ClosedLoopHW_DW.HILInitialize_AOMaximums[0] =
+        ClosedLoopHW_P.HILInitialize_AOHigh;
+      ClosedLoopHW_DW.HILInitialize_AOMaximums[1] =
+        ClosedLoopHW_P.HILInitialize_AOHigh;
+      ClosedLoopHW_DW.HILInitialize_AOMaximums[2] =
+        ClosedLoopHW_P.HILInitialize_AOHigh;
+      ClosedLoopHW_DW.HILInitialize_AOMaximums[3] =
+        ClosedLoopHW_P.HILInitialize_AOHigh;
+      result = hil_set_analog_output_ranges(ClosedLoopHW_DW.HILInitialize_Card,
+        ClosedLoopHW_P.HILInitialize_AOChannels, 4U,
+        &ClosedLoopHW_DW.HILInitialize_AOMinimums[0],
+        &ClosedLoopHW_DW.HILInitialize_AOMaximums[0]);
+      if (result < 0) {
+        msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
+          (_rt_error_message));
+        rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
+        return;
+      }
+    }
+
+    if ((ClosedLoopHW_P.HILInitialize_AOStart && !is_switching) ||
+        (ClosedLoopHW_P.HILInitialize_AOEnter && is_switching)) {
+      ClosedLoopHW_DW.HILInitialize_AOVoltages[0] =
+        ClosedLoopHW_P.HILInitialize_AOInitial;
+      ClosedLoopHW_DW.HILInitialize_AOVoltages[1] =
+        ClosedLoopHW_P.HILInitialize_AOInitial;
+      ClosedLoopHW_DW.HILInitialize_AOVoltages[2] =
+        ClosedLoopHW_P.HILInitialize_AOInitial;
+      ClosedLoopHW_DW.HILInitialize_AOVoltages[3] =
+        ClosedLoopHW_P.HILInitialize_AOInitial;
+      result = hil_write_analog(ClosedLoopHW_DW.HILInitialize_Card,
+        ClosedLoopHW_P.HILInitialize_AOChannels, 4U,
+        &ClosedLoopHW_DW.HILInitialize_AOVoltages[0]);
+      if (result < 0) {
+        msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
+          (_rt_error_message));
+        rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
+        return;
+      }
+    }
+
+    if (ClosedLoopHW_P.HILInitialize_AOReset) {
+      ClosedLoopHW_DW.HILInitialize_AOVoltages[0] =
+        ClosedLoopHW_P.HILInitialize_AOWatchdog;
+      ClosedLoopHW_DW.HILInitialize_AOVoltages[1] =
+        ClosedLoopHW_P.HILInitialize_AOWatchdog;
+      ClosedLoopHW_DW.HILInitialize_AOVoltages[2] =
+        ClosedLoopHW_P.HILInitialize_AOWatchdog;
+      ClosedLoopHW_DW.HILInitialize_AOVoltages[3] =
+        ClosedLoopHW_P.HILInitialize_AOWatchdog;
+      result = hil_watchdog_set_analog_expiration_state
+        (ClosedLoopHW_DW.HILInitialize_Card,
+         ClosedLoopHW_P.HILInitialize_AOChannels, 4U,
+         &ClosedLoopHW_DW.HILInitialize_AOVoltages[0]);
+      if (result < 0) {
+        msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
+          (_rt_error_message));
+        rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
+        return;
+      }
+    }
+
+    if ((ClosedLoopHW_P.HILInitialize_EIPStart && !is_switching) ||
+        (ClosedLoopHW_P.HILInitialize_EIPEnter && is_switching)) {
+      ClosedLoopHW_DW.HILInitialize_QuadratureModes[0] =
+        ClosedLoopHW_P.HILInitialize_EIQuadrature;
+      ClosedLoopHW_DW.HILInitialize_QuadratureModes[1] =
+        ClosedLoopHW_P.HILInitialize_EIQuadrature;
+      ClosedLoopHW_DW.HILInitialize_QuadratureModes[2] =
+        ClosedLoopHW_P.HILInitialize_EIQuadrature;
+      ClosedLoopHW_DW.HILInitialize_QuadratureModes[3] =
+        ClosedLoopHW_P.HILInitialize_EIQuadrature;
+      result = hil_set_encoder_quadrature_mode
+        (ClosedLoopHW_DW.HILInitialize_Card,
+         ClosedLoopHW_P.HILInitialize_EIChannels, 4U, (t_encoder_quadrature_mode
+          *) &ClosedLoopHW_DW.HILInitialize_QuadratureModes[0]);
       if (result < 0) {
         msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
           (_rt_error_message));
@@ -412,264 +650,117 @@ void ClosedLoopHW_initialize(void)
         return;
       }
 
-      is_switching = false;
-      if ((ClosedLoopHW_P.HILInitialize_CKPStart && !is_switching) ||
-          (ClosedLoopHW_P.HILInitialize_CKPEnter && is_switching)) {
-        result = hil_set_clock_mode(ClosedLoopHW_DW.HILInitialize_Card, (t_clock
-          *) ClosedLoopHW_P.HILInitialize_CKChannels, 2U, (t_clock_mode *)
-          ClosedLoopHW_P.HILInitialize_CKModes);
-        if (result < 0) {
-          msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
-            (_rt_error_message));
-          rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
-          return;
-        }
-      }
-
-      result = hil_watchdog_clear(ClosedLoopHW_DW.HILInitialize_Card);
-      if (result < 0 && result != -QERR_HIL_WATCHDOG_CLEAR) {
+      ClosedLoopHW_DW.HILInitialize_FilterFrequency[0] =
+        ClosedLoopHW_P.HILInitialize_EIFrequency;
+      ClosedLoopHW_DW.HILInitialize_FilterFrequency[1] =
+        ClosedLoopHW_P.HILInitialize_EIFrequency;
+      ClosedLoopHW_DW.HILInitialize_FilterFrequency[2] =
+        ClosedLoopHW_P.HILInitialize_EIFrequency;
+      ClosedLoopHW_DW.HILInitialize_FilterFrequency[3] =
+        ClosedLoopHW_P.HILInitialize_EIFrequency;
+      result = hil_set_encoder_filter_frequency
+        (ClosedLoopHW_DW.HILInitialize_Card,
+         ClosedLoopHW_P.HILInitialize_EIChannels, 4U,
+         &ClosedLoopHW_DW.HILInitialize_FilterFrequency[0]);
+      if (result < 0) {
         msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
           (_rt_error_message));
         rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
         return;
       }
-
-      if ((ClosedLoopHW_P.HILInitialize_AIPStart && !is_switching) ||
-          (ClosedLoopHW_P.HILInitialize_AIPEnter && is_switching)) {
-        ClosedLoopHW_DW.HILInitialize_AIMinimums[0] =
-          (ClosedLoopHW_P.HILInitialize_AILow);
-        ClosedLoopHW_DW.HILInitialize_AIMinimums[1] =
-          (ClosedLoopHW_P.HILInitialize_AILow);
-        ClosedLoopHW_DW.HILInitialize_AIMinimums[2] =
-          (ClosedLoopHW_P.HILInitialize_AILow);
-        ClosedLoopHW_DW.HILInitialize_AIMinimums[3] =
-          (ClosedLoopHW_P.HILInitialize_AILow);
-        ClosedLoopHW_DW.HILInitialize_AIMaximums[0] =
-          ClosedLoopHW_P.HILInitialize_AIHigh;
-        ClosedLoopHW_DW.HILInitialize_AIMaximums[1] =
-          ClosedLoopHW_P.HILInitialize_AIHigh;
-        ClosedLoopHW_DW.HILInitialize_AIMaximums[2] =
-          ClosedLoopHW_P.HILInitialize_AIHigh;
-        ClosedLoopHW_DW.HILInitialize_AIMaximums[3] =
-          ClosedLoopHW_P.HILInitialize_AIHigh;
-        result = hil_set_analog_input_ranges(ClosedLoopHW_DW.HILInitialize_Card,
-          ClosedLoopHW_P.HILInitialize_AIChannels, 4U,
-          &ClosedLoopHW_DW.HILInitialize_AIMinimums[0],
-          &ClosedLoopHW_DW.HILInitialize_AIMaximums[0]);
-        if (result < 0) {
-          msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
-            (_rt_error_message));
-          rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
-          return;
-        }
-      }
-
-      if ((ClosedLoopHW_P.HILInitialize_AOPStart && !is_switching) ||
-          (ClosedLoopHW_P.HILInitialize_AOPEnter && is_switching)) {
-        ClosedLoopHW_DW.HILInitialize_AOMinimums[0] =
-          (ClosedLoopHW_P.HILInitialize_AOLow);
-        ClosedLoopHW_DW.HILInitialize_AOMinimums[1] =
-          (ClosedLoopHW_P.HILInitialize_AOLow);
-        ClosedLoopHW_DW.HILInitialize_AOMinimums[2] =
-          (ClosedLoopHW_P.HILInitialize_AOLow);
-        ClosedLoopHW_DW.HILInitialize_AOMinimums[3] =
-          (ClosedLoopHW_P.HILInitialize_AOLow);
-        ClosedLoopHW_DW.HILInitialize_AOMaximums[0] =
-          ClosedLoopHW_P.HILInitialize_AOHigh;
-        ClosedLoopHW_DW.HILInitialize_AOMaximums[1] =
-          ClosedLoopHW_P.HILInitialize_AOHigh;
-        ClosedLoopHW_DW.HILInitialize_AOMaximums[2] =
-          ClosedLoopHW_P.HILInitialize_AOHigh;
-        ClosedLoopHW_DW.HILInitialize_AOMaximums[3] =
-          ClosedLoopHW_P.HILInitialize_AOHigh;
-        result = hil_set_analog_output_ranges(ClosedLoopHW_DW.HILInitialize_Card,
-          ClosedLoopHW_P.HILInitialize_AOChannels, 4U,
-          &ClosedLoopHW_DW.HILInitialize_AOMinimums[0],
-          &ClosedLoopHW_DW.HILInitialize_AOMaximums[0]);
-        if (result < 0) {
-          msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
-            (_rt_error_message));
-          rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
-          return;
-        }
-      }
-
-      if ((ClosedLoopHW_P.HILInitialize_AOStart && !is_switching) ||
-          (ClosedLoopHW_P.HILInitialize_AOEnter && is_switching)) {
-        ClosedLoopHW_DW.HILInitialize_AOVoltages[0] =
-          ClosedLoopHW_P.HILInitialize_AOInitial;
-        ClosedLoopHW_DW.HILInitialize_AOVoltages[1] =
-          ClosedLoopHW_P.HILInitialize_AOInitial;
-        ClosedLoopHW_DW.HILInitialize_AOVoltages[2] =
-          ClosedLoopHW_P.HILInitialize_AOInitial;
-        ClosedLoopHW_DW.HILInitialize_AOVoltages[3] =
-          ClosedLoopHW_P.HILInitialize_AOInitial;
-        result = hil_write_analog(ClosedLoopHW_DW.HILInitialize_Card,
-          ClosedLoopHW_P.HILInitialize_AOChannels, 4U,
-          &ClosedLoopHW_DW.HILInitialize_AOVoltages[0]);
-        if (result < 0) {
-          msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
-            (_rt_error_message));
-          rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
-          return;
-        }
-      }
-
-      if (ClosedLoopHW_P.HILInitialize_AOReset) {
-        ClosedLoopHW_DW.HILInitialize_AOVoltages[0] =
-          ClosedLoopHW_P.HILInitialize_AOWatchdog;
-        ClosedLoopHW_DW.HILInitialize_AOVoltages[1] =
-          ClosedLoopHW_P.HILInitialize_AOWatchdog;
-        ClosedLoopHW_DW.HILInitialize_AOVoltages[2] =
-          ClosedLoopHW_P.HILInitialize_AOWatchdog;
-        ClosedLoopHW_DW.HILInitialize_AOVoltages[3] =
-          ClosedLoopHW_P.HILInitialize_AOWatchdog;
-        result = hil_watchdog_set_analog_expiration_state
-          (ClosedLoopHW_DW.HILInitialize_Card,
-           ClosedLoopHW_P.HILInitialize_AOChannels, 4U,
-           &ClosedLoopHW_DW.HILInitialize_AOVoltages[0]);
-        if (result < 0) {
-          msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
-            (_rt_error_message));
-          rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
-          return;
-        }
-      }
-
-      if ((ClosedLoopHW_P.HILInitialize_EIPStart && !is_switching) ||
-          (ClosedLoopHW_P.HILInitialize_EIPEnter && is_switching)) {
-        ClosedLoopHW_DW.HILInitialize_QuadratureModes[0] =
-          ClosedLoopHW_P.HILInitialize_EIQuadrature;
-        ClosedLoopHW_DW.HILInitialize_QuadratureModes[1] =
-          ClosedLoopHW_P.HILInitialize_EIQuadrature;
-        ClosedLoopHW_DW.HILInitialize_QuadratureModes[2] =
-          ClosedLoopHW_P.HILInitialize_EIQuadrature;
-        ClosedLoopHW_DW.HILInitialize_QuadratureModes[3] =
-          ClosedLoopHW_P.HILInitialize_EIQuadrature;
-        result = hil_set_encoder_quadrature_mode
-          (ClosedLoopHW_DW.HILInitialize_Card,
-           ClosedLoopHW_P.HILInitialize_EIChannels, 4U,
-           (t_encoder_quadrature_mode *)
-           &ClosedLoopHW_DW.HILInitialize_QuadratureModes[0]);
-        if (result < 0) {
-          msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
-            (_rt_error_message));
-          rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
-          return;
-        }
-
-        ClosedLoopHW_DW.HILInitialize_FilterFrequency[0] =
-          ClosedLoopHW_P.HILInitialize_EIFrequency;
-        ClosedLoopHW_DW.HILInitialize_FilterFrequency[1] =
-          ClosedLoopHW_P.HILInitialize_EIFrequency;
-        ClosedLoopHW_DW.HILInitialize_FilterFrequency[2] =
-          ClosedLoopHW_P.HILInitialize_EIFrequency;
-        ClosedLoopHW_DW.HILInitialize_FilterFrequency[3] =
-          ClosedLoopHW_P.HILInitialize_EIFrequency;
-        result = hil_set_encoder_filter_frequency
-          (ClosedLoopHW_DW.HILInitialize_Card,
-           ClosedLoopHW_P.HILInitialize_EIChannels, 4U,
-           &ClosedLoopHW_DW.HILInitialize_FilterFrequency[0]);
-        if (result < 0) {
-          msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
-            (_rt_error_message));
-          rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
-          return;
-        }
-      }
-
-      if ((ClosedLoopHW_P.HILInitialize_EIStart && !is_switching) ||
-          (ClosedLoopHW_P.HILInitialize_EIEnter && is_switching)) {
-        ClosedLoopHW_DW.HILInitialize_InitialEICounts[0] =
-          ClosedLoopHW_P.HILInitialize_EIInitial;
-        ClosedLoopHW_DW.HILInitialize_InitialEICounts[1] =
-          ClosedLoopHW_P.HILInitialize_EIInitial;
-        ClosedLoopHW_DW.HILInitialize_InitialEICounts[2] =
-          ClosedLoopHW_P.HILInitialize_EIInitial;
-        ClosedLoopHW_DW.HILInitialize_InitialEICounts[3] =
-          ClosedLoopHW_P.HILInitialize_EIInitial;
-        result = hil_set_encoder_counts(ClosedLoopHW_DW.HILInitialize_Card,
-          ClosedLoopHW_P.HILInitialize_EIChannels, 4U,
-          &ClosedLoopHW_DW.HILInitialize_InitialEICounts[0]);
-        if (result < 0) {
-          msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
-            (_rt_error_message));
-          rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
-          return;
-        }
-      }
     }
 
-    /* Start for MATLABSystem: '<Root>/Lowpass Filter' */
-    ClosedLoopHW_DW.obj._pobj0.matlabCodegenIsDeleted = true;
-    ClosedLoopHW_DW.obj.NumChannels = -1;
-    ClosedLoopHW_DW.obj.matlabCodegenIsDeleted = false;
-    ClosedLoopHW_DW.objisempty = true;
-    ClosedLoopHW_DW.obj.isInitialized = 1;
-    if (ClosedLoopHW_DW.obj.NumChannels == -1) {
-      ClosedLoopHW_DW.obj.NumChannels = 1;
+    if ((ClosedLoopHW_P.HILInitialize_EIStart && !is_switching) ||
+        (ClosedLoopHW_P.HILInitialize_EIEnter && is_switching)) {
+      ClosedLoopHW_DW.HILInitialize_InitialEICounts[0] =
+        ClosedLoopHW_P.HILInitialize_EIInitial;
+      ClosedLoopHW_DW.HILInitialize_InitialEICounts[1] =
+        ClosedLoopHW_P.HILInitialize_EIInitial;
+      ClosedLoopHW_DW.HILInitialize_InitialEICounts[2] =
+        ClosedLoopHW_P.HILInitialize_EIInitial;
+      ClosedLoopHW_DW.HILInitialize_InitialEICounts[3] =
+        ClosedLoopHW_P.HILInitialize_EIInitial;
+      result = hil_set_encoder_counts(ClosedLoopHW_DW.HILInitialize_Card,
+        ClosedLoopHW_P.HILInitialize_EIChannels, 4U,
+        &ClosedLoopHW_DW.HILInitialize_InitialEICounts[0]);
+      if (result < 0) {
+        msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
+          (_rt_error_message));
+        rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
+        return;
+      }
     }
-
-    iobj_0 = &ClosedLoopHW_DW.obj._pobj0;
-    iobj_0->isInitialized = 0;
-    iobj_0->isInitialized = 0;
-
-    /* System object Constructor function: dsp.FIRFilter */
-    iobj_0->cSFunObject.P0_InitialStates = 0.0;
-    for (i = 0; i < 86; i++) {
-      iobj_0->cSFunObject.P1_Coefficients[i] = tmp[i];
-    }
-
-    iobj_0->matlabCodegenIsDeleted = false;
-    ClosedLoopHW_DW.obj.FilterObj = iobj_0;
-    ClosedLoopHW_DW.obj.isSetupComplete = true;
-
-    /* End of Start for MATLABSystem: '<Root>/Lowpass Filter' */
   }
 
-  {
-    b_dspcodegen_FIRFilter_Closed_T *obj;
-    int32_T i;
+  /* Start for Constant: '<S1>/Constant1' */
+  ClosedLoopHW_B.Constant1[0] = ClosedLoopHW_P.x0[0];
+  ClosedLoopHW_B.Constant1[1] = ClosedLoopHW_P.x0[1];
+  ClosedLoopHW_B.Constant1[2] = ClosedLoopHW_P.x0[2];
+  ClosedLoopHW_B.Constant1[3] = ClosedLoopHW_P.x0[3];
 
-    /* InitializeConditions for Delay: '<Root>/Delay' */
-    ClosedLoopHW_DW.Delay_DSTATE[0] = ClosedLoopHW_P.x0[0];
-    ClosedLoopHW_DW.Delay_DSTATE[1] = ClosedLoopHW_P.x0[1];
-    ClosedLoopHW_DW.Delay_DSTATE[2] = ClosedLoopHW_P.x0[2];
-    ClosedLoopHW_DW.Delay_DSTATE[3] = ClosedLoopHW_P.x0[3];
+  /* Start for Probe: '<S8>/Probe' */
+  ClosedLoopHW_B.Probe[0] = 0.001;
+  ClosedLoopHW_B.Probe[1] = 0.0;
 
-    /* InitializeConditions for UnitDelay: '<S1>/UD' */
-    ClosedLoopHW_DW.UD_DSTATE[0] = ClosedLoopHW_P.x0[0] / 0.001;
-    ClosedLoopHW_DW.UD_DSTATE[1] = ClosedLoopHW_P.x0[1] / 0.001;
+  /* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' incorporates:
+   *  Constant: '<S1>/Constant1'
+   */
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0] = ClosedLoopHW_B.Constant1[0];
 
-    /* InitializeConditions for Delay: '<S2>/Delay' */
-    ClosedLoopHW_DW.icLoad = true;
+  /* InitializeConditions for Delay: '<Root>/Delay' */
+  ClosedLoopHW_DW.Delay_DSTATE[0] = ClosedLoopHW_P.x0[0];
 
-    /* SystemInitialize for MATLAB Function: '<S3>/MATLAB Function' */
-    ClosedLoopHW_DW.sfEvent = ClosedLoopHW_CALL_EVENT;
-    ClosedLoopHW_DW.is_active_c2_ClosedLoopHW = 0U;
+  /* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' incorporates:
+   *  Constant: '<S1>/Constant1'
+   */
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[1] = ClosedLoopHW_B.Constant1[1];
 
-    /* SystemInitialize for MATLAB Function: '<S2>/MATLAB Function' */
-    ClosedLoopHW_DW.sfEvent_k = ClosedLoopHW_CALL_EVENT;
-    ClosedLoopHW_DW.is_active_c3_ClosedLoopHW = 0U;
+  /* InitializeConditions for Delay: '<Root>/Delay' */
+  ClosedLoopHW_DW.Delay_DSTATE[1] = ClosedLoopHW_P.x0[1];
 
-    /* InitializeConditions for MATLABSystem: '<Root>/Lowpass Filter' */
-    obj = ClosedLoopHW_DW.obj.FilterObj;
-    if (obj->isInitialized == 1) {
-      /* System object Initialization function: dsp.FIRFilter */
-      for (i = 0; i < 85; i++) {
-        obj->cSFunObject.W0_states[i] = obj->cSFunObject.P0_InitialStates;
-      }
-    }
+  /* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' incorporates:
+   *  Constant: '<S1>/Constant1'
+   */
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[2] = ClosedLoopHW_B.Constant1[2];
 
-    /* End of InitializeConditions for MATLABSystem: '<Root>/Lowpass Filter' */
-  }
+  /* InitializeConditions for Delay: '<Root>/Delay' */
+  ClosedLoopHW_DW.Delay_DSTATE[2] = ClosedLoopHW_P.x0[2];
+
+  /* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' incorporates:
+   *  Constant: '<S1>/Constant1'
+   */
+  ClosedLoopHW_DW.DiscreteTimeIntegrator_DSTATE[3] = ClosedLoopHW_B.Constant1[3];
+
+  /* InitializeConditions for Delay: '<Root>/Delay' */
+  ClosedLoopHW_DW.Delay_DSTATE[3] = ClosedLoopHW_P.x0[3];
+
+  /* InitializeConditions for UnitDelay: '<S2>/UD' */
+  ClosedLoopHW_DW.UD_DSTATE[0] = ClosedLoopHW_P.x0[0] / 0.001;
+  ClosedLoopHW_DW.UD_DSTATE[1] = ClosedLoopHW_P.x0[1] / 0.001;
+
+  /* InitializeConditions for DiscreteIntegrator: '<S14>/Integrator' */
+  ClosedLoopHW_DW.Integrator_PrevResetState = 0;
+  ClosedLoopHW_DW.Integrator_IC_LOADING = 1U;
+
+  /* InitializeConditions for Delay: '<S3>/Delay' */
+  ClosedLoopHW_DW.icLoad = true;
+
+  /* SystemInitialize for MATLAB Function: '<S5>/MATLAB Function' */
+  ClosedLoopHW_DW.sfEvent = ClosedLoopHW_CALL_EVENT;
+  ClosedLoopHW_DW.is_active_c2_ClosedLoopHW = 0U;
+
+  /* SystemInitialize for MATLAB Function: '<S3>/MATLAB Function' */
+  ClosedLoopHW_DW.sfEvent_k = ClosedLoopHW_CALL_EVENT;
+  ClosedLoopHW_DW.is_active_c3_ClosedLoopHW = 0U;
+
+  /* SystemInitialize for MATLAB Function: '<S1>/MATLAB Function' */
+  ClosedLoopHW_DW.sfEvent_c = ClosedLoopHW_CALL_EVENT;
+  ClosedLoopHW_DW.is_active_c1_ClosedLoopHW = 0U;
 }
 
 /* Model terminate function */
 void ClosedLoopHW_terminate(void)
 {
-  b_dspcodegen_FIRFilter_Closed_T *obj;
-
   /* Terminate for S-Function (hil_initialize_block): '<Root>/HIL Initialize' */
 
   /* S-Function Block: ClosedLoopHW/HIL Initialize (hil_initialize_block) */
@@ -711,30 +802,6 @@ void ClosedLoopHW_terminate(void)
     hil_close(ClosedLoopHW_DW.HILInitialize_Card);
     ClosedLoopHW_DW.HILInitialize_Card = NULL;
   }
-
-  /* Terminate for MATLABSystem: '<Root>/Lowpass Filter' */
-  if (!ClosedLoopHW_DW.obj.matlabCodegenIsDeleted) {
-    ClosedLoopHW_DW.obj.matlabCodegenIsDeleted = true;
-    if ((ClosedLoopHW_DW.obj.isInitialized == 1) &&
-        ClosedLoopHW_DW.obj.isSetupComplete) {
-      obj = ClosedLoopHW_DW.obj.FilterObj;
-      if (obj->isInitialized == 1) {
-        obj->isInitialized = 2;
-      }
-
-      ClosedLoopHW_DW.obj.NumChannels = -1;
-    }
-  }
-
-  obj = &ClosedLoopHW_DW.obj._pobj0;
-  if (!obj->matlabCodegenIsDeleted) {
-    obj->matlabCodegenIsDeleted = true;
-    if (obj->isInitialized == 1) {
-      obj->isInitialized = 2;
-    }
-  }
-
-  /* End of Terminate for MATLABSystem: '<Root>/Lowpass Filter' */
 }
 
 /*========================================================================*
@@ -781,6 +848,12 @@ RT_MODEL_ClosedLoopHW_T *ClosedLoopHW(void)
 
   /* initialize non-finites */
   rt_InitInfAndNaN(sizeof(real_T));
+
+  /* non-finite (run-time) assignments */
+  ClosedLoopHW_P.Integrator_UpperSat = rtInf;
+  ClosedLoopHW_P.Integrator_LowerSat = rtMinusInf;
+  ClosedLoopHW_P.Saturation_UpperSat = rtInf;
+  ClosedLoopHW_P.Saturation_LowerSat = rtMinusInf;
 
   /* initialize real-time model */
   (void) memset((void *)ClosedLoopHW_M, 0,
@@ -833,15 +906,15 @@ RT_MODEL_ClosedLoopHW_T *ClosedLoopHW(void)
     ClosedLoopHW_M->Timing.sampleHits = (&mdlSampleHits[0]);
   }
 
-  rtmSetTFinal(ClosedLoopHW_M, 30.0);
+  rtmSetTFinal(ClosedLoopHW_M, 10.0);
   ClosedLoopHW_M->Timing.stepSize0 = 0.001;
   ClosedLoopHW_M->Timing.stepSize1 = 0.001;
 
   /* External mode info */
-  ClosedLoopHW_M->Sizes.checksums[0] = (2062547860U);
-  ClosedLoopHW_M->Sizes.checksums[1] = (211137538U);
-  ClosedLoopHW_M->Sizes.checksums[2] = (3211193813U);
-  ClosedLoopHW_M->Sizes.checksums[3] = (140345290U);
+  ClosedLoopHW_M->Sizes.checksums[0] = (2992429433U);
+  ClosedLoopHW_M->Sizes.checksums[1] = (1778215653U);
+  ClosedLoopHW_M->Sizes.checksums[2] = (1913437955U);
+  ClosedLoopHW_M->Sizes.checksums[3] = (2381205983U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
@@ -901,9 +974,9 @@ RT_MODEL_ClosedLoopHW_T *ClosedLoopHW(void)
   ClosedLoopHW_M->Sizes.numU = (0);    /* Number of model inputs */
   ClosedLoopHW_M->Sizes.sysDirFeedThru = (0);/* The model is not direct feedthrough */
   ClosedLoopHW_M->Sizes.numSampTimes = (2);/* Number of sample times */
-  ClosedLoopHW_M->Sizes.numBlocks = (41);/* Number of blocks */
-  ClosedLoopHW_M->Sizes.numBlockIO = (14);/* Number of block outputs */
-  ClosedLoopHW_M->Sizes.numBlockPrms = (101);/* Sum of parameter "widths" */
+  ClosedLoopHW_M->Sizes.numBlocks = (50);/* Number of blocks */
+  ClosedLoopHW_M->Sizes.numBlockIO = (18);/* Number of block outputs */
+  ClosedLoopHW_M->Sizes.numBlockPrms = (102);/* Sum of parameter "widths" */
   return ClosedLoopHW_M;
 }
 

@@ -9,7 +9,7 @@
  *
  * Model version              : 1.53
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Tue Dec  9 11:22:27 2025
+ * C source code generated on : Tue Dec  9 14:50:42 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -866,27 +866,31 @@
 
 /* Block signals (default storage) */
 typedef struct {
+  real_T Constant1[4];                 /* '<S1>/Constant1' */
+  real_T x[4];                         /* '<S1>/Discrete-Time Integrator' */
+  real_T Reshape[2];                   /* '<Root>/Reshape' */
   real_T Delay[4];                     /* '<Root>/Delay' */
   real_T Saturation1;                  /* '<Root>/Saturation1' */
-  real_T Saturation;                   /* '<Root>/Saturation' */
-  real_T Add;                          /* '<Root>/Add' */
-  real_T Gain1;                        /* '<Root>/Gain1' */
-  real_T TmpSignalConversionAtToWorkspac[2];
-  real_T TSamp[2];                     /* '<S1>/TSamp' */
+  real_T Probe[2];                     /* '<S8>/Probe' */
+  real_T TSamp[2];                     /* '<S2>/TSamp' */
+  real_T Saturation[2];                /* '<S14>/Saturation' */
   real_T Multiply[2];                  /* '<Root>/Multiply' */
   real_T Sum[4];                       /* '<Root>/Sum' */
   real_T Reshape1[4];                  /* '<Root>/Reshape1' */
+  real_T uT[2];                        /* '<S4>/1//T' */
   real_T Step;                         /* '<Root>/Step' */
-  real_T LowpassFilter[2];             /* '<Root>/Lowpass Filter' */
-  real_T x_hat[4];                     /* '<S2>/MATLAB Function' */
+  real_T x_hat[4];                     /* '<S3>/MATLAB Function' */
+  real_T dx[4];                        /* '<S1>/MATLAB Function' */
+  boolean_T LogicalOperator;           /* '<S8>/Logical Operator' */
 } B_ClosedLoopHW_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  dsp_simulink_LowpassFilter_Cl_T obj; /* '<Root>/Lowpass Filter' */
+  real_T DiscreteTimeIntegrator_DSTATE[4];/* '<S1>/Discrete-Time Integrator' */
   real_T Delay_DSTATE[4];              /* '<Root>/Delay' */
-  real_T UD_DSTATE[2];                 /* '<S1>/UD' */
-  real_T Delay_DSTATE_m[4];            /* '<S2>/Delay' */
+  real_T UD_DSTATE[2];                 /* '<S2>/UD' */
+  real_T Integrator_DSTATE[2];         /* '<S14>/Integrator' */
+  real_T Delay_DSTATE_m[4];            /* '<S3>/Delay' */
   real_T HILInitialize_AIMinimums[4];  /* '<Root>/HIL Initialize' */
   real_T HILInitialize_AIMaximums[4];  /* '<Root>/HIL Initialize' */
   real_T HILInitialize_AOMinimums[4];  /* '<Root>/HIL Initialize' */
@@ -894,15 +898,9 @@ typedef struct {
   real_T HILInitialize_AOVoltages[4];  /* '<Root>/HIL Initialize' */
   real_T HILInitialize_FilterFrequency[4];/* '<Root>/HIL Initialize' */
   t_card HILInitialize_Card;           /* '<Root>/HIL Initialize' */
-  void *HILWriteAnalog_PWORK;          /* '<Root>/HIL Write Analog' */
-  void *HILReadEncoder_PWORK;          /* '<Root>/HIL Read Encoder' */
   struct {
     void *LoggedData;
   } Scope_PWORK;                       /* '<Root>/Scope' */
-
-  struct {
-    void *LoggedData;
-  } Scope1_PWORK;                      /* '<Root>/Scope1' */
 
   struct {
     void *LoggedData;
@@ -934,16 +932,18 @@ typedef struct {
 
   int32_T HILInitialize_QuadratureModes[4];/* '<Root>/HIL Initialize' */
   int32_T HILInitialize_InitialEICounts[4];/* '<Root>/HIL Initialize' */
-  int32_T HILReadEncoder_Buffer[2];    /* '<Root>/HIL Read Encoder' */
-  int32_T sfEvent;                     /* '<S3>/MATLAB Function' */
-  int32_T sfEvent_k;                   /* '<S2>/MATLAB Function' */
-  uint8_T is_active_c2_ClosedLoopHW;   /* '<S3>/MATLAB Function' */
-  uint8_T is_active_c3_ClosedLoopHW;   /* '<S2>/MATLAB Function' */
-  boolean_T icLoad;                    /* '<S2>/Delay' */
-  boolean_T doneDoubleBufferReInit;    /* '<S3>/MATLAB Function' */
-  boolean_T objisempty;                /* '<Root>/Lowpass Filter' */
-  boolean_T isInitialized;             /* '<Root>/Lowpass Filter' */
-  boolean_T doneDoubleBufferReInit_i;  /* '<S2>/MATLAB Function' */
+  int32_T sfEvent;                     /* '<S5>/MATLAB Function' */
+  int32_T sfEvent_k;                   /* '<S3>/MATLAB Function' */
+  int32_T sfEvent_c;                   /* '<S1>/MATLAB Function' */
+  int8_T Integrator_PrevResetState;    /* '<S14>/Integrator' */
+  uint8_T Integrator_IC_LOADING;       /* '<S14>/Integrator' */
+  uint8_T is_active_c2_ClosedLoopHW;   /* '<S5>/MATLAB Function' */
+  uint8_T is_active_c3_ClosedLoopHW;   /* '<S3>/MATLAB Function' */
+  uint8_T is_active_c1_ClosedLoopHW;   /* '<S1>/MATLAB Function' */
+  boolean_T icLoad;                    /* '<S3>/Delay' */
+  boolean_T doneDoubleBufferReInit;    /* '<S5>/MATLAB Function' */
+  boolean_T doneDoubleBufferReInit_i;  /* '<S3>/MATLAB Function' */
+  boolean_T doneDoubleBufferReInit_d;  /* '<S1>/MATLAB Function' */
 } DW_ClosedLoopHW_T;
 
 /* Backward compatible GRT Identifiers */
@@ -957,14 +957,17 @@ typedef struct {
 /* Parameters (default storage) */
 struct P_ClosedLoopHW_T_ {
   struct_8dcRBKd2sugfTo5czTP1GD est_param;/* Variable: est_param
-                                           * Referenced by: '<S2>/MATLAB Function'
+                                           * Referenced by: '<S3>/MATLAB Function'
                                            */
+  struct_EyhfgjFUMIaPmLVzByLI3F p;     /* Variable: p
+                                        * Referenced by: '<S1>/MATLAB Function'
+                                        */
   struct_IikMKrhxguvBv6I6XHfpIC c;     /* Variable: c
                                         * Referenced by:
                                         *   '<Root>/x_star'
-                                        *   '<S2>/Constant'
-                                        *   '<S2>/Constant1'
-                                        *   '<S3>/MATLAB Function'
+                                        *   '<S3>/Constant'
+                                        *   '<S3>/Constant1'
+                                        *   '<S5>/MATLAB Function'
                                         */
   real_T dC[8];                        /* Variable: dC
                                         * Referenced by: '<Root>/Multiply'
@@ -972,15 +975,28 @@ struct P_ClosedLoopHW_T_ {
   real_T x0[4];                        /* Variable: x0
                                         * Referenced by:
                                         *   '<Root>/Delay'
-                                        *   '<S1>/UD'
-                                        *   '<S2>/Constant'
+                                        *   '<S1>/Constant1'
+                                        *   '<S2>/UD'
+                                        *   '<S3>/Constant'
                                         */
-  uint32_T HILWriteAnalog_channels;   /* Mask Parameter: HILWriteAnalog_channels
-                                       * Referenced by: '<Root>/HIL Write Analog'
+  real_T LowPassFilterDiscreteorContinuo;
+                              /* Mask Parameter: LowPassFilterDiscreteorContinuo
+                               * Referenced by: '<S4>/K'
+                               */
+  real_T LowPassFilterDiscreteorContin_n;
+                              /* Mask Parameter: LowPassFilterDiscreteorContin_n
+                               * Referenced by: '<S8>/Time constant'
+                               */
+  real_T CompareToConstant_const;     /* Mask Parameter: CompareToConstant_const
+                                       * Referenced by: '<S11>/Constant'
                                        */
-  uint32_T HILReadEncoder_channels[2];/* Mask Parameter: HILReadEncoder_channels
-                                       * Referenced by: '<Root>/HIL Read Encoder'
-                                       */
+  real_T LowPassFilterDiscreteorContin_b;
+                              /* Mask Parameter: LowPassFilterDiscreteorContin_b
+                               * Referenced by: '<S8>/Constant'
+                               */
+  real_T Constant_Value;               /* Expression: 0
+                                        * Referenced by: '<S12>/Constant'
+                                        */
   real_T HILInitialize_OOTerminate;/* Expression: set_other_outputs_at_terminate
                                     * Referenced by: '<Root>/HIL Initialize'
                                     */
@@ -1026,32 +1042,33 @@ struct P_ClosedLoopHW_T_ {
   real_T HILInitialize_POInitial;      /* Expression: initial_pwm_outputs
                                         * Referenced by: '<Root>/HIL Initialize'
                                         */
+  real_T DiscreteTimeIntegrator_gainval;
+                           /* Computed Parameter: DiscreteTimeIntegrator_gainval
+                            * Referenced by: '<S1>/Discrete-Time Integrator'
+                            */
   real_T Saturation1_UpperSat;         /* Expression: 2
                                         * Referenced by: '<Root>/Saturation1'
                                         */
   real_T Saturation1_LowerSat;         /* Expression: -2
                                         * Referenced by: '<Root>/Saturation1'
                                         */
-  real_T Gain2_Gain;                   /* Expression: 2/(1.2*0.4006*3.5)
-                                        * Referenced by: '<Root>/Gain2'
-                                        */
-  real_T Saturation_UpperSat;          /* Expression: 1
-                                        * Referenced by: '<Root>/Saturation'
-                                        */
-  real_T Saturation_LowerSat;          /* Expression: -1
-                                        * Referenced by: '<Root>/Saturation'
-                                        */
-  real_T Constant_Value;               /* Expression: -pi/2
-                                        * Referenced by: '<Root>/Constant'
-                                        */
-  real_T Gain_Gain;                    /* Expression: 2*pi/5000
-                                        * Referenced by: '<Root>/Gain'
-                                        */
-  real_T Gain1_Gain;                   /* Expression: -2*pi/10000
-                                        * Referenced by: '<Root>/Gain1'
-                                        */
   real_T TSamp_WtEt;                   /* Computed Parameter: TSamp_WtEt
-                                        * Referenced by: '<S1>/TSamp'
+                                        * Referenced by: '<S2>/TSamp'
+                                        */
+  real_T Integrator_gainval;           /* Computed Parameter: Integrator_gainval
+                                        * Referenced by: '<S14>/Integrator'
+                                        */
+  real_T Integrator_UpperSat;          /* Expression: antiwindupUpperLimit
+                                        * Referenced by: '<S14>/Integrator'
+                                        */
+  real_T Integrator_LowerSat;          /* Expression: antiwindupLowerLimit
+                                        * Referenced by: '<S14>/Integrator'
+                                        */
+  real_T Saturation_UpperSat;          /* Expression: windupUpperLimit
+                                        * Referenced by: '<S14>/Saturation'
+                                        */
+  real_T Saturation_LowerSat;          /* Expression: windupLowerLimit
+                                        * Referenced by: '<S14>/Saturation'
                                         */
   real_T Step_Time;                    /* Expression: 0.001
                                         * Referenced by: '<Root>/Step'
@@ -1204,12 +1221,6 @@ struct P_ClosedLoopHW_T_ {
                                   /* Computed Parameter: HILInitialize_DOInitial
                                    * Referenced by: '<Root>/HIL Initialize'
                                    */
-  boolean_T HILWriteAnalog_Active;  /* Computed Parameter: HILWriteAnalog_Active
-                                     * Referenced by: '<Root>/HIL Write Analog'
-                                     */
-  boolean_T HILReadEncoder_Active;  /* Computed Parameter: HILReadEncoder_Active
-                                     * Referenced by: '<Root>/HIL Read Encoder'
-                                     */
 };
 
 /* Real-time Model Data Structure */
@@ -1357,10 +1368,20 @@ extern RT_MODEL_ClosedLoopHW_T *const ClosedLoopHW_M;
  * Here is the system hierarchy for this model
  *
  * '<Root>' : 'ClosedLoopHW'
- * '<S1>'   : 'ClosedLoopHW/Discrete Derivative'
- * '<S2>'   : 'ClosedLoopHW/Estimator'
- * '<S3>'   : 'ClosedLoopHW/Subsystem'
- * '<S4>'   : 'ClosedLoopHW/Estimator/MATLAB Function'
- * '<S5>'   : 'ClosedLoopHW/Subsystem/MATLAB Function'
+ * '<S1>'   : 'ClosedLoopHW/DigitalTwin'
+ * '<S2>'   : 'ClosedLoopHW/Discrete Derivative'
+ * '<S3>'   : 'ClosedLoopHW/Estimator'
+ * '<S4>'   : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)'
+ * '<S5>'   : 'ClosedLoopHW/Subsystem'
+ * '<S6>'   : 'ClosedLoopHW/DigitalTwin/MATLAB Function'
+ * '<S7>'   : 'ClosedLoopHW/Estimator/MATLAB Function'
+ * '<S8>'   : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Enable//disable time constant'
+ * '<S9>'   : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Initialization'
+ * '<S10>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Integrator (Discrete or Continuous)'
+ * '<S11>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Enable//disable time constant/Compare To Constant'
+ * '<S12>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Enable//disable time constant/Compare To Zero'
+ * '<S13>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Initialization/Init_u'
+ * '<S14>'  : 'ClosedLoopHW/Low-Pass Filter (Discrete or Continuous)/Integrator (Discrete or Continuous)/Discrete'
+ * '<S15>'  : 'ClosedLoopHW/Subsystem/MATLAB Function'
  */
 #endif                                 /* RTW_HEADER_ClosedLoopHW_h_ */
