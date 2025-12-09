@@ -7,9 +7,9 @@
  *
  * Code generation for model "ClosedLoopHW".
  *
- * Model version              : 1.52
+ * Model version              : 1.53
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Sat Dec  6 18:24:02 2025
+ * C source code generated on : Tue Dec  9 11:22:27 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -413,15 +413,6 @@ void ClosedLoopHW_initialize(void)
       }
 
       is_switching = false;
-      result = hil_set_card_specific_options(ClosedLoopHW_DW.HILInitialize_Card,
-        " ", 2);
-      if (result < 0) {
-        msg_get_error_messageA(NULL, result, _rt_error_message, sizeof
-          (_rt_error_message));
-        rtmSetErrorStatus(ClosedLoopHW_M, _rt_error_message);
-        return;
-      }
-
       if ((ClosedLoopHW_P.HILInitialize_CKPStart && !is_switching) ||
           (ClosedLoopHW_P.HILInitialize_CKPEnter && is_switching)) {
         result = hil_set_clock_mode(ClosedLoopHW_DW.HILInitialize_Card, (t_clock
@@ -847,10 +838,10 @@ RT_MODEL_ClosedLoopHW_T *ClosedLoopHW(void)
   ClosedLoopHW_M->Timing.stepSize1 = 0.001;
 
   /* External mode info */
-  ClosedLoopHW_M->Sizes.checksums[0] = (1798303350U);
-  ClosedLoopHW_M->Sizes.checksums[1] = (1441189245U);
-  ClosedLoopHW_M->Sizes.checksums[2] = (447826125U);
-  ClosedLoopHW_M->Sizes.checksums[3] = (4182097784U);
+  ClosedLoopHW_M->Sizes.checksums[0] = (2062547860U);
+  ClosedLoopHW_M->Sizes.checksums[1] = (211137538U);
+  ClosedLoopHW_M->Sizes.checksums[2] = (3211193813U);
+  ClosedLoopHW_M->Sizes.checksums[3] = (140345290U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;

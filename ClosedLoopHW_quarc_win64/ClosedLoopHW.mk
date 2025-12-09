@@ -2,7 +2,7 @@
 ## Makefile generated for component 'ClosedLoopHW'. 
 ## 
 ## Makefile     : ClosedLoopHW.mk
-## Generated on : Sat Dec 06 14:54:31 2025
+## Generated on : Tue Dec 09 11:22:31 2025
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)\ClosedLoopHW.rt-win64
 ## Product type : executable
 ## 
@@ -23,7 +23,7 @@ MAKEFILE                  = ClosedLoopHW.mk
 MATLAB_ROOT               = C:\PROGRA~1\MATLAB\R2023a
 MATLAB_BIN                = C:\PROGRA~1\MATLAB\R2023a\bin
 MATLAB_ARCH_BIN           = $(MATLAB_BIN)\win64
-START_DIR                 = C:\Users\colegiusto\Documents\ME238-FinalProject
+START_DIR                 = C:\Users\colegiusto\ME238-FinalProject
 SOLVER                    = 
 SOLVER_OBJ                = 
 CLASSIC_INTERFACE         = 1

@@ -45,7 +45,7 @@ offset = 0;
 
 % x0 = [-pi/2+offset-0.1; -offset; 0; 0]; 
 
-c.x_star = [-pi/2+offset; 0; 0; 0];
+c.x_star = [-pi/2+offset; -offset; 0; 0];
 
 
 
@@ -123,9 +123,10 @@ legend("Encoder dq1", "Encoder dq2", "Kalman dq1", "Kalman dq2")
 
 q1_ref = pi/2;
 
-kp = 38.64;
-kd = 8;
-
+kp = 28.25;
+kd = 5.5;
+c.kp = kp;
+c.kd = kd;
 x_ref = [pi/2; 0; 0; 0];
 
 controller = @(x) linearizedPD(x,x_ref,p,kp,kd);
@@ -161,6 +162,7 @@ c.x0 = x0;
 c.startTrig = 0.1;
 c.stabTrig = 0.0;
 c.stabAbort = 1;
+c.top_K = zeros(1,4);
 
 
 %%
@@ -175,7 +177,7 @@ pendPos = out.pendPos;
 
 %% animate result
 
-output = out.pendPos;
+output = pendPos;
 ap.l1 = 1;
 ap.l2 = 1.5;
 figure(1)
@@ -192,12 +194,13 @@ end
 A = J([pi/2; 0; 0; 0], 1e-5*ones(1,4), @(x)dynamics(x,0,p));
 B = J(0, 1e-5, @(u)dynamics([pi/2; 0; 0; 0], u, p));
 
-Q = eye(4);
-R = 1;
+Q = diag([1 0.2 0.1 0.1]);
+R = 1e2;
 
 c.top_K = lqr(A, B, Q, R);
+c.norm_weight = diag([1 1 .01 .01]);
 c.startTrig = 0.1;
-c.stabTrig = 0.5;
+c.stabTrig = 0.2;
 c.stabAbort = 20;
 %%
 model = 'PFLControl';
@@ -226,13 +229,13 @@ end
 addpath ../OptimTraj/
 
 problem.func.dynamics = @(t,x,u)( dynamics(x,u,p) );
-problem.func.pathObj = @(t,x,u)( 1e-4* u.^2 );
+problem.func.pathObj = @(t,x,u)( (t+1).* u.^2 );
 
 % Problem bounds
 problem.bounds.initialTime.low = 0;
 problem.bounds.initialTime.upp = 0;
-problem.bounds.finalTime.low = 5;
-problem.bounds.finalTime.upp = 10;
+problem.bounds.finalTime.low = 2;
+problem.bounds.finalTime.upp = 4;
 
 problem.bounds.state.low = [-inf; -inf; -inf; -inf];
 problem.bounds.state.upp = [inf; inf; inf; inf];
@@ -261,7 +264,7 @@ problem.guess = guess;
 
 % Select a solver:
 problem.options.method = 'trapezoid';
-problem.options.defaultAccuracy = 'medium';
+problem.options.defaultAccuracy = 'high';
 problem.options.trapezoid.nGrid = 100;
 % problem.options.nlpOpt = optimoptions('fmincon');
 % problem.options.nlpOpt.MaxIterations = 1000;
@@ -298,7 +301,8 @@ ylabel('u')
 %%
 figure(3)
 clf 
-
+ap.l1 = 1;
+ap.l2 = 1.5;
 hold on 
 set(gca, 'YTickLabel', [ ]); 
 lblTime = uicontrol('style','text');
@@ -330,7 +334,7 @@ ut = u;
 model = 'OpenLoopHW';
 
 set_param(model, "StopTime", string(t(end)))
-set_param(model, 'SimulationMode', 'normal')
+set_param(model, 'SimulationMode', 'external')
 set_param(model, 'SimulationCommand', 'connect')
 pause(1)
 set_param(model, 'SimulationCommand', 'start')
@@ -343,7 +347,7 @@ pause(11)
 output = pendPos;
 ap.l1 = 1;
 ap.l2 = 1.5;
-for i = 1:50:length(output.time)
+for i = 1:50:length(output.time)-1
     clf; hold on;
     animate(output.time(i), output.signals.values(i,:), ap)
     animate(output.time(i), soln.grid.state(:,find(t>=output.time(i))), ap)
@@ -361,8 +365,8 @@ c.bounds = [-pi/3 pi/3; -pi/3 pi/3];
 
 c.K = zeros(1,4,length(t));
 
-Q = diag([10000 100 100 100])*1e4;
-R = 1e-8;
+Q = diag([1 0.2 0.1 0.1]);
+R = 1e2;
 
 
 % Calculate K for each knot point
