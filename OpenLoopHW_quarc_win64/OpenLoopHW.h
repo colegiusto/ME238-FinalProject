@@ -7,9 +7,9 @@
  *
  * Code generation for model "OpenLoopHW".
  *
- * Model version              : 1.16
+ * Model version              : 1.19
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Sat Dec  6 17:32:46 2025
+ * C source code generated on : Tue Dec  9 13:17:52 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -866,15 +866,17 @@
 
 /* Block signals (default storage) */
 typedef struct {
-  real_T Gain2;                        /* '<Root>/Gain2' */
-  real_T Add;                          /* '<Root>/Add' */
-  real_T Gain1;                        /* '<Root>/Gain1' */
-  real_T TmpSignalConversionAtToWorkspac[2];
+  real_T Constant1[4];                 /* '<S1>/Constant1' */
+  real_T x[4];                         /* '<S1>/Discrete-Time Integrator' */
+  real_T Reshape[2];                   /* '<Root>/Reshape' */
+  real_T uDLookupTable;                /* '<Root>/1-D Lookup Table' */
   real_T Step;                         /* '<Root>/Step' */
+  real_T dx[4];                        /* '<S1>/MATLAB Function' */
 } B_OpenLoopHW_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
+  real_T DiscreteTimeIntegrator_DSTATE[4];/* '<S1>/Discrete-Time Integrator' */
   real_T HILInitialize_AIMinimums[4];  /* '<Root>/HIL Initialize' */
   real_T HILInitialize_AIMaximums[4];  /* '<Root>/HIL Initialize' */
   real_T HILInitialize_AOMinimums[4];  /* '<Root>/HIL Initialize' */
@@ -882,15 +884,13 @@ typedef struct {
   real_T HILInitialize_AOVoltages[4];  /* '<Root>/HIL Initialize' */
   real_T HILInitialize_FilterFrequency[4];/* '<Root>/HIL Initialize' */
   t_card HILInitialize_Card;           /* '<Root>/HIL Initialize' */
-  void *HILWriteAnalog_PWORK;          /* '<Root>/HIL Write Analog' */
-  struct {
-    void *LoggedData;
-  } Scope1_PWORK;                      /* '<Root>/Scope1' */
-
-  void *HILReadEncoder_PWORK;          /* '<Root>/HIL Read Encoder' */
   struct {
     void *LoggedData;
   } Scope_PWORK;                       /* '<Root>/Scope' */
+
+  struct {
+    void *LoggedData;
+  } Scope1_PWORK;                      /* '<Root>/Scope1' */
 
   struct {
     void *LoggedData;
@@ -902,7 +902,9 @@ typedef struct {
 
   int32_T HILInitialize_QuadratureModes[4];/* '<Root>/HIL Initialize' */
   int32_T HILInitialize_InitialEICounts[4];/* '<Root>/HIL Initialize' */
-  int32_T HILReadEncoder_Buffer[2];    /* '<Root>/HIL Read Encoder' */
+  int32_T sfEvent;                     /* '<S1>/MATLAB Function' */
+  uint8_T is_active_c1_OpenLoopHW;     /* '<S1>/MATLAB Function' */
+  boolean_T doneDoubleBufferReInit;    /* '<S1>/MATLAB Function' */
 } DW_OpenLoopHW_T;
 
 /* Backward compatible GRT Identifiers */
@@ -915,18 +917,18 @@ typedef struct {
 
 /* Parameters (default storage) */
 struct P_OpenLoopHW_T_ {
+  struct_EyhfgjFUMIaPmLVzByLI3F p;     /* Variable: p
+                                        * Referenced by: '<S1>/MATLAB Function'
+                                        */
   real_T t_control[100];               /* Variable: t_control
                                         * Referenced by: '<Root>/1-D Lookup Table'
                                         */
   real_T ut[100];                      /* Variable: ut
                                         * Referenced by: '<Root>/1-D Lookup Table'
                                         */
-  uint32_T HILWriteAnalog_channels;   /* Mask Parameter: HILWriteAnalog_channels
-                                       * Referenced by: '<Root>/HIL Write Analog'
-                                       */
-  uint32_T HILReadEncoder_channels[2];/* Mask Parameter: HILReadEncoder_channels
-                                       * Referenced by: '<Root>/HIL Read Encoder'
-                                       */
+  real_T x0[4];                        /* Variable: x0
+                                        * Referenced by: '<S1>/Constant1'
+                                        */
   real_T HILInitialize_OOTerminate;/* Expression: set_other_outputs_at_terminate
                                     * Referenced by: '<Root>/HIL Initialize'
                                     */
@@ -972,18 +974,10 @@ struct P_OpenLoopHW_T_ {
   real_T HILInitialize_POInitial;      /* Expression: initial_pwm_outputs
                                         * Referenced by: '<Root>/HIL Initialize'
                                         */
-  real_T Gain2_Gain;                   /* Expression: 1/(1.2*0.4006)
-                                        * Referenced by: '<Root>/Gain2'
-                                        */
-  real_T Constant_Value;               /* Expression: -pi/2
-                                        * Referenced by: '<Root>/Constant'
-                                        */
-  real_T Gain_Gain;                    /* Expression: 2*pi/5000
-                                        * Referenced by: '<Root>/Gain'
-                                        */
-  real_T Gain1_Gain;                   /* Expression: -2*pi/10000
-                                        * Referenced by: '<Root>/Gain1'
-                                        */
+  real_T DiscreteTimeIntegrator_gainval;
+                           /* Computed Parameter: DiscreteTimeIntegrator_gainval
+                            * Referenced by: '<S1>/Discrete-Time Integrator'
+                            */
   real_T Step_Time;                    /* Expression: 0.001
                                         * Referenced by: '<Root>/Step'
                                         */
@@ -1135,12 +1129,6 @@ struct P_OpenLoopHW_T_ {
                                   /* Computed Parameter: HILInitialize_DOInitial
                                    * Referenced by: '<Root>/HIL Initialize'
                                    */
-  boolean_T HILWriteAnalog_Active;  /* Computed Parameter: HILWriteAnalog_Active
-                                     * Referenced by: '<Root>/HIL Write Analog'
-                                     */
-  boolean_T HILReadEncoder_Active;  /* Computed Parameter: HILReadEncoder_Active
-                                     * Referenced by: '<Root>/HIL Read Encoder'
-                                     */
 };
 
 /* Real-time Model Data Structure */
@@ -1288,5 +1276,7 @@ extern RT_MODEL_OpenLoopHW_T *const OpenLoopHW_M;
  * Here is the system hierarchy for this model
  *
  * '<Root>' : 'OpenLoopHW'
+ * '<S1>'   : 'OpenLoopHW/DigitalTwin'
+ * '<S2>'   : 'OpenLoopHW/DigitalTwin/MATLAB Function'
  */
 #endif                                 /* RTW_HEADER_OpenLoopHW_h_ */
