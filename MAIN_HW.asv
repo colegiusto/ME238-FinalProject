@@ -384,8 +384,8 @@ c.bounds = [-pi/3 pi/3; -pi/3 pi/3];
 
 c.K = zeros(1,4,length(t));
 
-Q = diag([1 100 1 1]);
-R = 1e4;
+Q = diag([1 1 1 1]);
+R = 1e2;
 c.conds = zeros(length(t),1);
 
 % Calculate K for each knot point
@@ -405,9 +405,7 @@ for i = 1:length(t)
     c.K(:,:, i) = K_placed;
 
     c.conds(i) = cond(ctrb(dA,dB));
-    if c.conds(i) > 1e9
-        c.K(:,:,i) = K_placed*0;
-    end
+
     
 end
 
@@ -415,7 +413,7 @@ end
 % Perform LQG for each knot point
 
 c.B = zeros(4,5,length(t));
-
+c.
 
 for i = 1:length(t)
     A = J(c.x_star(:,i), 1e-5*ones(4,1), @(x)dynamics(x, u(i), p));
