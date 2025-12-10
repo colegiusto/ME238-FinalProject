@@ -7,9 +7,9 @@
  *
  * Code generation for model "OpenLoopHW".
  *
- * Model version              : 1.20
+ * Model version              : 1.21
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Tue Dec  9 14:40:38 2025
+ * C source code generated on : Tue Dec  9 18:55:42 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -22,26 +22,6 @@
 
 /* Block parameters (default storage) */
 P_OpenLoopHW_T OpenLoopHW_P = {
-  /* Variable: p
-   * Referenced by: '<S1>/MATLAB Function'
-   */
-  {
-    9.8,
-    0.014806176,
-    0.005095632,
-    0.00456684,
-    0.100326264,
-    0.03028536,
-    1.0,
-    1.0,
-    1.0,
-    1.0,
-    1.0,
-    1.0,
-    0.5,
-    0.5
-  },
-
   /* Variable: t_control
    * Referenced by: '<Root>/1-D Lookup Table'
    */
@@ -80,18 +60,23 @@ P_OpenLoopHW_T OpenLoopHW_P = {
   /* Variable: ut
    * Referenced by: '<Root>/1-D Lookup Table'
    */
-  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 0.2, 0.2, 0.2, 0.2,
-    0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2,
-    0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2,
-    0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2,
-    0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2,
-    0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2,
-    0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 },
+  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.6, 0.6, 0.6, 0.6, 0.6,
+    0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6,
+    0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6,
+    0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6,
+    0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6,
+    0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6,
+    0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6 },
 
-  /* Variable: x0
-   * Referenced by: '<S1>/Constant1'
+  /* Mask Parameter: HILWriteAnalog_channels
+   * Referenced by: '<Root>/HIL Write Analog'
    */
-  { -1.5707963267948966, 0.0, 0.0, 0.0 },
+  0U,
+
+  /* Mask Parameter: HILReadEncoder_channels
+   * Referenced by: '<Root>/HIL Read Encoder'
+   */
+  { 0U, 2U },
 
   /* Expression: set_other_outputs_at_terminate
    * Referenced by: '<Root>/HIL Initialize'
@@ -168,10 +153,35 @@ P_OpenLoopHW_T OpenLoopHW_P = {
    */
   0.0,
 
-  /* Computed Parameter: DiscreteTimeIntegrator_gainval
-   * Referenced by: '<S1>/Discrete-Time Integrator'
+  /* Expression: 1/(1.2*0.4006)
+   * Referenced by: '<Root>/Gain2'
    */
-  0.001,
+  2.0802130138126147,
+
+  /* Expression: 0.5
+   * Referenced by: '<Root>/Saturation'
+   */
+  0.5,
+
+  /* Expression: -0.5
+   * Referenced by: '<Root>/Saturation'
+   */
+  -0.5,
+
+  /* Expression: -pi/2
+   * Referenced by: '<Root>/Constant'
+   */
+  -1.5707963267948966,
+
+  /* Expression: 2*pi/5000
+   * Referenced by: '<Root>/Gain'
+   */
+  0.0012566370614359172,
+
+  /* Expression: -2*pi/10000
+   * Referenced by: '<Root>/Gain1'
+   */
+  -0.00062831853071795862,
 
   /* Expression: 0.001
    * Referenced by: '<Root>/Step'
@@ -405,6 +415,16 @@ P_OpenLoopHW_T OpenLoopHW_P = {
 
   /* Computed Parameter: HILInitialize_DOInitial
    * Referenced by: '<Root>/HIL Initialize'
+   */
+  true,
+
+  /* Computed Parameter: HILWriteAnalog_Active
+   * Referenced by: '<Root>/HIL Write Analog'
+   */
+  false,
+
+  /* Computed Parameter: HILReadEncoder_Active
+   * Referenced by: '<Root>/HIL Read Encoder'
    */
   true
 };
