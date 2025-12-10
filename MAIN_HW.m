@@ -380,7 +380,6 @@ x0 = [-pi/2;0;0;0];
 c.t_k = t;
 c.u_star = u;
 c.x_star = soln.grid.state;
-c.bounds = [-pi/3 pi/3; -pi/3 pi/3];
 
 c.K = zeros(1,4,length(t));
 
@@ -492,3 +491,7 @@ plot(output.time(1:end-1)+diff(output.time), diff(output.signals.values(:,1))/0.
 hold on
 plot(pendEst.time, pendEst.signals.values(:,3),pendEst.time,pendEst.signals.values(:,4))
 legend("Encoder dq1", "Encoder dq2", "Kalman dq1", "Kalman dq2")
+
+%%
+
+c = trajectoryLQR(t, u, soln.grid.state, Q, R, 1, 0.95, 1e9, p);
