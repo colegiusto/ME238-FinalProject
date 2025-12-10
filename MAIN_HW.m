@@ -6,7 +6,7 @@ load guess.mat
 x0 = [-pi/2; 0; 0; 0]; 
 
 t_control = linspace(0,10,100);
-ut = (t_control>=1)*0.2;
+ut = (t_control>=1)*0.6;
 
 %%
 model = 'OpenLoopHW';
@@ -363,7 +363,7 @@ pause(11)
 
 %% animate result
 
-output = out.pendPos;
+output = pendPos;
 ap.l1 = 1;
 ap.l2 = 1.5;
 for i = 1:50:length(output.time)
@@ -383,7 +383,7 @@ c.x_star = soln.grid.state;
 
 c.K = zeros(1,4,length(t));
 
-Q = diag([1 100 1 1]);
+Q = diag([1 500 1 1]);
 R = 1e4;
 c.conds = zeros(length(t),1);
 
@@ -435,7 +435,7 @@ for i = 1:length(t)
     
     poles_old = eig(dA'-dC'*L');
     
-    poles_new = poles_old * 0.95;
+    poles_new = poles_old * 0.94;
 
     
     [L_placed, prec_l] = place(dA', dC', poles_new);
@@ -463,9 +463,10 @@ pause(11)
 
 %% animate result
 
-output = out.pendPos;
+output = pendPos;
 ap.l1 = 1;
 ap.l2 = 1.5;
+figure(1)
 for i = 1:50:length(output.time)
     clf; hold on;
     ap.color = [1.0 0 0];
@@ -477,8 +478,8 @@ for i = 1:50:length(output.time)
     drawnow; pause(0.05); 
 end
 %%
-output = out.pendPos;
-pendEst = out.pendEst;
+output = pendPos;
+pendEst = pendEst;
 
 figure(2);clf;
 subplot(2,1,1)
@@ -495,3 +496,22 @@ legend("Encoder dq1", "Encoder dq2", "Kalman dq1", "Kalman dq2")
 %%
 
 c = trajectoryLQR(t, u, soln.grid.state, Q, R, 1, 0.95, 1e9, p);
+ref = interp1(soln.grid.time, soln.grid.state', output.time,"linear" , 1);
+ref(find(output.time > soln.grid.time(end), 1):end, :) = ref(find(output.time > soln.grid.time(end), 1):end, :).* soln.grid.state(:,end)';
+figure(1); clf;
+subplot(2,1,1)
+hold on
+
+plot(output.time, ref(:,1:2))
+plot(output.time, pendEst.signals.values(:,1:2))
+legend("ref q1", "ref q2", "Kalman q1", "Kalman q2")
+subplot(2,1,2)
+hold on
+
+plot(output.time, ref(:,3:4))
+plot(output.time, pendEst.signals.values(:,3:4))
+legend("ref dq1", "ref dq2", "Kalman dq1", "Kalman dq2")
+
+
+
+

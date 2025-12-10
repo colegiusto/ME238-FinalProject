@@ -7,9 +7,9 @@
  *
  * Code generation for model "OpenLoopHW".
  *
- * Model version              : 1.20
+ * Model version              : 1.21
  * Simulink Coder version : 9.9 (R2023a) 19-Nov-2022
- * C source code generated on : Tue Dec  9 14:40:38 2025
+ * C source code generated on : Tue Dec  9 18:55:42 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -37,7 +37,6 @@ static uint_T rtDataTypeSizes[] = {
   sizeof(action_T),
   2*sizeof(uint32_T),
   sizeof(int32_T),
-  sizeof(struct_EyhfgjFUMIaPmLVzByLI3F),
   sizeof(t_card),
   sizeof(uint_T),
   sizeof(char_T),
@@ -62,7 +61,6 @@ static const char_T * rtDataTypeNames[] = {
   "action_T",
   "timer_uint32_pair_T",
   "physical_connection",
-  "struct_EyhfgjFUMIaPmLVzByLI3F",
   "t_card",
   "uint_T",
   "char_T",
@@ -72,44 +70,42 @@ static const char_T * rtDataTypeNames[] = {
 
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
-  { (char_T *)(&OpenLoopHW_B.Constant1[0]), 0, 0, 16 }
+  { (char_T *)(&OpenLoopHW_B.uDLookupTable), 0, 0, 7 }
   ,
 
-  { (char_T *)(&OpenLoopHW_DW.DiscreteTimeIntegrator_DSTATE[0]), 0, 0, 28 },
+  { (char_T *)(&OpenLoopHW_DW.HILInitialize_AIMinimums[0]), 0, 0, 24 },
 
-  { (char_T *)(&OpenLoopHW_DW.HILInitialize_Card), 16, 0, 1 },
+  { (char_T *)(&OpenLoopHW_DW.HILInitialize_Card), 15, 0, 1 },
 
-  { (char_T *)(&OpenLoopHW_DW.Scope_PWORK.LoggedData), 11, 0, 4 },
+  { (char_T *)(&OpenLoopHW_DW.HILWriteAnalog_PWORK), 11, 0, 6 },
 
-  { (char_T *)(&OpenLoopHW_DW.HILInitialize_QuadratureModes[0]), 6, 0, 9 },
-
-  { (char_T *)(&OpenLoopHW_DW.is_active_c1_OpenLoopHW), 3, 0, 1 },
-
-  { (char_T *)(&OpenLoopHW_DW.doneDoubleBufferReInit), 8, 0, 1 }
+  { (char_T *)(&OpenLoopHW_DW.HILInitialize_QuadratureModes[0]), 6, 0, 10 }
 };
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-  7U,
+  5U,
   rtBTransitions
 };
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&OpenLoopHW_P.p), 15, 0, 1 },
+  { (char_T *)(&OpenLoopHW_P.t_control[0]), 0, 0, 200 },
 
-  { (char_T *)(&OpenLoopHW_P.t_control[0]), 0, 0, 223 },
+  { (char_T *)(&OpenLoopHW_P.HILWriteAnalog_channels), 7, 0, 3 },
+
+  { (char_T *)(&OpenLoopHW_P.HILInitialize_OOTerminate), 0, 0, 24 },
 
   { (char_T *)(&OpenLoopHW_P.HILInitialize_CKChannels[0]), 6, 0, 7 },
 
   { (char_T *)(&OpenLoopHW_P.HILInitialize_AIChannels[0]), 7, 0, 13 },
 
-  { (char_T *)(&OpenLoopHW_P.HILInitialize_Active), 8, 0, 35 }
+  { (char_T *)(&OpenLoopHW_P.HILInitialize_Active), 8, 0, 37 }
 };
 
 /* data type transition table for Parameters structure */
 static DataTypeTransitionTable rtPTransTable = {
-  5U,
+  6U,
   rtPTransitions
 };
 
